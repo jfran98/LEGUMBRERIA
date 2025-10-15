@@ -1,0 +1,1364 @@
+<!-- public/gestionproop.html -->
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Gestión de Procesos y Operaciones - Legumbrería JM</title>
+  <link rel="stylesheet" href="style.css">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+  <!-- Navbar dinámico -->
+  <div id="navbar"></div>
+
+  <div class="container-operaciones">
+    <div class="header-operaciones">
+      <h1><i class="fas fa-cogs"></i> Gestión de Procesos y Operaciones</h1>
+      <p>Panel de optimización operativa para gerentes</p>
+    </div>
+
+    <div id="soloGerente" style="display:none;">
+      <!-- Dashboard operativo -->
+      <div class="dashboard-operaciones">
+        
+        <!-- KPIs Principales -->
+        <div class="kpis-principales">
+          <div class="kpi-card">
+            <div class="kpi-icon">
+              <i class="fas fa-clock"></i>
+            </div>
+            <div class="kpi-content">
+              <h3>Tiempo Promedio de Atención</h3>
+              <p class="kpi-value">3.2 min</p>
+              <span class="kpi-target">Meta: < 3 min</span>
+            </div>
+          </div>
+          
+          <div class="kpi-card">
+            <div class="kpi-icon">
+              <i class="fas fa-shopping-cart"></i>
+            </div>
+            <div class="kpi-content">
+              <h3>Productos Vendidos/Día</h3>
+              <p class="kpi-value">1,247</p>
+              <span class="kpi-target">Meta: 1,500</span>
+            </div>
+          </div>
+          
+          <div class="kpi-card">
+            <div class="kpi-icon">
+              <i class="fas fa-percentage"></i>
+            </div>
+            <div class="kpi-content">
+              <h3>Satisfacción del Cliente</h3>
+              <p class="kpi-value">94.2%</p>
+              <span class="kpi-target">Meta: > 95%</span>
+            </div>
+          </div>
+          
+          <div class="kpi-card">
+            <div class="kpi-icon">
+              <i class="fas fa-chart-line"></i>
+            </div>
+            <div class="kpi-content">
+              <h3>Eficiencia Operativa</h3>
+              <p class="kpi-value">87.5%</p>
+              <span class="kpi-target">Meta: > 90%</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Gestión de Procedimientos -->
+        <div class="card-operaciones">
+          <div class="card-header">
+            <i class="fas fa-clipboard-list"></i>
+            <h3>Procedimientos Internos</h3>
+          </div>
+          <div class="card-content">
+            <div class="procedimientos-activos">
+              <h4>Procedimientos Activos</h4>
+              <div class="procedimiento-item">
+                <div class="procedimiento-info">
+                  <strong>Recepción de Mercancía</strong>
+                  <span class="procedimiento-desc">Verificación y almacenamiento de productos</span>
+                  <span class="procedimiento-version">v2.1</span>
+                </div>
+                <div class="procedimiento-actions">
+                  <button class="btn-edit" onclick="editarProcedimiento(1)">
+                    <i class="fas fa-edit"></i> Editar
+                  </button>
+                  <button class="btn-view" onclick="verProcedimiento(1)">
+                    <i class="fas fa-eye"></i> Ver
+                  </button>
+                </div>
+              </div>
+              
+              <div class="procedimiento-item">
+                <div class="procedimiento-info">
+                  <strong>Atención al Cliente</strong>
+                  <span class="procedimiento-desc">Protocolo de servicio y ventas</span>
+                  <span class="procedimiento-version">v1.8</span>
+                </div>
+                <div class="procedimiento-actions">
+                  <button class="btn-edit" onclick="editarProcedimiento(2)">
+                    <i class="fas fa-edit"></i> Editar
+                  </button>
+                  <button class="btn-view" onclick="verProcedimiento(2)">
+                    <i class="fas fa-eye"></i> Ver
+                  </button>
+                </div>
+              </div>
+              
+              <div class="procedimiento-item">
+                <div class="procedimiento-info">
+                  <strong>Control de Inventario</strong>
+                  <span class="procedimiento-desc">Gestión de stock y rotación</span>
+                  <span class="procedimiento-version">v3.0</span>
+                </div>
+                <div class="procedimiento-actions">
+                  <button class="btn-edit" onclick="editarProcedimiento(3)">
+                    <i class="fas fa-edit"></i> Editar
+                  </button>
+                  <button class="btn-view" onclick="verProcedimiento(3)">
+                    <i class="fas fa-eye"></i> Ver
+                  </button>
+                </div>
+              </div>
+            </div>
+            
+            <div class="nuevo-procedimiento">
+              <h4>Crear Nuevo Procedimiento</h4>
+              <form id="formProcedimiento" class="form-operaciones">
+                <div class="form-row">
+                  <div class="form-group">
+                    <label for="nombreProcedimiento">Nombre del Procedimiento</label>
+                    <input type="text" name="nombreProcedimiento" id="nombreProcedimiento" placeholder="Ej: Limpieza de Áreas" required>
+                  </div>
+                  <div class="form-group">
+                    <label for="areaProcedimiento">Área</label>
+                    <select name="areaProcedimiento" id="areaProcedimiento" required>
+                      <option value="">Selecciona área</option>
+                      <option value="ventas">Ventas</option>
+                      <option value="inventario">Inventario</option>
+                      <option value="administracion">Administración</option>
+                      <option value="mantenimiento">Mantenimiento</option>
+                      <option value="calidad">Calidad</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label for="descripcionProcedimiento">Descripción</label>
+                  <textarea name="descripcionProcedimiento" id="descripcionProcedimiento" rows="3" placeholder="Descripción detallada del procedimiento..." required></textarea>
+                </div>
+                <div class="form-group">
+                  <label for="pasosProcedimiento">Pasos del Procedimiento</label>
+                  <textarea name="pasosProcedimiento" id="pasosProcedimiento" rows="4" placeholder="1. Primer paso&#10;2. Segundo paso&#10;3. Tercer paso..." required></textarea>
+                </div>
+                <button type="submit" class="btn-primary">
+                  <i class="fas fa-plus"></i> Crear Procedimiento
+                </button>
+              </form>
+            </div>
+          </div>
+        </div>
+
+        <!-- Planes de Trabajo -->
+        <div class="card-operaciones">
+          <div class="card-header">
+            <i class="fas fa-tasks"></i>
+            <h3>Planes de Trabajo y Metas</h3>
+          </div>
+          <div class="card-content">
+            <div class="planes-activos">
+              <h4>Planes Activos</h4>
+              <div class="plan-item">
+                <div class="plan-info">
+                  <strong>Optimización de Ventas Q1 2024</strong>
+                  <span class="plan-desc">Incrementar ventas en 15%</span>
+                  <span class="plan-progress">Progreso: 68%</span>
+                </div>
+                <div class="plan-progress-bar">
+                  <div class="progress-fill" style="width: 68%"></div>
+                </div>
+                <div class="plan-actions">
+                  <button class="btn-edit" onclick="editarPlan(1)">
+                    <i class="fas fa-edit"></i> Editar
+                  </button>
+                  <button class="btn-update" onclick="actualizarProgreso(1)">
+                    <i class="fas fa-sync"></i> Actualizar
+                  </button>
+                </div>
+              </div>
+              
+              <div class="plan-item">
+                <div class="plan-info">
+                  <strong>Mejora de Eficiencia Operativa</strong>
+                  <span class="plan-desc">Reducir tiempos de proceso en 20%</span>
+                  <span class="plan-progress">Progreso: 45%</span>
+                </div>
+                <div class="plan-progress-bar">
+                  <div class="progress-fill" style="width: 45%"></div>
+                </div>
+                <div class="plan-actions">
+                  <button class="btn-edit" onclick="editarPlan(2)">
+                    <i class="fas fa-edit"></i> Editar
+                  </button>
+                  <button class="btn-update" onclick="actualizarProgreso(2)">
+                    <i class="fas fa-sync"></i> Actualizar
+                  </button>
+                </div>
+              </div>
+            </div>
+            
+            <div class="nuevo-plan">
+              <h4>Crear Nuevo Plan</h4>
+              <form id="formPlan" class="form-operaciones">
+                <div class="form-row">
+                  <div class="form-group">
+                    <label for="nombrePlan">Nombre del Plan</label>
+                    <input type="text" name="nombrePlan" id="nombrePlan" placeholder="Ej: Mejora de Calidad" required>
+                  </div>
+                  <div class="form-group">
+                    <label for="fechaInicio">Fecha de Inicio</label>
+                    <input type="date" name="fechaInicio" id="fechaInicio" required>
+                  </div>
+                </div>
+                <div class="form-row">
+                  <div class="form-group">
+                    <label for="fechaFin">Fecha de Finalización</label>
+                    <input type="date" name="fechaFin" id="fechaFin" required>
+                  </div>
+                  <div class="form-group">
+                    <label for="responsablePlan">Responsable</label>
+                    <select name="responsablePlan" id="responsablePlan" required>
+                      <option value="">Selecciona responsable</option>
+                      <option value="juan">Juan Pérez</option>
+                      <option value="maria">María García</option>
+                      <option value="carlos">Carlos López</option>
+                      <option value="gerente">Gerente</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label for="objetivoPlan">Objetivo</label>
+                  <textarea name="objetivoPlan" id="objetivoPlan" rows="3" placeholder="Descripción del objetivo a alcanzar..." required></textarea>
+                </div>
+                <div class="form-group">
+                  <label for="metasPlan">Metas Específicas</label>
+                  <textarea name="metasPlan" id="metasPlan" rows="3" placeholder="Meta 1: Incrementar ventas 10%&#10;Meta 2: Reducir costos 5%&#10;Meta 3: Mejorar satisfacción cliente..." required></textarea>
+                </div>
+                <button type="submit" class="btn-primary">
+                  <i class="fas fa-plus"></i> Crear Plan
+                </button>
+              </form>
+            </div>
+          </div>
+        </div>
+
+        <!-- Indicadores de Rendimiento (KPIs) -->
+        <div class="card-operaciones">
+          <div class="card-header">
+            <i class="fas fa-chart-bar"></i>
+            <h3>Indicadores de Rendimiento (KPIs)</h3>
+          </div>
+          <div class="card-content">
+            <div class="kpis-gestion">
+              <div class="kpi-categoria">
+                <h4>KPIs de Ventas</h4>
+                <div class="kpi-item">
+                  <span class="kpi-nombre">Ticket Promedio</span>
+                  <div class="kpi-controls">
+                    <input type="number" class="kpi-input" value="45000" step="1000">
+                    <button class="btn-update" onclick="actualizarKPI('ticket-promedio')">
+                      <i class="fas fa-save"></i>
+                    </button>
+                  </div>
+                </div>
+                <div class="kpi-item">
+                  <span class="kpi-nombre">Conversión (%)</span>
+                  <div class="kpi-controls">
+                    <input type="number" class="kpi-input" value="78" step="1" min="0" max="100">
+                    <button class="btn-update" onclick="actualizarKPI('conversion')">
+                      <i class="fas fa-save"></i>
+                    </button>
+                  </div>
+                </div>
+                <div class="kpi-item">
+                  <span class="kpi-nombre">Ventas por Hora</span>
+                  <div class="kpi-controls">
+                    <input type="number" class="kpi-input" value="125000" step="5000">
+                    <button class="btn-update" onclick="actualizarKPI('ventas-hora')">
+                      <i class="fas fa-save"></i>
+                    </button>
+                  </div>
+                </div>
+              </div>
+              
+              <div class="kpi-categoria">
+                <h4>KPIs Operativos</h4>
+                <div class="kpi-item">
+                  <span class="kpi-nombre">Tiempo de Atención (min)</span>
+                  <div class="kpi-controls">
+                    <input type="number" class="kpi-input" value="3.2" step="0.1">
+                    <button class="btn-update" onclick="actualizarKPI('tiempo-atencion')">
+                      <i class="fas fa-save"></i>
+                    </button>
+                  </div>
+                </div>
+                <div class="kpi-item">
+                  <span class="kpi-nombre">Productos/Día</span>
+                  <div class="kpi-controls">
+                    <input type="number" class="kpi-input" value="1247" step="10">
+                    <button class="btn-update" onclick="actualizarKPI('productos-dia')">
+                      <i class="fas fa-save"></i>
+                    </button>
+                  </div>
+                </div>
+                <div class="kpi-item">
+                  <span class="kpi-nombre">Eficiencia (%)</span>
+                  <div class="kpi-controls">
+                    <input type="number" class="kpi-input" value="87.5" step="0.5" min="0" max="100">
+                    <button class="btn-update" onclick="actualizarKPI('eficiencia')">
+                      <i class="fas fa-save"></i>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Estrategias Operativas -->
+        <div class="card-operaciones">
+          <div class="card-header">
+            <i class="fas fa-lightbulb"></i>
+            <h3>Estrategias Operativas</h3>
+          </div>
+          <div class="card-content">
+            <div class="estrategias-activas">
+              <h4>Estrategias en Implementación</h4>
+              <div class="estrategia-item">
+                <div class="estrategia-info">
+                  <strong>Digitalización de Procesos</strong>
+                  <span class="estrategia-desc">Implementar sistema de gestión digital</span>
+                  <span class="estrategia-estado">En Progreso</span>
+                </div>
+                <div class="estrategia-actions">
+                  <button class="btn-edit" onclick="editarEstrategia(1)">
+                    <i class="fas fa-edit"></i> Editar
+                  </button>
+                  <button class="btn-status" onclick="cambiarEstado(1)">
+                    <i class="fas fa-sync"></i> Estado
+                  </button>
+                </div>
+              </div>
+              
+              <div class="estrategia-item">
+                <div class="estrategia-info">
+                  <strong>Optimización de Inventario</strong>
+                  <span class="estrategia-desc">Sistema de rotación inteligente</span>
+                  <span class="estrategia-estado">Planificada</span>
+                </div>
+                <div class="estrategia-actions">
+                  <button class="btn-edit" onclick="editarEstrategia(2)">
+                    <i class="fas fa-edit"></i> Editar
+                  </button>
+                  <button class="btn-status" onclick="cambiarEstado(2)">
+                    <i class="fas fa-sync"></i> Estado
+                  </button>
+                </div>
+              </div>
+            </div>
+            
+            <div class="nueva-estrategia">
+              <h4>Implementar Nueva Estrategia</h4>
+              <form id="formEstrategia" class="form-operaciones">
+                <div class="form-row">
+                  <div class="form-group">
+                    <label for="nombreEstrategia">Nombre de la Estrategia</label>
+                    <input type="text" name="nombreEstrategia" id="nombreEstrategia" placeholder="Ej: Mejora de Experiencia Cliente" required>
+                  </div>
+                  <div class="form-group">
+                    <label for="tipoEstrategia">Tipo</label>
+                    <select name="tipoEstrategia" id="tipoEstrategia" required>
+                      <option value="">Selecciona tipo</option>
+                      <option value="operacional">Operacional</option>
+                      <option value="comercial">Comercial</option>
+                      <option value="tecnologica">Tecnológica</option>
+                      <option value="organizacional">Organizacional</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label for="descripcionEstrategia">Descripción</label>
+                  <textarea name="descripcionEstrategia" id="descripcionEstrategia" rows="3" placeholder="Descripción detallada de la estrategia..." required></textarea>
+                </div>
+                <div class="form-group">
+                  <label for="beneficiosEstrategia">Beneficios Esperados</label>
+                  <textarea name="beneficiosEstrategia" id="beneficiosEstrategia" rows="3" placeholder="Beneficio 1: Incremento de eficiencia&#10;Beneficio 2: Reducción de costos&#10;Beneficio 3: Mejora de calidad..." required></textarea>
+                </div>
+                <div class="form-group">
+                  <label for="recursosEstrategia">Recursos Necesarios</label>
+                  <textarea name="recursosEstrategia" id="recursosEstrategia" rows="2" placeholder="Recursos humanos, tecnológicos, financieros..." required></textarea>
+                </div>
+                <button type="submit" class="btn-primary">
+                  <i class="fas fa-rocket"></i> Implementar Estrategia
+                </button>
+              </form>
+            </div>
+          </div>
+        </div>
+
+        <!-- Gráfico de Rendimiento -->
+        <div class="card-operaciones chart-card">
+          <div class="card-header">
+            <i class="fas fa-chart-area"></i>
+            <h3>Rendimiento Operativo</h3>
+          </div>
+          <div class="card-content">
+            <canvas id="rendimientoOperativoChart" width="400" height="200"></canvas>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Mensajes de respuesta -->
+      <div class="mensaje" id="mensaje"></div>
+    </div>
+
+    <div id="noGerente" style="display:none;">
+      <div class="no-access">
+        <i class="fas fa-lock"></i>
+        <h2>Acceso Restringido</h2>
+        <p>Solo los gerentes pueden acceder a la gestión de procesos y operaciones.</p>
+        <a href="index.html" class="btn-secondary">Volver al Inicio</a>
+      </div>
+    </div>
+  </div>
+
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', Arial, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      padding-top: 80px;
+    }
+
+    .container-operaciones {
+      max-width: 1600px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+
+    .header-operaciones {
+      text-align: center;
+      background: rgba(255, 255, 255, 0.95);
+      padding: 30px;
+      border-radius: 15px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+      margin-bottom: 30px;
+      backdrop-filter: blur(10px);
+    }
+
+    .header-operaciones h1 {
+      color: #2c3e50;
+      font-size: 2.2rem;
+      margin-bottom: 10px;
+      font-weight: 700;
+    }
+
+    .header-operaciones p {
+      color: #7f8c8d;
+      font-size: 1.1rem;
+    }
+
+    .dashboard-operaciones {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+      gap: 25px;
+      margin-bottom: 30px;
+    }
+
+    .kpis-principales {
+      grid-column: 1 / -1;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 20px;
+      margin-bottom: 20px;
+    }
+
+    .kpi-card {
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 15px;
+      padding: 25px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      transition: transform 0.3s ease;
+      backdrop-filter: blur(10px);
+    }
+
+    .kpi-card:hover {
+      transform: translateY(-5px);
+    }
+
+    .kpi-icon {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #4caf50, #45a049);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 1.5rem;
+    }
+
+    .kpi-content h3 {
+      margin: 0 0 10px 0;
+      color: #2c3e50;
+      font-size: 1rem;
+      font-weight: 600;
+    }
+
+    .kpi-value {
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: #2c3e50;
+      margin: 0 0 5px 0;
+    }
+
+    .kpi-target {
+      font-size: 0.9rem;
+      font-weight: 500;
+      color: #6c757d;
+    }
+
+    .card-operaciones {
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 15px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+      overflow: hidden;
+      transition: transform 0.3s ease;
+      backdrop-filter: blur(10px);
+    }
+
+    .card-operaciones:hover {
+      transform: translateY(-5px);
+    }
+
+    .card-header {
+      background: linear-gradient(135deg, #4caf50, #45a049);
+      color: white;
+      padding: 20px;
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+
+    .card-header i {
+      font-size: 1.5rem;
+    }
+
+    .card-header h3 {
+      margin: 0;
+      font-size: 1.3rem;
+      font-weight: 600;
+    }
+
+    .card-content {
+      padding: 25px;
+    }
+
+    .procedimientos-activos,
+    .planes-activos,
+    .estrategias-activas {
+      margin-bottom: 25px;
+    }
+
+    .procedimientos-activos h4,
+    .planes-activos h4,
+    .estrategias-activas h4 {
+      color: #2c3e50;
+      margin-bottom: 15px;
+      font-size: 1.1rem;
+    }
+
+    .procedimiento-item,
+    .plan-item,
+    .estrategia-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 15px;
+      background: #f8f9fa;
+      border-radius: 8px;
+      margin-bottom: 10px;
+      border-left: 4px solid #4caf50;
+    }
+
+    .procedimiento-info,
+    .plan-info,
+    .estrategia-info {
+      flex: 1;
+    }
+
+    .procedimiento-info strong,
+    .plan-info strong,
+    .estrategia-info strong {
+      display: block;
+      color: #2c3e50;
+      font-size: 1rem;
+      margin-bottom: 5px;
+    }
+
+    .procedimiento-desc,
+    .plan-desc,
+    .estrategia-desc {
+      display: block;
+      color: #6c757d;
+      font-size: 0.9rem;
+      margin-bottom: 3px;
+    }
+
+    .procedimiento-version,
+    .plan-progress,
+    .estrategia-estado {
+      display: block;
+      color: #4caf50;
+      font-size: 0.8rem;
+      font-weight: 500;
+    }
+
+    .plan-progress-bar {
+      width: 100px;
+      height: 8px;
+      background: #e9ecef;
+      border-radius: 4px;
+      overflow: hidden;
+      margin: 0 15px;
+    }
+
+    .progress-fill {
+      height: 100%;
+      background: linear-gradient(135deg, #4caf50, #45a049);
+      transition: width 0.3s ease;
+    }
+
+    .procedimiento-actions,
+    .plan-actions,
+    .estrategia-actions {
+      display: flex;
+      gap: 8px;
+    }
+
+    .btn-edit,
+    .btn-view,
+    .btn-update,
+    .btn-status {
+      padding: 8px 12px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 0.9rem;
+      font-weight: 500;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .btn-edit {
+      background: #17a2b8;
+      color: white;
+    }
+
+    .btn-edit:hover {
+      background: #138496;
+      transform: scale(1.05);
+    }
+
+    .btn-view {
+      background: #6c757d;
+      color: white;
+    }
+
+    .btn-view:hover {
+      background: #5a6268;
+      transform: scale(1.05);
+    }
+
+    .btn-update {
+      background: #ffc107;
+      color: #212529;
+    }
+
+    .btn-update:hover {
+      background: #e0a800;
+      transform: scale(1.05);
+    }
+
+    .btn-status {
+      background: #28a745;
+      color: white;
+    }
+
+    .btn-status:hover {
+      background: #218838;
+      transform: scale(1.05);
+    }
+
+    .form-operaciones {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 15px;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .form-group label {
+      color: #2c3e50;
+      font-weight: 600;
+      margin-bottom: 8px;
+      font-size: 0.95rem;
+    }
+
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+      padding: 12px 15px;
+      border: 2px solid #e9ecef;
+      border-radius: 8px;
+      font-size: 1rem;
+      transition: all 0.3s ease;
+      background: #f8f9fa;
+    }
+
+    .form-group input:focus,
+    .form-group select:focus,
+    .form-group textarea:focus {
+      border-color: #4caf50;
+      outline: none;
+      background: white;
+      box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.1);
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, #4caf50, #45a049);
+      color: white;
+      border: none;
+      padding: 12px 20px;
+      border-radius: 8px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(76, 175, 80, 0.3);
+    }
+
+    .btn-secondary {
+      background: #6c757d;
+      color: white;
+      text-decoration: none;
+      padding: 10px 20px;
+      border-radius: 6px;
+      font-weight: 500;
+      transition: background 0.3s ease;
+    }
+
+    .btn-secondary:hover {
+      background: #5a6268;
+    }
+
+    .kpis-gestion {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 30px;
+    }
+
+    .kpi-categoria h4 {
+      color: #2c3e50;
+      margin-bottom: 15px;
+      font-size: 1.1rem;
+    }
+
+    .kpi-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 0;
+      border-bottom: 1px solid #e9ecef;
+    }
+
+    .kpi-nombre {
+      font-weight: 500;
+      color: #2c3e50;
+      min-width: 150px;
+    }
+
+    .kpi-controls {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+    }
+
+    .kpi-input {
+      width: 100px;
+      padding: 6px 8px;
+      border: 1px solid #e9ecef;
+      border-radius: 4px;
+      text-align: center;
+      font-size: 0.9rem;
+    }
+
+    .chart-card {
+      grid-column: 1 / -1;
+    }
+
+    .chart-card .card-content {
+      padding: 20px;
+    }
+
+    .mensaje {
+      margin-top: 20px;
+      padding: 15px;
+      border-radius: 8px;
+      font-weight: 500;
+      text-align: center;
+      min-height: 20px;
+    }
+
+    .mensaje.success {
+      background: #d4edda;
+      color: #155724;
+      border: 1px solid #c3e6cb;
+    }
+
+    .mensaje.error {
+      background: #f8d7da;
+      color: #721c24;
+      border: 1px solid #f5c6cb;
+    }
+
+    .no-access {
+      text-align: center;
+      background: rgba(255, 255, 255, 0.95);
+      padding: 60px 40px;
+      border-radius: 15px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+      backdrop-filter: blur(10px);
+    }
+
+    .no-access i {
+      font-size: 4rem;
+      color: #dc3545;
+      margin-bottom: 20px;
+    }
+
+    .no-access h2 {
+      color: #2c3e50;
+      margin-bottom: 15px;
+      font-size: 1.8rem;
+    }
+
+    .no-access p {
+      color: #6c757d;
+      font-size: 1.1rem;
+      margin-bottom: 25px;
+    }
+
+    @media (max-width: 768px) {
+      .dashboard-operaciones {
+        grid-template-columns: 1fr;
+      }
+      
+      .kpis-principales {
+        grid-template-columns: 1fr;
+      }
+      
+      .form-row {
+        grid-template-columns: 1fr;
+      }
+      
+      .kpis-gestion {
+        grid-template-columns: 1fr;
+      }
+      
+      .procedimiento-item,
+      .plan-item,
+      .estrategia-item {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+      }
+      
+      .plan-progress-bar {
+        width: 100%;
+        margin: 10px 0;
+      }
+    }
+  </style>
+
+  <script src="js/role-verifier.js"></script>
+  <script src="navbar.js"></script>
+  <script>
+    // Verificación de roles - DEBE SER LO PRIMERO
+    if (!roleVerifier.init('gestionproop.html')) {
+      // Si no tiene acceso, la función ya redirige automáticamente
+      // No ejecutar el resto del código
+      throw new Error('Acceso denegado');
+    }
+
+    // Verificación de gerente (código existente)
+    async function verificarGerente() {
+      const token = localStorage.getItem('token');
+      if (!token) return false;
+      try {
+        const res = await fetch('http://localhost:4545/mi-rol', {
+          headers: { 'Authorization': 'Bearer ' + token }
+        });
+        const data = await res.json();
+        return data.rol === 'gerente';
+      } catch {
+        return false;
+      }
+    }
+
+    // Mostrar mensaje
+    function mostrarMensaje(texto, tipo = 'success') {
+      const mensaje = document.getElementById('mensaje');
+      mensaje.textContent = texto;
+      mensaje.className = `mensaje ${tipo}`;
+      setTimeout(() => {
+        mensaje.textContent = '';
+        mensaje.className = 'mensaje';
+      }, 5000);
+    }
+
+    // Funciones para gestión de procedimientos
+    function editarProcedimiento(id) {
+      mostrarMensaje(`✏️ Editando procedimiento ${id}...`, 'success');
+    }
+
+    function verProcedimiento(id) {
+      mostrarMensaje(`👁️ Visualizando procedimiento ${id}`, 'success');
+    }
+
+    // Funciones para cargar datos de la base de datos
+    async function cargarProcedimientos() {
+      try {
+        const token = localStorage.getItem('token');
+        const response = await fetch('http://localhost:4545/gestion/procedimientos', {
+          headers: { 'Authorization': `Bearer ${token}` }
+        });
+        const result = await response.json();
+        
+        if (result.success && result.data) {
+          actualizarListaProcedimientos(result.data);
+        }
+      } catch (error) {
+        console.error('Error al cargar procedimientos:', error);
+      }
+    }
+
+    async function cargarPlanesTrabajo() {
+      try {
+        const token = localStorage.getItem('token');
+        const response = await fetch('http://localhost:4545/gestion/planes-trabajo', {
+          headers: { 'Authorization': `Bearer ${token}` }
+        });
+        const result = await response.json();
+        
+        if (result.success && result.data) {
+          actualizarListaPlanes(result.data);
+        }
+      } catch (error) {
+        console.error('Error al cargar planes de trabajo:', error);
+      }
+    }
+
+    async function cargarKPIs() {
+      try {
+        const token = localStorage.getItem('token');
+        const response = await fetch('http://localhost:4545/gestion/kpis', {
+          headers: { 'Authorization': `Bearer ${token}` }
+        });
+        const result = await response.json();
+        
+        if (result.success && result.data) {
+          actualizarKPIs(result.data);
+        }
+      } catch (error) {
+        console.error('Error al cargar KPIs:', error);
+      }
+    }
+
+    async function cargarEstrategias() {
+      try {
+        const token = localStorage.getItem('token');
+        const response = await fetch('http://localhost:4545/gestion/estrategias', {
+          headers: { 'Authorization': `Bearer ${token}` }
+        });
+        const result = await response.json();
+        
+        if (result.success && result.data) {
+          actualizarListaEstrategias(result.data);
+        }
+      } catch (error) {
+        console.error('Error al cargar estrategias:', error);
+      }
+    }
+
+    function actualizarListaProcedimientos(procedimientos) {
+      const container = document.querySelector('.procedimientos-activos');
+      if (!container) return;
+
+      container.innerHTML = '<h4>Procedimientos Activos</h4>';
+      
+      procedimientos.forEach(procedimiento => {
+        const procedimientoElement = document.createElement('div');
+        procedimientoElement.className = 'procedimiento-item';
+        procedimientoElement.innerHTML = `
+          <div class="procedimiento-info">
+            <strong>${procedimiento.nombre}</strong>
+            <span class="procedimiento-desc">${procedimiento.descripcion}</span>
+            <span class="procedimiento-version">v${procedimiento.version}</span>
+          </div>
+          <div class="procedimiento-actions">
+            <button class="btn-edit" onclick="editarProcedimiento(${procedimiento.idProcedimiento})">
+              <i class="fas fa-edit"></i> Editar
+            </button>
+            <button class="btn-view" onclick="verProcedimiento(${procedimiento.idProcedimiento})">
+              <i class="fas fa-eye"></i> Ver
+            </button>
+          </div>
+        `;
+        container.appendChild(procedimientoElement);
+      });
+    }
+
+    function actualizarListaPlanes(planes) {
+      const container = document.querySelector('.planes-activos');
+      if (!container) return;
+
+      container.innerHTML = '<h4>Planes Activos</h4>';
+      
+      planes.forEach(plan => {
+        const planElement = document.createElement('div');
+        planElement.className = 'plan-item';
+        planElement.innerHTML = `
+          <div class="plan-info">
+            <strong>${plan.nombre}</strong>
+            <span class="plan-desc">${plan.objetivo}</span>
+            <span class="plan-progress">Progreso: ${plan.progreso}%</span>
+          </div>
+          <div class="plan-progress-bar">
+            <div class="progress-fill" style="width: ${plan.progreso}%"></div>
+          </div>
+          <div class="plan-actions">
+            <button class="btn-edit" onclick="editarPlan(${plan.idPlan})">
+              <i class="fas fa-edit"></i> Editar
+            </button>
+            <button class="btn-update" onclick="actualizarProgreso(${plan.idPlan})">
+              <i class="fas fa-sync"></i> Actualizar
+            </button>
+          </div>
+        `;
+        container.appendChild(planElement);
+      });
+    }
+
+    function actualizarKPIs(kpis) {
+      // Actualizar KPIs principales
+      const kpiCards = document.querySelectorAll('.kpi-card');
+      kpiCards.forEach((card, index) => {
+        const kpiValue = card.querySelector('.kpi-value');
+        if (kpiValue && kpis[index]) {
+          kpiValue.textContent = kpis[index].valor + (kpis[index].unidad === 'porcentaje' ? '%' : '');
+        }
+      });
+
+      // Actualizar controles de KPIs
+      const kpiInputs = document.querySelectorAll('.kpi-input');
+      kpiInputs.forEach((input, index) => {
+        if (kpis[index]) {
+          input.value = kpis[index].valor;
+        }
+      });
+    }
+
+    function actualizarListaEstrategias(estrategias) {
+      const container = document.querySelector('.estrategias-activas');
+      if (!container) return;
+
+      container.innerHTML = '<h4>Estrategias en Implementación</h4>';
+      
+      estrategias.forEach(estrategia => {
+        const estrategiaElement = document.createElement('div');
+        estrategiaElement.className = 'estrategia-item';
+        estrategiaElement.innerHTML = `
+          <div class="estrategia-info">
+            <strong>${estrategia.nombre}</strong>
+            <span class="estrategia-desc">${estrategia.descripcion}</span>
+            <span class="estrategia-estado">${estrategia.estado}</span>
+          </div>
+          <div class="estrategia-actions">
+            <button class="btn-edit" onclick="editarEstrategia(${estrategia.idEstrategia})">
+              <i class="fas fa-edit"></i> Editar
+            </button>
+            <button class="btn-status" onclick="cambiarEstado(${estrategia.idEstrategia})">
+              <i class="fas fa-sync"></i> Estado
+            </button>
+          </div>
+        `;
+        container.appendChild(estrategiaElement);
+      });
+    }
+
+    // Funciones para gestión de planes
+    function editarPlan(id) {
+      mostrarMensaje(`✏️ Editando plan ${id}...`, 'success');
+    }
+
+    async function actualizarProgreso(id) {
+      const nuevoProgreso = prompt('Ingrese el nuevo progreso (0-100):', '68');
+      if (nuevoProgreso && !isNaN(nuevoProgreso) && nuevoProgreso >= 0 && nuevoProgreso <= 100) {
+        try {
+          const token = localStorage.getItem('token');
+          const response = await fetch(`http://localhost:4545/gestion/planes-trabajo/${id}/progreso`, {
+            method: 'PUT',
+            headers: {
+              'Authorization': `Bearer ${token}`,
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ progreso: nuevoProgreso })
+          });
+          const result = await response.json();
+          mostrarMensaje(result.message, result.success ? 'success' : 'error');
+          if (result.success) {
+            cargarPlanesTrabajo();
+          }
+        } catch (error) {
+          mostrarMensaje('Error al actualizar progreso', 'error');
+        }
+      }
+    }
+
+    // Funciones para gestión de KPIs
+    async function actualizarKPI(kpi) {
+      const input = document.querySelector(`[onclick="actualizarKPI('${kpi}')"]`).previousElementSibling;
+      const valor = input.value;
+      
+      try {
+        const token = localStorage.getItem('token');
+        const response = await fetch(`http://localhost:4545/gestion/kpis/${kpi}`, {
+          method: 'PUT',
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ valor: valor })
+        });
+        const result = await response.json();
+        mostrarMensaje(result.message, result.success ? 'success' : 'error');
+        if (result.success) {
+          cargarKPIs();
+        }
+      } catch (error) {
+        mostrarMensaje('Error al actualizar KPI', 'error');
+      }
+    }
+
+    // Funciones para gestión de estrategias
+    function editarEstrategia(id) {
+      mostrarMensaje(`✏️ Editando estrategia ${id}...`, 'success');
+    }
+
+    function cambiarEstado(id) {
+      const estados = ['Planificada', 'En Progreso', 'Completada', 'Pausada'];
+      const estadoActual = estados[Math.floor(Math.random() * estados.length)];
+      mostrarMensaje(`🔄 Estado de estrategia ${id} cambiado a: ${estadoActual}`, 'success');
+    }
+
+    // Inicialización
+    (async () => {
+      const esGerente = await verificarGerente();
+      document.getElementById('soloGerente').style.display = esGerente ? 'block' : 'none';
+      document.getElementById('noGerente').style.display = esGerente ? 'none' : 'block';
+      
+      if (esGerente) {
+        inicializarGrafico();
+        establecerFechasMinimas();
+        cargarProcedimientos();
+        cargarPlanesTrabajo();
+        cargarKPIs();
+        cargarEstrategias();
+      }
+    })();
+
+    // Gestión de Procedimientos
+    document.getElementById('formProcedimiento')?.addEventListener('submit', async function(e) {
+      e.preventDefault();
+      const formData = new FormData(this);
+      const datos = Object.fromEntries(formData.entries());
+      
+      try {
+        const token = localStorage.getItem('token');
+        const response = await fetch('http://localhost:4545/gestion/procedimientos', {
+          method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(datos)
+        });
+        const result = await response.json();
+        mostrarMensaje(result.message, result.success ? 'success' : 'error');
+        if (result.success) {
+          this.reset();
+          cargarProcedimientos();
+        }
+      } catch (error) {
+        mostrarMensaje('Error al crear procedimiento', 'error');
+      }
+    });
+
+    // Gestión de Planes
+    document.getElementById('formPlan')?.addEventListener('submit', async function(e) {
+      e.preventDefault();
+      const formData = new FormData(this);
+      const datos = Object.fromEntries(formData.entries());
+      
+      try {
+        const token = localStorage.getItem('token');
+        const response = await fetch('http://localhost:4545/gestion/planes-trabajo', {
+          method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(datos)
+        });
+        const result = await response.json();
+        mostrarMensaje(result.message, result.success ? 'success' : 'error');
+        if (result.success) {
+          this.reset();
+          cargarPlanesTrabajo();
+        }
+      } catch (error) {
+        mostrarMensaje('Error al crear plan', 'error');
+      }
+    });
+
+    // Gestión de Estrategias
+    document.getElementById('formEstrategia')?.addEventListener('submit', async function(e) {
+      e.preventDefault();
+      const formData = new FormData(this);
+      const datos = Object.fromEntries(formData.entries());
+      
+      try {
+        const token = localStorage.getItem('token');
+        const response = await fetch('http://localhost:4545/gestion/estrategias', {
+          method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(datos)
+        });
+        const result = await response.json();
+        mostrarMensaje(result.message, result.success ? 'success' : 'error');
+        if (result.success) {
+          this.reset();
+          cargarEstrategias();
+        }
+      } catch (error) {
+        mostrarMensaje('Error al crear estrategia', 'error');
+      }
+    });
+
+    // Establecer fechas mínimas
+    function establecerFechasMinimas() {
+      const fechaInicio = document.getElementById('fechaInicio');
+      const fechaFin = document.getElementById('fechaFin');
+      
+      if (fechaInicio) {
+        const hoy = new Date().toISOString().split('T')[0];
+        fechaInicio.min = hoy;
+      }
+      
+      if (fechaFin) {
+        fechaFin.addEventListener('change', function() {
+          if (fechaInicio.value) {
+            fechaFin.min = fechaInicio.value;
+          }
+        });
+      }
+    }
+
+    // Inicializar gráfico de rendimiento operativo
+    function inicializarGrafico() {
+      const ctx = document.getElementById('rendimientoOperativoChart').getContext('2d');
+      new Chart(ctx, {
+        type: 'bar',
+        data: {
+          labels: ['Eficiencia', 'Satisfacción', 'Productividad', 'Calidad', 'Innovación'],
+          datasets: [{
+            label: 'Rendimiento Actual',
+            data: [87.5, 94.2, 82.1, 91.3, 76.8],
+            backgroundColor: 'rgba(76, 175, 80, 0.8)',
+            borderColor: '#4caf50',
+            borderWidth: 2
+          }, {
+            label: 'Meta Objetivo',
+            data: [90, 95, 85, 93, 80],
+            backgroundColor: 'rgba(33, 150, 243, 0.8)',
+            borderColor: '#2196f3',
+            borderWidth: 2
+          }]
+        },
+        options: {
+          responsive: true,
+          plugins: {
+            title: {
+              display: true,
+              text: 'Rendimiento Operativo por Categoría'
+            }
+          },
+          scales: {
+            y: {
+              beginAtZero: true,
+              max: 100,
+              ticks: {
+                callback: function(value) {
+                  return value + '%';
+                }
+              }
+            }
+          }
+        }
+      });
+    }
+  </script>
+</body>
+</html>

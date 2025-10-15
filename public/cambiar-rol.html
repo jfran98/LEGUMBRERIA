@@ -1,0 +1,668 @@
+<!-- public/cambiar-rol.html -->
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Gestión del Personal - Legumbrería JM</title>
+  <link rel="stylesheet" href="style.css">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+  <!-- Navbar dinámico -->
+  <div id="navbar"></div>
+
+  <div class="container-gestion">
+    <div class="header-gestion">
+      <h1><i class="fas fa-users-cog"></i> Gestión del Personal</h1>
+      <p>Panel de administración para gerentes</p>
+    </div>
+
+    <div id="soloGerente" style="display:none;">
+      <!-- Dashboard de gestión -->
+      <div class="dashboard-grid">
+        
+        <!-- Gestión de Roles -->
+        <div class="card-gestion">
+          <div class="card-header">
+            <i class="fas fa-user-tag"></i>
+            <h3>Gestión de Roles</h3>
+          </div>
+          <div class="card-content">
+            <form id="formRol" class="form-gestion">
+              <div class="form-group">
+                <label for="email">Correo del empleado</label>
+                <input type="email" name="email" id="email" placeholder="empleado@legumbreria.com" required>
+              </div>
+              <div class="form-group">
+                <label for="rol">Nuevo rol</label>
+                <select name="rol" id="rol" required>
+                  <option value="">Selecciona nuevo rol</option>
+                  <option value="usuario">Usuario</option>
+                  <option value="empleado">Empleado</option>
+                  <option value="gerente">Gerente</option>
+                </select>
+              </div>
+              <button type="submit" class="btn-primary">
+                <i class="fas fa-save"></i> Cambiar Rol
+              </button>
+            </form>
+          </div>
+        </div>
+
+        <!-- Gestión de Vacaciones -->
+        <div class="card-gestion">
+          <div class="card-header">
+            <i class="fas fa-calendar-check"></i>
+            <h3>Vacaciones y Permisos</h3>
+          </div>
+          <div class="card-content">
+            <div class="solicitudes-list" id="solicitudesVacaciones">
+              <div class="solicitud-item">
+                <div class="solicitud-info">
+                  <strong>Juan Pérez</strong>
+                  <span class="fecha">15-20 Enero 2024</span>
+                  <span class="tipo">Vacaciones</span>
+                </div>
+                <div class="solicitud-actions">
+                  <button class="btn-approve" onclick="aprobarSolicitud(1)">
+                    <i class="fas fa-check"></i>
+                  </button>
+                  <button class="btn-reject" onclick="rechazarSolicitud(1)">
+                    <i class="fas fa-times"></i>
+                  </button>
+                </div>
+              </div>
+              <div class="solicitud-item">
+                <div class="solicitud-info">
+                  <strong>María García</strong>
+                  <span class="fecha">22 Enero 2024</span>
+                  <span class="tipo">Permiso Médico</span>
+                </div>
+                <div class="solicitud-actions">
+                  <button class="btn-approve" onclick="aprobarSolicitud(2)">
+                    <i class="fas fa-check"></i>
+                  </button>
+                  <button class="btn-reject" onclick="rechazarSolicitud(2)">
+                    <i class="fas fa-times"></i>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Gestión de Horarios -->
+        <div class="card-gestion">
+          <div class="card-header">
+            <i class="fas fa-clock"></i>
+            <h3>Horarios y Turnos</h3>
+          </div>
+          <div class="card-content">
+            <form id="formHorario" class="form-gestion">
+              <div class="form-group">
+                <label for="empleadoHorario">Empleado</label>
+                <select name="empleadoHorario" id="empleadoHorario" required>
+                  <option value="">Selecciona empleado</option>
+                  <option value="juan">Juan Pérez</option>
+                  <option value="maria">María García</option>
+                  <option value="carlos">Carlos López</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label for="turno">Turno</label>
+                <select name="turno" id="turno" required>
+                  <option value="">Selecciona turno</option>
+                  <option value="mañana">Mañana (6:00 - 14:00)</option>
+                  <option value="tarde">Tarde (14:00 - 22:00)</option>
+                  <option value="noche">Noche (22:00 - 6:00)</option>
+                </select>
+              </div>
+              <button type="submit" class="btn-primary">
+                <i class="fas fa-clock"></i> Asignar Turno
+              </button>
+            </form>
+          </div>
+        </div>
+
+        <!-- Evaluación de Desempeño -->
+        <div class="card-gestion">
+          <div class="card-header">
+            <i class="fas fa-chart-line"></i>
+            <h3>Evaluación de Desempeño</h3>
+          </div>
+          <div class="card-content">
+            <form id="formEvaluacion" class="form-gestion">
+              <div class="form-group">
+                <label for="empleadoEval">Empleado</label>
+                <select name="empleadoEval" id="empleadoEval" required>
+                  <option value="">Selecciona empleado</option>
+                  <option value="juan">Juan Pérez</option>
+                  <option value="maria">María García</option>
+                  <option value="carlos">Carlos López</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label for="calificacion">Calificación (1-10)</label>
+                <input type="number" name="calificacion" id="calificacion" min="1" max="10" required>
+              </div>
+              <div class="form-group">
+                <label for="comentarios">Comentarios</label>
+                <textarea name="comentarios" id="comentarios" rows="3" placeholder="Observaciones sobre el desempeño..."></textarea>
+              </div>
+              <button type="submit" class="btn-primary">
+                <i class="fas fa-star"></i> Evaluar
+              </button>
+            </form>
+          </div>
+        </div>
+
+        <!-- Gestión de Contrataciones -->
+        <div class="card-gestion">
+          <div class="card-header">
+            <i class="fas fa-user-plus"></i>
+            <h3>Contrataciones</h3>
+          </div>
+          <div class="card-content">
+            <form id="formContratacion" class="form-gestion">
+              <div class="form-group">
+                <label for="nombreNuevo">Nombre completo</label>
+                <input type="text" name="nombreNuevo" id="nombreNuevo" placeholder="Nombre del nuevo empleado" required>
+              </div>
+              <div class="form-group">
+                <label for="cargoNuevo">Cargo</label>
+                <select name="cargoNuevo" id="cargoNuevo" required>
+                  <option value="">Selecciona cargo</option>
+                  <option value="vendedor">Vendedor</option>
+                  <option value="cajero">Cajero</option>
+                  <option value="almacenista">Almacenista</option>
+                  <option value="empleado">Empleado General</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label for="salarioNuevo">Salario</label>
+                <input type="number" name="salarioNuevo" id="salarioNuevo" placeholder="Salario mensual" required>
+              </div>
+              <button type="submit" class="btn-primary">
+                <i class="fas fa-handshake"></i> Autorizar Contratación
+              </button>
+            </form>
+          </div>
+        </div>
+
+        <!-- Asignación de Tareas -->
+        <div class="card-gestion">
+          <div class="card-header">
+            <i class="fas fa-tasks"></i>
+            <h3>Asignación de Tareas</h3>
+          </div>
+          <div class="card-content">
+            <form id="formTarea" class="form-gestion">
+              <div class="form-group">
+                <label for="empleadoTarea">Asignar a</label>
+                <select name="empleadoTarea" id="empleadoTarea" required>
+                  <option value="">Selecciona empleado</option>
+                  <option value="juan">Juan Pérez</option>
+                  <option value="maria">María García</option>
+                  <option value="carlos">Carlos López</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label for="tituloTarea">Título de la tarea</label>
+                <input type="text" name="tituloTarea" id="tituloTarea" placeholder="Título de la tarea" required>
+              </div>
+              <div class="form-group">
+                <label for="descripcionTarea">Descripción</label>
+                <textarea name="descripcionTarea" id="descripcionTarea" rows="3" placeholder="Descripción detallada de la tarea..." required></textarea>
+              </div>
+              <div class="form-group">
+                <label for="fechaLimite">Fecha límite</label>
+                <input type="date" name="fechaLimite" id="fechaLimite" required>
+              </div>
+              <button type="submit" class="btn-primary">
+                <i class="fas fa-paper-plane"></i> Asignar Tarea
+              </button>
+            </form>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Mensajes de respuesta -->
+      <div class="mensaje" id="mensaje"></div>
+    </div>
+
+    <div id="noGerente" style="display:none;">
+      <div class="no-access">
+        <i class="fas fa-lock"></i>
+        <h2>Acceso Restringido</h2>
+        <p>Solo los gerentes pueden acceder a la gestión del personal.</p>
+        <a href="index.html" class="btn-secondary">Volver al Inicio</a>
+      </div>
+    </div>
+  </div>
+
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', Arial, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      padding-top: 80px;
+    }
+
+    .container-gestion {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+
+    .header-gestion {
+      text-align: center;
+      background: rgba(255, 255, 255, 0.95);
+      padding: 30px;
+      border-radius: 15px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+      margin-bottom: 30px;
+      backdrop-filter: blur(10px);
+    }
+
+    .header-gestion h1 {
+      color: #2c3e50;
+      font-size: 2.2rem;
+      margin-bottom: 10px;
+      font-weight: 700;
+    }
+
+    .header-gestion p {
+      color: #7f8c8d;
+      font-size: 1.1rem;
+    }
+
+    .dashboard-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+      gap: 25px;
+      margin-bottom: 30px;
+    }
+
+    .card-gestion {
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 15px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+      overflow: hidden;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      backdrop-filter: blur(10px);
+    }
+
+    .card-gestion:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+    }
+
+    .card-header {
+      background: linear-gradient(135deg, #4caf50, #45a049);
+      color: white;
+      padding: 20px;
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+
+    .card-header i {
+      font-size: 1.5rem;
+    }
+
+    .card-header h3 {
+      margin: 0;
+      font-size: 1.3rem;
+      font-weight: 600;
+    }
+
+    .card-content {
+      padding: 25px;
+    }
+
+    .form-gestion {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .form-group label {
+      color: #2c3e50;
+      font-weight: 600;
+      margin-bottom: 8px;
+      font-size: 0.95rem;
+    }
+
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+      padding: 12px 15px;
+      border: 2px solid #e9ecef;
+      border-radius: 8px;
+      font-size: 1rem;
+      transition: all 0.3s ease;
+      background: #f8f9fa;
+    }
+
+    .form-group input:focus,
+    .form-group select:focus,
+    .form-group textarea:focus {
+      border-color: #4caf50;
+      outline: none;
+      background: white;
+      box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.1);
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, #4caf50, #45a049);
+      color: white;
+      border: none;
+      padding: 12px 20px;
+      border-radius: 8px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(76, 175, 80, 0.3);
+    }
+
+    .btn-secondary {
+      background: #6c757d;
+      color: white;
+      text-decoration: none;
+      padding: 10px 20px;
+      border-radius: 6px;
+      font-weight: 500;
+      transition: background 0.3s ease;
+    }
+
+    .btn-secondary:hover {
+      background: #5a6268;
+    }
+
+    .solicitudes-list {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+    }
+
+    .solicitud-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 15px;
+      background: #f8f9fa;
+      border-radius: 8px;
+      border-left: 4px solid #4caf50;
+    }
+
+    .solicitud-info {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+    }
+
+    .solicitud-info strong {
+      color: #2c3e50;
+      font-size: 1rem;
+    }
+
+    .solicitud-info .fecha {
+      color: #6c757d;
+      font-size: 0.9rem;
+    }
+
+    .solicitud-info .tipo {
+      background: #e3f2fd;
+      color: #1976d2;
+      padding: 2px 8px;
+      border-radius: 4px;
+      font-size: 0.8rem;
+      font-weight: 500;
+    }
+
+    .solicitud-actions {
+      display: flex;
+      gap: 8px;
+    }
+
+    .btn-approve,
+    .btn-reject {
+      width: 35px;
+      height: 35px;
+      border: none;
+      border-radius: 50%;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .btn-approve {
+      background: #4caf50;
+      color: white;
+    }
+
+    .btn-approve:hover {
+      background: #45a049;
+      transform: scale(1.1);
+    }
+
+    .btn-reject {
+      background: #f44336;
+      color: white;
+    }
+
+    .btn-reject:hover {
+      background: #d32f2f;
+      transform: scale(1.1);
+    }
+
+    .mensaje {
+      margin-top: 20px;
+      padding: 15px;
+      border-radius: 8px;
+      font-weight: 500;
+      text-align: center;
+      min-height: 20px;
+    }
+
+    .mensaje.success {
+      background: #d4edda;
+      color: #155724;
+      border: 1px solid #c3e6cb;
+    }
+
+    .mensaje.error {
+      background: #f8d7da;
+      color: #721c24;
+      border: 1px solid #f5c6cb;
+    }
+
+    .no-access {
+      text-align: center;
+      background: rgba(255, 255, 255, 0.95);
+      padding: 60px 40px;
+      border-radius: 15px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+      backdrop-filter: blur(10px);
+    }
+
+    .no-access i {
+      font-size: 4rem;
+      color: #dc3545;
+      margin-bottom: 20px;
+    }
+
+    .no-access h2 {
+      color: #2c3e50;
+      margin-bottom: 15px;
+      font-size: 1.8rem;
+    }
+
+    .no-access p {
+      color: #6c757d;
+      font-size: 1.1rem;
+      margin-bottom: 25px;
+    }
+
+    @media (max-width: 768px) {
+      .dashboard-grid {
+        grid-template-columns: 1fr;
+      }
+      
+      .header-gestion h1 {
+        font-size: 1.8rem;
+      }
+      
+      .card-content {
+        padding: 20px;
+      }
+    }
+  </style>
+
+  <script src="js/role-verifier.js"></script>
+  <script src="navbar.js"></script>
+  <script>
+    // Verificación de roles - DEBE SER LO PRIMERO
+    if (!roleVerifier.init('cambiar-rol.html')) {
+      // Si no tiene acceso, la función ya redirige automáticamente
+      // No ejecutar el resto del código
+      throw new Error('Acceso denegado');
+    }
+
+    // Verificación de gerente (código existente)
+    async function verificarGerente() {
+      const token = localStorage.getItem('token');
+      if (!token) return false;
+      try {
+        const res = await fetch('http://localhost:4545/mi-rol', {
+          headers: { 'Authorization': 'Bearer ' + token }
+        });
+        const data = await res.json();
+        return data.rol === 'gerente';
+      } catch {
+        return false;
+      }
+    }
+
+    // Mostrar mensaje
+    function mostrarMensaje(texto, tipo = 'success') {
+      const mensaje = document.getElementById('mensaje');
+      mensaje.textContent = texto;
+      mensaje.className = `mensaje ${tipo}`;
+      setTimeout(() => {
+        mensaje.textContent = '';
+        mensaje.className = 'mensaje';
+      }, 5000);
+    }
+
+    // Funciones para gestión de vacaciones
+    function aprobarSolicitud(id) {
+      mostrarMensaje(`✅ Solicitud ${id} aprobada correctamente`, 'success');
+      // Aquí se podría hacer una llamada al servidor
+    }
+
+    function rechazarSolicitud(id) {
+      mostrarMensaje(`❌ Solicitud ${id} rechazada`, 'error');
+      // Aquí se podría hacer una llamada al servidor
+    }
+
+    // Inicialización
+    (async () => {
+      const esGerente = await verificarGerente();
+      document.getElementById('soloGerente').style.display = esGerente ? 'block' : 'none';
+      document.getElementById('noGerente').style.display = esGerente ? 'none' : 'block';
+    })();
+
+    // Gestión de Roles
+    document.getElementById('formRol')?.addEventListener('submit', async function(e) {
+      e.preventDefault();
+      const formData = new FormData(this);
+      const datos = Object.fromEntries(formData.entries());
+      
+      try {
+        const token = localStorage.getItem('token');
+        const res = await fetch('http://localhost:4545/cambiar-rol', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + token
+          },
+          body: JSON.stringify(datos),
+        });
+        const resultado = await res.json();
+        if (res.ok) {
+          mostrarMensaje('✅ Rol cambiado correctamente', 'success');
+          this.reset();
+        } else {
+          mostrarMensaje(resultado.mensaje || resultado.error || 'Error al cambiar rol', 'error');
+        }
+      } catch (error) {
+        mostrarMensaje('Error al conectar con el servidor', 'error');
+      }
+    });
+
+    // Gestión de Horarios
+    document.getElementById('formHorario')?.addEventListener('submit', function(e) {
+      e.preventDefault();
+      const formData = new FormData(this);
+      const datos = Object.fromEntries(formData.entries());
+      mostrarMensaje(`✅ Turno asignado a ${datos.empleadoHorario}: ${datos.turno}`, 'success');
+      this.reset();
+    });
+
+    // Evaluación de Desempeño
+    document.getElementById('formEvaluacion')?.addEventListener('submit', function(e) {
+      e.preventDefault();
+      const formData = new FormData(this);
+      const datos = Object.fromEntries(formData.entries());
+      mostrarMensaje(`✅ Evaluación registrada para ${datos.empleadoEval}: ${datos.calificacion}/10`, 'success');
+      this.reset();
+    });
+
+    // Gestión de Contrataciones
+    document.getElementById('formContratacion')?.addEventListener('submit', function(e) {
+      e.preventDefault();
+      const formData = new FormData(this);
+      const datos = Object.fromEntries(formData.entries());
+      mostrarMensaje(`✅ Contratación autorizada: ${datos.nombreNuevo} como ${datos.cargoNuevo}`, 'success');
+      this.reset();
+    });
+
+    // Asignación de Tareas
+    document.getElementById('formTarea')?.addEventListener('submit', function(e) {
+      e.preventDefault();
+      const formData = new FormData(this);
+      const datos = Object.fromEntries(formData.entries());
+      mostrarMensaje(`✅ Tarea asignada a ${datos.empleadoTarea}: "${datos.tituloTarea}"`, 'success');
+      this.reset();
+    });
+
+    // Establecer fecha mínima para tareas (hoy)
+    document.addEventListener('DOMContentLoaded', function() {
+      const fechaLimite = document.getElementById('fechaLimite');
+      if (fechaLimite) {
+        const hoy = new Date().toISOString().split('T')[0];
+        fechaLimite.min = hoy;
+      }
+    });
+  </script>
+</body>
+</html>

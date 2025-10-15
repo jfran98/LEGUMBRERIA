@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Mi Perfil</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: url('img/frutas-verduras.jpg') no-repeat center center fixed;
+      background-size: cover;
+    }
+
+    .perfil-container {
+      background-color: rgba(255, 255, 255, 0.95);
+      max-width: 600px;
+      margin: 120px auto;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+      text-align: center;
+    }
+
+    .perfil-container h2 {
+      color: #388e3c;
+      margin-bottom: 20px;
+    }
+
+    .avatar-section {
+      margin-bottom: 25px;
+    }
+
+    .avatar {
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      object-fit: cover;
+      margin-bottom: 15px;
+      border: 4px solid #ff9800;
+      cursor: pointer;
+      transition: transform 0.2s ease;
+    }
+
+         .avatar:hover {
+       transform: scale(1.05);
+       cursor: pointer;
+       box-shadow: 0 4px 15px rgba(255, 152, 0, 0.4);
+     }
+
+     .avatar.clickable {
+       position: relative;
+     }
+
+     .avatar.clickable::after {
+       content: '✏️';
+       position: absolute;
+       top: -5px;
+       right: -5px;
+       background: #ff9800;
+       color: white;
+       border-radius: 50%;
+       width: 25px;
+       height: 25px;
+       display: flex;
+       align-items: center;
+       justify-content: center;
+       font-size: 12px;
+       box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+     }
+
+         .avatar-options {
+       margin: 20px 0;
+       padding: 15px;
+       background-color: rgba(56, 142, 60, 0.1);
+       border-radius: 8px;
+     }
+
+     .avatar-options-header {
+       display: flex;
+       justify-content: space-between;
+       align-items: center;
+       margin-bottom: 15px;
+     }
+
+     .avatar-options h3 {
+       color: #388e3c;
+       margin: 0;
+       font-size: 18px;
+     }
+
+     .close-btn {
+       background: #f44336;
+       color: white;
+       border: none;
+       width: 30px;
+       height: 30px;
+       border-radius: 50%;
+       cursor: pointer;
+       font-size: 16px;
+       font-weight: bold;
+       transition: all 0.3s ease;
+       display: flex;
+       align-items: center;
+       justify-content: center;
+     }
+
+     .close-btn:hover {
+       background: #d32f2f;
+       transform: scale(1.1);
+     }
+
+    .avatar-grid {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 20px;
+      overflow-x: auto;
+      padding: 10px 0;
+      scrollbar-width: thin;
+      scrollbar-color: #ff9800 #f0f0f0;
+      scroll-behavior: smooth;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .avatar-grid::-webkit-scrollbar {
+      height: 8px;
+    }
+
+    .avatar-grid::-webkit-scrollbar-track {
+      background: #f0f0f0;
+      border-radius: 4px;
+    }
+
+    .avatar-grid::-webkit-scrollbar-thumb {
+      background: #ff9800;
+      border-radius: 4px;
+    }
+
+    .avatar-grid::-webkit-scrollbar-thumb:hover {
+      background: #f57c00;
+    }
+
+    .avatar-option {
+      min-width: 60px;
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 3px solid transparent;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      flex-shrink: 0;
+    }
+
+    .avatar-option:hover {
+      border-color: #ff9800;
+      transform: scale(1.1);
+    }
+
+    .avatar-option.selected {
+      border-color: #388e3c;
+      transform: scale(1.1);
+    }
+
+    .upload-section {
+      margin: 20px 0;
+      padding: 15px;
+      background-color: rgba(255, 152, 0, 0.1);
+      border-radius: 8px;
+    }
+
+    .upload-section h3 {
+      color: #f57c00;
+      margin-bottom: 15px;
+      font-size: 18px;
+    }
+
+    .file-input-wrapper {
+      position: relative;
+      display: inline-block;
+      cursor: pointer;
+      background-color: #ff9800;
+      color: white;
+      padding: 10px 20px;
+      border-radius: 6px;
+      transition: background 0.3s ease;
+    }
+
+    .file-input-wrapper:hover {
+      background-color: #f57c00;
+    }
+
+    .file-input {
+      position: absolute;
+      opacity: 0;
+      width: 100%;
+      height: 100%;
+      cursor: pointer;
+    }
+
+    .info {
+      text-align: left;
+      margin-top: 20px;
+    }
+
+    .info p {
+      margin: 10px 0;
+      font-size: 16px;
+    }
+
+    .info strong {
+      color: #388e3c;
+      width: 120px;
+      display: inline-block;
+    }
+
+    #mensaje {
+      margin-top: 15px;
+      font-weight: bold;
+      color: red;
+    }
+
+    .botones {
+      margin-top: 25px;
+    }
+
+    .botones button {
+      background-color: #ffb300;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 6px;
+      cursor: pointer;
+      margin: 0 5px;
+      transition: background 0.3s ease;
+    }
+
+    .botones button:hover {
+      background-color: #f57c00;
+    }
+
+    .save-avatar-btn {
+      background-color: #388e3c !important;
+      margin-top: 10px;
+    }
+
+    .save-avatar-btn:hover {
+      background-color: #2e7d32 !important;
+    }
+
+    .avatar-preview {
+      margin: 15px 0;
+      padding: 10px;
+      background-color: rgba(0, 0, 0, 0.05);
+      border-radius: 8px;
+    }
+
+    .avatar-preview img {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 3px solid #ff9800;
+    }
+
+    .avatar-navigation {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      margin: 10px 0;
+    }
+
+    .nav-btn {
+      background: #ff9800;
+      color: white;
+      border: none;
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      cursor: pointer;
+      font-size: 18px;
+      font-weight: bold;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .nav-btn:hover {
+      background: #f57c00;
+      transform: scale(1.1);
+    }
+
+    .nav-btn:disabled {
+      background: #ccc;
+      cursor: not-allowed;
+      transform: none;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="perfil-container">
+    <h2>Mi Perfil</h2>
+    
+    <div class="avatar-section">
+             <img src="img/avatar-default.png" alt="Foto de perfil" class="avatar clickable" id="avatar">
+      
+             <div class="avatar-options" id="avatarOptions" style="display: none;">
+         <div class="avatar-options-header">
+           <h3>Seleccionar Avatar</h3>
+           <button class="close-btn" onclick="avatarManager.toggleAvatarOptions()">✕</button>
+         </div>
+         <div class="avatar-grid" id="avatarGrid">
+           <!-- Los avatares se generarán dinámicamente -->
+         </div>
+         
+         <div class="upload-section">
+           <h3>Subir Foto Personalizada</h3>
+           <div class="file-input-wrapper">
+             <span>📷 Seleccionar Imagen</span>
+             <input type="file" class="file-input" id="fileInput" accept="image/*">
+           </div>
+           
+           <div class="avatar-preview" id="avatarPreview" style="display: none;">
+             <p>Vista previa:</p>
+             <img id="previewImage" alt="Vista previa">
+             <br>
+             <button class="save-avatar-btn" onclick="guardarAvatarPersonalizado()">💾 Guardar Avatar</button>
+           </div>
+         </div>
+       </div>
+    </div>
+
+    <div class="info" id="info">
+      <p><strong>Nombres:</strong> <span id="nombres"></span></p>
+      <p><strong>Teléfono:</strong> <span id="telefono"></span></p>
+      <p><strong>Correo:</strong> <span id="correo"></span></p>
+    </div>
+
+    <p id="mensaje"></p>
+
+    <div class="botones" id="botones">
+      <button onclick="window.location.href='editar-perfil.html'">Editar Perfil</button>
+    </div>
+  </div>
+
+  <script src="js/avatar-manager.js"></script>
+  <script>
+    const token = localStorage.getItem('token');
+    const mensaje = document.getElementById('mensaje');
+
+    // Inicializar
+    if (!token) {
+      mensaje.textContent = '⚠️ No estás autenticado. Inicia sesión.';
+      document.getElementById('info').style.display = 'none';
+      document.getElementById('botones').style.display = 'none';
+      document.getElementById('avatar').style.display = 'none';
+      document.querySelector('.avatar-options').style.display = 'none';
+    } else {
+      // Cargar información del perfil
+      fetch('http://localhost:4545/usuario/perfil', {
+        headers: { 'Authorization': 'Bearer ' + token }
+      })
+      .then(res => res.json())
+      .then(data => {
+        if (data.error) {
+          mensaje.textContent = '❌ ' + data.error;
+        } else {
+          document.getElementById('nombres').textContent = data.nombres;
+          document.getElementById('telefono').textContent = data.telefono;
+          document.getElementById('correo').textContent = data.correo;
+          
+          // Si el backend tiene una URL de foto, usarla
+          if (data.foto) {
+            document.getElementById('avatar').src = data.foto;
+            localStorage.setItem('avatarPersonalizada', data.foto);
+          }
+        }
+      })
+      .catch((error) => {
+        console.error('Error en el fetch:', error);
+        mensaje.textContent = '❌ Error al cargar perfil';
+      });
+    }
+  </script>
+
+  <script src="navbar.js"></script>
+</body>
+</html>

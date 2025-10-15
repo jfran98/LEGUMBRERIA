@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Legumbrería JM</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    :root {
+      --verde: #4CAF50;
+      --naranja: #FF9800;
+      --amarillo: #FFEB3B;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Segoe UI', sans-serif;
+    }
+
+    .hero {
+      background-image: url('https://cdn.pixabay.com/photo/2017/02/22/17/06/fruits-2085066_1280.jpg');
+      background-size: cover;
+      background-position: center;
+      height: 400px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      text-shadow: 1px 1px 3px black;
+      margin-top: 80px; /* espacio solo cuando hay navbar */
+    }
+
+    .hero h1 {
+      font-size: 48px;
+      background-color: rgba(76, 175, 80, 0.7);
+      padding: 20px;
+      border-radius: 10px;
+    }
+
+    .productos {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      padding: 40px;
+      background-color: var(--amarillo);
+    }
+
+    .producto {
+      width: 250px;
+      background-color: white;
+      border: 3px solid var(--naranja);
+      margin: 20px;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      transition: transform 0.3s;
+    }
+
+    .producto:hover {
+      transform: scale(1.05);
+    }
+
+    .producto img {
+      width: 100%;
+      height: 180px;
+      object-fit: cover;
+    }
+
+    .producto h3 {
+      text-align: center;
+      padding: 10px;
+    }
+
+    /* Controles y botón estéticos */
+    .controles {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      padding: 12px;
+      flex-wrap: wrap;
+    }
+    .controles select,
+    .controles input[type="number"] {
+      padding: 8px 10px;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      font-size: 14px;
+    }
+    .btn-add {
+      background: linear-gradient(135deg, #4CAF50, #45a049);
+      color: #fff;
+      border: none;
+      padding: 10px 14px;
+      border-radius: 999px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      box-shadow: 0 4px 10px rgba(76, 175, 80, 0.3);
+      transition: transform 0.15s ease, box-shadow 0.15s ease, opacity 0.15s ease;
+    }
+    .btn-add:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 6px 14px rgba(76, 175, 80, 0.35);
+    }
+    .btn-add:active {
+      transform: translateY(0);
+      opacity: 0.9;
+    }
+
+    footer {
+      background-color: var(--verde);
+      color: white;
+      text-align: center;
+      padding: 20px;
+    }
+  </style>
+</head>
+<body>
+
+ 
+
+  <!-- Hero -->
+  <section class="hero">
+    <h1>Frutas y Verduras Frescas Directas del Campo</h1>
+  </section>
+
+  <!-- Productos -->
+  <section class="productos" id="productos-list">
+    <!-- Los productos se cargarán aquí dinámicamente -->
+  </section>
+
+  <footer>
+    © 2025 Legumbrería Natural. Todos los derechos reservados.
+  </footer>
+
+  
+  <script>
+    const token = localStorage.getItem('token');
+    const bienvenida = document.getElementById('bienvenida');
+    const menu = document.getElementById('menu');
+
+    if (token) {
+      fetch('/usuario/perfil', {
+        headers: {
+          Authorization: 'Bearer ' + token
+        }
+      })
+      .then(res => res.json())
+      .then(data => {
+        if (bienvenida) bienvenida.textContent = `Hola, ${data.nombres}`;
+        if (menu) {
+          menu.innerHTML = `
+            <a href="perfil.html">Perfil</a>
+            <a href="#" onclick="cerrarSesion()">Salir</a>
+          `;
+        }
+      })
+      .catch(() => {
+        localStorage.removeItem('token');
+      });
+    }
+
+    function cerrarSesion() {
+      localStorage.removeItem('token');
+      window.location.href = 'index.html';
+    }
+
+    // Cargar productos dinámicamente con controles y botón estilizado
+    fetch('/legumbreria/productos')
+      .then(res => {
+        if (!res.ok) throw new Error('No se pudo cargar productos');
+        return res.json();
+      })
+      .then(productos => {
+        const contenedor = document.getElementById('productos-list');
+        contenedor.innerHTML = '';
+
+        (productos || []).forEach(p => {
+          const nombre = p.descripcion || p.nombre || 'Producto';
+          const imagen = (p.imagen && String(p.imagen).trim()) ? p.imagen : '/img/tomate.jpg';
+          const precioPorKg = Number((p.precioVentaMenor != null ? p.precioVentaMenor : p.precio) || 0);
+          const disponible = p.cantidad != null ? p.cantidad : (p.stock || '');
+          const estaAgotado = disponible <= 0;
+          const mensajeStock = estaAgotado ? '<strong style="color: red;">Agotado</strong>' : `Disponible: ${disponible}`;
+
+          const card = document.createElement('div');
+          card.className = 'producto';
+          card.innerHTML = `
+            <img src="${imagen}" alt="${nombre}">
+            <h3>${nombre}</h3>
+            <div style=\"padding: 0 12px 10px; text-align:center; color:#555;\">
+              <div>Precio: <strong>$${precioPorKg ? precioPorKg : '—'}</strong> <small>/ kg</small></div>
+              <div>${mensajeStock}</div>
+            </div>
+            <div class=\"controles\">
+              <select class=\"unidad\" ${estaAgotado ? 'disabled' : ''}>
+                <option value=\"kg\">kg</option>
+                <option value=\"lb\">lb</option>
+              </select>
+              <input type=\"number\" class=\"cantidad\" min=\"0.1\" step=\"0.1\" value=\"1\" ${estaAgotado ? 'disabled' : ''} />
+              <button class=\"btn-add\" ${estaAgotado ? 'disabled' : ''}><span>🛒</span> Agregar al carrito</button>
+            </div>
+          `;
+          contenedor.appendChild(card);
+
+          const btn = card.querySelector('.btn-add');
+          const selUnidad = card.querySelector('.unidad');
+          const inpCantidad = card.querySelector('.cantidad');
+          if (estaAgotado) {
+            // Si el producto está agotado, no añadimos el evento click al botón
+            btn.removeEventListener('click', () => {});
+          } else {
+            btn.addEventListener('click', () => {
+              const unidadSel = selUnidad.value;
+              const cantidadSel = parseFloat(inpCantidad.value || '0');
+              if (!cantidadSel || cantidadSel <= 0) {
+                alert('Ingresa una cantidad válida.');
+                return;
+              }
+              if (!precioPorKg) {
+                alert('Producto sin precio.');
+                return;
+              }
+              const POUNDS_TO_KG = 0.45359237;
+              const cantidadKg = unidadSel === 'lb' ? cantidadSel * POUNDS_TO_KG : cantidadSel;
+              const subtotal = cantidadKg * precioPorKg;
+
+              const item = {
+                idProducto: p.idProducto || null,
+                nombre,
+                imagen,
+                unidad: unidadSel,
+                cantidad: cantidadSel,
+                cantidadKg,
+                precioPorKg,
+                subtotal
+              };
+
+              try {
+                const carrito = JSON.parse(localStorage.getItem('carrito') || '[]');
+                carrito.push(item);
+                localStorage.setItem('carrito', JSON.stringify(carrito));
+                btn.innerHTML = '<span>✅</span> Agregado!';
+                setTimeout(() => { btn.innerHTML = '<span>🛒</span> Agregar al carrito'; }, 1200);
+              } catch (e) {
+                alert('No se pudo agregar al carrito.');
+              }
+            });
+          }
+        });
+      })
+      .catch(() => {
+        // Manejo de error opcional
+      });
+  </script>
+
+  <script src="navbar.js"></script>
+</body>
+</html>

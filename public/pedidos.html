@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Gestión de Pedidos - Legumbrería JM</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f1f8e9;
+      margin: 0;
+      padding: 0;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 30px auto;
+      padding: 20px;
+    }
+
+    h2 {
+      color: #388e3c;
+      border-bottom: 2px solid #ff9800;
+      padding-bottom: 10px;
+      margin-top: 40px;
+    }
+
+    .pedido-card {
+      background: white;
+      border-radius: 10px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      margin-bottom: 20px;
+      overflow: hidden;
+    }
+
+    .pedido-header {
+      background: #f0f4c3;
+      padding: 15px;
+      border-bottom: 1px solid #ddd;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .pedido-info {
+      padding: 20px;
+    }
+
+    .pedido-details {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+      margin-bottom: 20px;
+    }
+
+    .pedido-details .box {
+      background: #fafafa;
+      border: 1px solid #eee;
+      border-radius: 8px;
+      padding: 15px;
+    }
+
+    .pedido-details .box h4 {
+      margin: 0 0 10px 0;
+      color: #33691e;
+    }
+
+    .metodo-pago {
+      background: #e8f5e8;
+      border: 1px solid #4caf50;
+      border-radius: 8px;
+      padding: 15px;
+      margin-bottom: 20px;
+    }
+
+    .metodo-pago h4 {
+      margin: 0 0 10px 0;
+      color: #2e7d32;
+    }
+
+    .productos-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 20px;
+    }
+
+    .productos-table th,
+    .productos-table td {
+      padding: 12px;
+      text-align: left;
+      border-bottom: 1px solid #ddd;
+    }
+
+    .productos-table th {
+      background-color: #f0f4c3;
+      color: #33691e;
+    }
+
+    .total {
+      text-align: right;
+      font-size: 18px;
+      font-weight: bold;
+      color: #2e7d32;
+      margin-bottom: 20px;
+    }
+
+    .acciones {
+      display: flex;
+      gap: 10px;
+      justify-content: flex-end;
+    }
+
+    .btn-aprobar {
+      background: #4caf50;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+
+    .btn-aprobar:hover {
+      background: #45a049;
+    }
+
+    .btn-rechazar {
+      background: #f44336;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+
+    .btn-rechazar:hover {
+      background: #da190b;
+    }
+
+    .estado-pendiente {
+      background: #fff3cd;
+      color: #856404;
+      padding: 5px 10px;
+      border-radius: 15px;
+      font-size: 12px;
+      font-weight: bold;
+    }
+
+    .estado-aprobado {
+      background: #d4edda;
+      color: #155724;
+      padding: 5px 10px;
+      border-radius: 15px;
+      font-size: 12px;
+      font-weight: bold;
+    }
+
+    .estado-rechazado {
+      background: #f8d7da;
+      color: #721c24;
+      padding: 5px 10px;
+      border-radius: 15px;
+      font-size: 12px;
+      font-weight: bold;
+    }
+
+    .filtros {
+      background: white;
+      padding: 20px;
+      border-radius: 10px;
+      margin-bottom: 20px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+
+    .filtros select {
+      padding: 8px;
+      border-radius: 5px;
+      border: 1px solid #ddd;
+      margin-right: 15px;
+    }
+
+    .sin-pedidos {
+      text-align: center;
+      padding: 40px;
+      color: #666;
+      font-size: 18px;
+    }
+  </style>
+  <script src="js/role-verifier.js"></script>
+  <script src="navbar.js"></script>
+  <script>
+    // Verificación de roles - DEBE SER LO PRIMERO
+    if (!roleVerifier.init('pedidos.html')) {
+      // Si no tiene acceso, la función ya redirige automáticamente
+      // No ejecutar el resto del código
+      throw new Error('Acceso denegado');
+    }
+  </script>
+</head>
+<body>
+  <header id="navbar-container"></header>
+  
+  <div class="container">
+    <h2>📋 Gestión de Pedidos</h2>
+    
+    <div class="filtros">
+      <label for="filtro-estado">Filtrar por estado:</label>
+      <select id="filtro-estado" onchange="filtrarPedidos()">
+        <option value="">Todos los estados</option>
+        <option value="pendiente">Pendientes</option>
+        <option value="aprobado">Aprobados</option>
+        <option value="rechazado">Rechazados</option>
+      </select>
+      
+      <label for="filtro-metodo">Filtrar por método de pago:</label>
+      <select id="filtro-metodo" onchange="filtrarPedidos()">
+        <option value="">Todos los métodos</option>
+        <option value="contraentrega">Contraentrega</option>
+        <option value="bancolombia">Bancolombia</option>
+        <option value="nequi">Nequi</option>
+      </select>
+    </div>
+
+    <div id="pedidos-container">
+      <!-- Los pedidos se cargarán aquí dinámicamente -->
+    </div>
+  </div>
+
+  <script>
+    let todosLosPedidos = [];
+    let pedidosFiltrados = [];
+
+    async function cargarPedidos() {
+      const token = localStorage.getItem('token');
+      if (!token) {
+        alert('Debes iniciar sesión.');
+        window.location.href = '/login.html';
+        return;
+      }
+
+      console.log('Token encontrado, intentando cargar pedidos...');
+
+      try {
+        console.log('Haciendo fetch a /venta/pedidos...');
+        const res = await fetch('/venta/pedidos', {
+          headers: {
+            'Authorization': 'Bearer ' + token
+          }
+        });
+
+        console.log('Respuesta recibida:', res.status, res.statusText);
+
+        if (!res.ok) {
+          if (res.status === 403) {
+            alert('No tienes permisos para acceder a esta página.');
+            window.location.href = '/index.html';
+            return;
+          }
+          const errorText = await res.text();
+          console.error('Error en respuesta:', errorText);
+          throw new Error(`Error al cargar pedidos: ${res.status} ${res.statusText}`);
+        }
+
+        const data = await res.json();
+        console.log('Datos recibidos:', data);
+        
+        todosLosPedidos = data.pedidos || [];
+        pedidosFiltrados = [...todosLosPedidos];
+        console.log('Pedidos cargados:', todosLosPedidos.length);
+        mostrarPedidos();
+      } catch (error) {
+        console.error('Error completo:', error);
+        document.getElementById('pedidos-container').innerHTML = 
+          `<div class="sin-pedidos">
+            Error al cargar los pedidos: ${error.message}<br>
+            <small>Revisa la consola para más detalles</small>
+          </div>`;
+      }
+    }
+
+    function filtrarPedidos() {
+      const filtroEstado = document.getElementById('filtro-estado').value;
+      const filtroMetodo = document.getElementById('filtro-metodo').value;
+
+      pedidosFiltrados = todosLosPedidos.filter(pedido => {
+        const estado = pedido.estado || 'pendiente';
+        const metodoPago = pedido.metodoPago || 'contraentrega';
+        const cumpleEstado = !filtroEstado || estado === filtroEstado;
+        const cumpleMetodo = !filtroMetodo || metodoPago === filtroMetodo;
+        return cumpleEstado && cumpleMetodo;
+      });
+
+      mostrarPedidos();
+    }
+
+    function mostrarPedidos() {
+      const container = document.getElementById('pedidos-container');
+      
+      if (pedidosFiltrados.length === 0) {
+        container.innerHTML = '<div class="sin-pedidos">No hay pedidos que coincidan con los filtros seleccionados.</div>';
+        return;
+      }
+
+      container.innerHTML = '';
+      
+      pedidosFiltrados.forEach(pedido => {
+        const pedidoCard = crearPedidoCard(pedido);
+        container.appendChild(pedidoCard);
+      });
+    }
+
+    function crearPedidoCard(pedido) {
+      const card = document.createElement('div');
+      card.className = 'pedido-card';
+      
+      const estadoClass = `estado-${pedido.estado || 'pendiente'}`;
+      const estadoText = (pedido.estado || 'pendiente').charAt(0).toUpperCase() + (pedido.estado || 'pendiente').slice(1);
+      
+      const instruccionesPago = obtenerInstruccionesPago(pedido.metodoPago);
+      
+      card.innerHTML = `
+        <div class="pedido-header">
+          <div>
+            <h3>Pedido #${pedido.idFactura}</h3>
+            <span class="${estadoClass}">${estadoText}</span>
+          </div>
+          <div>
+            <strong>Fecha:</strong> ${new Date(pedido.fecha).toLocaleDateString('es-ES')}
+          </div>
+        </div>
+        
+        <div class="pedido-info">
+          <div class="pedido-details">
+            <div class="box">
+              <h4>Cliente</h4>
+                      <p><strong>Nombre:</strong> ${pedido.usuario?.nombres || 'No especificado'}</p>
+        <p><strong>Documento:</strong> ${pedido.usuario?.documento || 'No especificado'}</p>
+        <p><strong>Correo:</strong> ${pedido.usuario?.correo || 'No especificado'}</p>
+        <p><strong>Teléfono:</strong> ${pedido.usuario?.telefono || 'No registrado'}</p>
+            </div>
+            <div class="box">
+              <h4>Detalles del Pedido</h4>
+                      <p><strong>Total:</strong> $${Number(pedido.total || 0).toLocaleString()}</p>
+        <p><strong>Productos:</strong> ${pedido.detalles?.length || 0}</p>
+            </div>
+          </div>
+          
+          <div class="metodo-pago">
+            <h4>Método de Pago: ${(pedido.metodoPago || 'No especificado').charAt(0).toUpperCase() + (pedido.metodoPago || 'No especificado').slice(1)}</h4>
+            ${instruccionesPago}
+          </div>
+          
+          <table class="productos-table">
+            <thead>
+              <tr>
+                <th>Producto</th>
+                <th>Cantidad</th>
+                <th>Precio Unitario</th>
+                <th>Subtotal</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${(pedido.detalles || []).map(d => `
+                <tr>
+                  <td>${d.nombre || 'Producto'}</td>
+                  <td>${Number(d.cantidadKg || 0).toFixed(2)} kg</td>
+                  <td>$${Number(d.precioUnitario || 0).toLocaleString()}</td>
+                  <td>$${Number(d.subTotal || 0).toLocaleString()}</td>
+                </tr>
+              `).join('')}
+            </tbody>
+          </table>
+          
+          <div class="total">Total: $${Number(pedido.total || 0).toLocaleString()}</div>
+          
+          ${(pedido.estado || 'pendiente') === 'pendiente' ? `
+            <div class="acciones">
+              <button class="btn-aprobar" onclick="cambiarEstado(${pedido.idFactura}, 'aprobado')">
+                ✅ Aprobar Pedido
+              </button>
+              <button class="btn-rechazar" onclick="cambiarEstado(${pedido.idFactura}, 'rechazado')">
+                ❌ Rechazar Pedido
+              </button>
+            </div>
+          ` : ''}
+        </div>
+      `;
+      
+      return card;
+    }
+
+    function obtenerInstruccionesPago(metodoPago) {
+      switch (metodoPago) {
+        case 'contraentrega':
+          return '<p>El cliente pagará al momento de la entrega. Verificar que tenga el monto exacto.</p>';
+        case 'bancolombia':
+          return '<p>Verificar que el cliente haya enviado el comprobante de transferencia a la cuenta <strong>XXX-XXXXXX-XX</strong>.</p>';
+        case 'nequi':
+          return '<p>Verificar que el cliente haya enviado el comprobante de transferencia al número <strong>3XX XXX XXXX</strong>.</p>';
+        default:
+          return '<p>Método de pago no especificado.</p>';
+      }
+    }
+
+    async function cambiarEstado(idFactura, nuevoEstado) {
+      const token = localStorage.getItem('token');
+      if (!token) {
+        alert('Debes iniciar sesión.');
+        return;
+      }
+
+      const confirmacion = confirm(`¿Estás seguro de que quieres ${nuevoEstado === 'aprobado' ? 'aprobar' : 'rechazar'} el pedido #${idFactura}?`);
+      if (!confirmacion) return;
+
+      try {
+        const res = await fetch(`/venta/pedido/${idFactura}/estado`, {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + token
+          },
+          body: JSON.stringify({ estado: nuevoEstado })
+        });
+
+        if (!res.ok) {
+          throw new Error('Error al cambiar el estado');
+        }
+
+        // Actualizar el estado localmente
+        const pedido = todosLosPedidos.find(p => p.idFactura === idFactura);
+        if (pedido) {
+          pedido.estado = nuevoEstado;
+        }
+
+        // Recargar la vista
+        filtrarPedidos();
+        
+        alert(`Pedido #${idFactura} ${nuevoEstado === 'aprobado' ? 'aprobado' : 'rechazado'} exitosamente.`);
+      } catch (error) {
+        console.error('Error:', error);
+        alert('Error al cambiar el estado del pedido. Intenta de nuevo.');
+      }
+    }
+
+    // Cargar pedidos al iniciar la página
+    document.addEventListener('DOMContentLoaded', cargarPedidos);
+  </script>
+</body>
+</html>

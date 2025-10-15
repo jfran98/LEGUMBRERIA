@@ -1,0 +1,1534 @@
+<!-- public/gestionprodser.html -->
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Gestión de Productos y Servicios - Legumbrería JM</title>
+  <link rel="stylesheet" href="style.css">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+  <!-- Navbar dinámico -->
+  <div id="navbar"></div>
+
+  <div class="container-productos">
+    <div class="header-productos">
+      <h1><i class="fas fa-boxes"></i> Gestión de Productos y Servicios</h1>
+      <p>Panel de gestión comercial e inventario para gerentes</p>
+    </div>
+
+    <div id="soloGerente" style="display:none;">
+      <!-- Dashboard comercial -->
+      <div class="dashboard-productos">
+        
+        <!-- Métricas Comerciales -->
+        <div class="metricas-comerciales">
+          <div class="metric-card">
+            <div class="metric-icon">
+              <i class="fas fa-dollar-sign"></i>
+            </div>
+            <div class="metric-content">
+              <h3>Ventas del Mes</h3>
+              <p class="metric-value">$2,450,000</p>
+              <span class="metric-change positive">+12.5%</span>
+            </div>
+          </div>
+          
+          <div class="metric-card">
+            <div class="metric-icon">
+              <i class="fas fa-shopping-basket"></i>
+            </div>
+            <div class="metric-content">
+              <h3>Productos Activos</h3>
+              <p class="metric-value">247</p>
+              <span class="metric-change neutral">En Catálogo</span>
+            </div>
+          </div>
+          
+          <div class="metric-card">
+            <div class="metric-icon">
+              <i class="fas fa-percentage"></i>
+            </div>
+            <div class="metric-content">
+              <h3>Margen Promedio</h3>
+              <p class="metric-value">28.5%</p>
+              <span class="metric-change positive">+2.1%</span>
+            </div>
+          </div>
+          
+          <div class="metric-card">
+            <div class="metric-icon">
+              <i class="fas fa-chart-line"></i>
+            </div>
+            <div class="metric-content">
+              <h3>Rotación Inventario</h3>
+              <p class="metric-value">4.2x</p>
+              <span class="metric-change positive">+0.3x</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Gestión de Precios y Promociones -->
+        <div class="card-productos">
+          <div class="card-header">
+            <i class="fas fa-tags"></i>
+            <h3>Precios y Promociones</h3>
+          </div>
+          <div class="card-content">
+            <div class="precios-pendientes">
+              <h4>Cambios de Precio Pendientes</h4>
+              <div class="precio-item">
+                <div class="precio-info">
+                  <strong>Tomates Frescos</strong>
+                  <span class="precio-desc">Precio actual: $8,500/kg</span>
+                  <span class="precio-propuesta">Nuevo precio: $9,200/kg</span>
+                </div>
+                <div class="precio-actions">
+                  <button class="btn-approve" onclick="aprobarPrecio(1)">
+                    <i class="fas fa-check"></i> Aprobar
+                  </button>
+                  <button class="btn-reject" onclick="rechazarPrecio(1)">
+                    <i class="fas fa-times"></i> Rechazar
+                  </button>
+                </div>
+              </div>
+              
+              <div class="precio-item">
+                <div class="precio-info">
+                  <strong>Lechuga Hidropónica</strong>
+                  <span class="precio-desc">Precio actual: $3,200/unidad</span>
+                  <span class="precio-propuesta">Nuevo precio: $2,800/unidad</span>
+                </div>
+                <div class="precio-actions">
+                  <button class="btn-approve" onclick="aprobarPrecio(2)">
+                    <i class="fas fa-check"></i> Aprobar
+                  </button>
+                  <button class="btn-reject" onclick="rechazarPrecio(2)">
+                    <i class="fas fa-times"></i> Rechazar
+                  </button>
+                </div>
+              </div>
+            </div>
+            
+            <div class="promociones-activas">
+              <h4>Promociones Activas</h4>
+              <div class="promocion-item">
+                <div class="promocion-info">
+                  <strong>Combo Frutas</strong>
+                  <span class="promocion-desc">3x2 en frutas de temporada</span>
+                  <span class="promocion-fecha">Hasta: 31 Enero 2024</span>
+                </div>
+                <div class="promocion-actions">
+                  <button class="btn-edit" onclick="editarPromocion(1)">
+                    <i class="fas fa-edit"></i> Editar
+                  </button>
+                  <button class="btn-deactivate" onclick="desactivarPromocion(1)">
+                    <i class="fas fa-pause"></i> Desactivar
+                  </button>
+                </div>
+              </div>
+            </div>
+            
+            <div class="nueva-promocion">
+              <h4>Crear Nueva Promoción</h4>
+              <form id="formPromocion" class="form-productos">
+                <div class="form-row">
+                  <div class="form-group">
+                    <label for="nombrePromocion">Nombre de la Promoción</label>
+                    <input type="text" name="nombrePromocion" id="nombrePromocion" placeholder="Ej: Descuento Verano" required>
+                  </div>
+                  <div class="form-group">
+                    <label for="tipoPromocion">Tipo</label>
+                    <select name="tipoPromocion" id="tipoPromocion" required>
+                      <option value="">Selecciona tipo</option>
+                      <option value="descuento">Descuento Porcentual</option>
+                      <option value="cantidad">Descuento por Cantidad</option>
+                      <option value="combo">Combo Especial</option>
+                      <option value="temporada">Promoción de Temporada</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="form-row">
+                  <div class="form-group">
+                    <label for="descuentoPromocion">Descuento (%)</label>
+                    <input type="number" name="descuentoPromocion" id="descuentoPromocion" placeholder="Ej: 15" min="1" max="50">
+                  </div>
+                  <div class="form-group">
+                    <label for="fechaInicioPromocion">Fecha de Inicio</label>
+                    <input type="date" name="fechaInicioPromocion" id="fechaInicioPromocion" required>
+                  </div>
+                </div>
+                <div class="form-row">
+                  <div class="form-group">
+                    <label for="fechaFinPromocion">Fecha de Fin</label>
+                    <input type="date" name="fechaFinPromocion" id="fechaFinPromocion" required>
+                  </div>
+                  <div class="form-group">
+                    <label for="productosPromocion">Productos Aplicables</label>
+                    <select name="productosPromocion" id="productosPromocion" required>
+                      <option value="">Selecciona productos</option>
+                      <option value="frutas">Frutas</option>
+                      <option value="verduras">Verduras</option>
+                      <option value="todos">Todos los Productos</option>
+                      <option value="especificos">Productos Específicos</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label for="descripcionPromocion">Descripción</label>
+                  <textarea name="descripcionPromocion" id="descripcionPromocion" rows="3" placeholder="Descripción detallada de la promoción..." required></textarea>
+                </div>
+                <button type="submit" class="btn-primary">
+                  <i class="fas fa-plus"></i> Crear Promoción
+                </button>
+              </form>
+            </div>
+          </div>
+        </div>
+
+        <!-- Gestión de Catálogo e Inventario -->
+        <div class="card-productos">
+          <div class="card-header">
+            <i class="fas fa-warehouse"></i>
+            <h3>Catálogo e Inventario</h3>
+          </div>
+          <div class="card-content">
+            <div class="cambios-catalogo">
+              <h4>Cambios en Catálogo Pendientes</h4>
+              <div class="catalogo-item">
+                <div class="catalogo-info">
+                  <strong>Nuevo Producto: Aguacate Hass</strong>
+                  <span class="catalogo-desc">Categoría: Frutas | Precio: $12,000/kg</span>
+                  <span class="catalogo-stock">Stock inicial: 50 kg</span>
+                </div>
+                <div class="catalogo-actions">
+                  <button class="btn-approve" onclick="aprobarCatalogo(1)">
+                    <i class="fas fa-check"></i> Aprobar
+                  </button>
+                  <button class="btn-reject" onclick="rechazarCatalogo(1)">
+                    <i class="fas fa-times"></i> Rechazar
+                  </button>
+                </div>
+              </div>
+              
+              <div class="catalogo-item">
+                <div class="catalogo-info">
+                  <strong>Modificación: Zanahoria Orgánica</strong>
+                  <span class="catalogo-desc">Nueva descripción y características</span>
+                  <span class="catalogo-stock">Stock actual: 120 kg</span>
+                </div>
+                <div class="catalogo-actions">
+                  <button class="btn-approve" onclick="aprobarCatalogo(2)">
+                    <i class="fas fa-check"></i> Aprobar
+                  </button>
+                  <button class="btn-reject" onclick="rechazarCatalogo(2)">
+                    <i class="fas fa-times"></i> Rechazar
+                  </button>
+                </div>
+              </div>
+            </div>
+            
+            <div class="control-stock">
+              <h4>Control de Stock</h4>
+              <div class="stock-alerts">
+                <div class="alert-item low-stock">
+                  <i class="fas fa-exclamation-triangle"></i>
+                  <span>Banano: Stock bajo (15 kg)</span>
+                  <button class="btn-reorder" onclick="reordenarStock('banano')">
+                    <i class="fas fa-shopping-cart"></i> Reordenar
+                  </button>
+                </div>
+                <div class="alert-item out-stock">
+                  <i class="fas fa-times-circle"></i>
+                  <span>Papa Criolla: Sin stock</span>
+                  <button class="btn-reorder" onclick="reordenarStock('papa-criolla')">
+                    <i class="fas fa-shopping-cart"></i> Reordenar
+                  </button>
+                </div>
+                <div class="alert-item excess-stock">
+                  <i class="fas fa-info-circle"></i>
+                  <span>Lechuga: Stock excesivo (200 kg)</span>
+                  <button class="btn-promote" onclick="promocionarStock('lechuga')">
+                    <i class="fas fa-tag"></i> Promocionar
+                  </button>
+                </div>
+              </div>
+            </div>
+            
+            <div class="nuevo-producto">
+              <h4>Agregar Nuevo Producto</h4>
+              <form id="formProducto" class="form-productos">
+                <div class="form-row">
+                  <div class="form-group">
+                    <label for="nombreProducto">Nombre del Producto</label>
+                    <input type="text" name="nombreProducto" id="nombreProducto" placeholder="Ej: Mango Tommy" required>
+                  </div>
+                  <div class="form-group">
+                    <label for="categoriaProducto">Categoría</label>
+                    <select name="categoriaProducto" id="categoriaProducto" required>
+                      <option value="">Selecciona categoría</option>
+                      <option value="frutas">Frutas</option>
+                      <option value="verduras">Verduras</option>
+                      <option value="legumbres">Legumbres</option>
+                      <option value="cereales">Cereales</option>
+                      <option value="hortalizas">Hortalizas</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="form-row">
+                  <div class="form-group">
+                    <label for="precioCompra">Precio de Compra</label>
+                    <input type="number" name="precioCompra" id="precioCompra" placeholder="Precio por unidad" required>
+                  </div>
+                  <div class="form-group">
+                    <label for="precioVenta">Precio de Venta</label>
+                    <input type="number" name="precioVenta" id="precioVenta" placeholder="Precio de venta" required>
+                  </div>
+                </div>
+                <div class="form-row">
+                  <div class="form-group">
+                    <label for="unidadProducto">Unidad</label>
+                    <select name="unidadProducto" id="unidadProducto" required>
+                      <option value="">Selecciona unidad</option>
+                      <option value="kg">Kilogramo (kg)</option>
+                      <option value="lb">Libra (lb)</option>
+                      <option value="unidad">Unidad</option>
+                    </select>
+                  </div>
+                  <div class="form-group">
+                    <label for="stockInicial">Stock Inicial</label>
+                    <input type="number" name="stockInicial" id="stockInicial" placeholder="Cantidad inicial" required>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label for="descripcionProducto">Descripción</label>
+                  <textarea name="descripcionProducto" id="descripcionProducto" rows="3" placeholder="Descripción del producto..." required></textarea>
+                </div>
+                <button type="submit" class="btn-primary">
+                  <i class="fas fa-plus"></i> Agregar Producto
+                </button>
+              </form>
+            </div>
+          </div>
+        </div>
+
+        <!-- Gestión de Contratos y Acuerdos -->
+        <div class="card-productos">
+          <div class="card-header">
+            <i class="fas fa-handshake"></i>
+            <h3>Contratos y Acuerdos</h3>
+          </div>
+          <div class="card-content">
+            <div class="contratos-pendientes">
+              <h4>Contratos Pendientes de Aprobación</h4>
+              <div class="contrato-item">
+                <div class="contrato-info">
+                  <strong>Proveedor: Frutas del Valle S.A.S.</strong>
+                  <span class="contrato-desc">Suministro de frutas frescas - 6 meses</span>
+                  <span class="contrato-valor">Valor: $15,000,000</span>
+                </div>
+                <div class="contrato-actions">
+                  <button class="btn-approve" onclick="aprobarContrato(1)">
+                    <i class="fas fa-check"></i> Aprobar
+                  </button>
+                  <button class="btn-reject" onclick="rechazarContrato(1)">
+                    <i class="fas fa-times"></i> Rechazar
+                  </button>
+                  <button class="btn-view" onclick="verContrato(1)">
+                    <i class="fas fa-eye"></i> Ver
+                  </button>
+                </div>
+              </div>
+              
+              <div class="contrato-item">
+                <div class="contrato-info">
+                  <strong>Cliente: Restaurante El Buen Sabor</strong>
+                  <span class="contrato-desc">Suministro semanal de verduras</span>
+                  <span class="contrato-valor">Valor: $2,500,000/mes</span>
+                </div>
+                <div class="contrato-actions">
+                  <button class="btn-approve" onclick="aprobarContrato(2)">
+                    <i class="fas fa-check"></i> Aprobar
+                  </button>
+                  <button class="btn-reject" onclick="rechazarContrato(2)">
+                    <i class="fas fa-times"></i> Rechazar
+                  </button>
+                  <button class="btn-view" onclick="verContrato(2)">
+                    <i class="fas fa-eye"></i> Ver
+                  </button>
+                </div>
+              </div>
+            </div>
+            
+            <div class="contratos-activos">
+              <h4>Contratos Activos</h4>
+              <div class="contrato-activo">
+                <div class="contrato-activo-info">
+                  <strong>Proveedor: Verduras Orgánicas Ltda.</strong>
+                  <span class="contrato-activo-desc">Suministro de verduras orgánicas</span>
+                  <span class="contrato-activo-fecha">Vigencia: Hasta 30 Junio 2024</span>
+                </div>
+                <div class="contrato-activo-actions">
+                  <button class="btn-edit" onclick="editarContrato(1)">
+                    <i class="fas fa-edit"></i> Modificar
+                  </button>
+                  <button class="btn-renew" onclick="renovarContrato(1)">
+                    <i class="fas fa-sync"></i> Renovar
+                  </button>
+                </div>
+              </div>
+            </div>
+            
+            <div class="nuevo-contrato">
+              <h4>Crear Nuevo Contrato/Acuerdo</h4>
+              <form id="formContrato" class="form-productos">
+                <div class="form-row">
+                  <div class="form-group">
+                    <label for="tipoContrato">Tipo de Contrato</label>
+                    <select name="tipoContrato" id="tipoContrato" required>
+                      <option value="">Selecciona tipo</option>
+                      <option value="proveedor">Contrato con Proveedor</option>
+                      <option value="cliente">Contrato con Cliente</option>
+                      <option value="servicio">Contrato de Servicio</option>
+                      <option value="distribucion">Acuerdo de Distribución</option>
+                    </select>
+                  </div>
+                  <div class="form-group">
+                    <label for="parteContrato">Parte Contratante</label>
+                    <input type="text" name="parteContrato" id="parteContrato" placeholder="Nombre de la empresa/persona" required>
+                  </div>
+                </div>
+                <div class="form-row">
+                  <div class="form-group">
+                    <label for="valorContrato">Valor del Contrato</label>
+                    <input type="number" name="valorContrato" id="valorContrato" placeholder="Valor en pesos" required>
+                  </div>
+                  <div class="form-group">
+                    <label for="vigenciaContrato">Vigencia (meses)</label>
+                    <input type="number" name="vigenciaContrato" id="vigenciaContrato" placeholder="Duración en meses" required>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label for="descripcionContrato">Descripción del Contrato</label>
+                  <textarea name="descripcionContrato" id="descripcionContrato" rows="3" placeholder="Descripción detallada del contrato..." required></textarea>
+                </div>
+                <div class="form-group">
+                  <label for="condicionesContrato">Condiciones Especiales</label>
+                  <textarea name="condicionesContrato" id="condicionesContrato" rows="2" placeholder="Condiciones, términos especiales..."></textarea>
+                </div>
+                <button type="submit" class="btn-primary">
+                  <i class="fas fa-file-contract"></i> Crear Contrato
+                </button>
+              </form>
+            </div>
+          </div>
+        </div>
+
+        <!-- Gráfico de Ventas por Categoría -->
+        <div class="card-productos chart-card">
+          <div class="card-header">
+            <i class="fas fa-chart-pie"></i>
+            <h3>Ventas por Categoría</h3>
+          </div>
+          <div class="card-content">
+            <canvas id="ventasCategoriaChart" width="400" height="200"></canvas>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Mensajes de respuesta -->
+      <div class="mensaje" id="mensaje"></div>
+    </div>
+
+    <div id="noGerente" style="display:none;">
+      <div class="no-access">
+        <i class="fas fa-lock"></i>
+        <h2>Acceso Restringido</h2>
+        <p>Solo los gerentes pueden acceder a la gestión de productos y servicios.</p>
+        <a href="index.html" class="btn-secondary">Volver al Inicio</a>
+      </div>
+    </div>
+  </div>
+
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', Arial, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      padding-top: 80px;
+    }
+
+    .container-productos {
+      max-width: 1600px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+
+    .header-productos {
+      text-align: center;
+      background: rgba(255, 255, 255, 0.95);
+      padding: 30px;
+      border-radius: 15px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+      margin-bottom: 30px;
+      backdrop-filter: blur(10px);
+    }
+
+    .header-productos h1 {
+      color: #2c3e50;
+      font-size: 2.2rem;
+      margin-bottom: 10px;
+      font-weight: 700;
+    }
+
+    .header-productos p {
+      color: #7f8c8d;
+      font-size: 1.1rem;
+    }
+
+    .dashboard-productos {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+      gap: 25px;
+      margin-bottom: 30px;
+    }
+
+    .metricas-comerciales {
+      grid-column: 1 / -1;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 20px;
+      margin-bottom: 20px;
+    }
+
+    .metric-card {
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 15px;
+      padding: 25px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      transition: transform 0.3s ease;
+      backdrop-filter: blur(10px);
+    }
+
+    .metric-card:hover {
+      transform: translateY(-5px);
+    }
+
+    .metric-icon {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #4caf50, #45a049);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 1.5rem;
+    }
+
+    .metric-content h3 {
+      margin: 0 0 10px 0;
+      color: #2c3e50;
+      font-size: 1rem;
+      font-weight: 600;
+    }
+
+    .metric-value {
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: #2c3e50;
+      margin: 0 0 5px 0;
+    }
+
+    .metric-change {
+      font-size: 0.9rem;
+      font-weight: 500;
+      padding: 2px 8px;
+      border-radius: 4px;
+    }
+
+    .metric-change.positive {
+      background: #d4edda;
+      color: #155724;
+    }
+
+    .metric-change.negative {
+      background: #f8d7da;
+      color: #721c24;
+    }
+
+    .metric-change.neutral {
+      background: #e2e3e5;
+      color: #6c757d;
+    }
+
+    .card-productos {
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 15px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+      overflow: hidden;
+      transition: transform 0.3s ease;
+      backdrop-filter: blur(10px);
+    }
+
+    .card-productos:hover {
+      transform: translateY(-5px);
+    }
+
+    .card-header {
+      background: linear-gradient(135deg, #4caf50, #45a049);
+      color: white;
+      padding: 20px;
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+
+    .card-header i {
+      font-size: 1.5rem;
+    }
+
+    .card-header h3 {
+      margin: 0;
+      font-size: 1.3rem;
+      font-weight: 600;
+    }
+
+    .card-content {
+      padding: 25px;
+    }
+
+    .precios-pendientes,
+    .promociones-activas,
+    .cambios-catalogo,
+    .control-stock,
+    .contratos-pendientes,
+    .contratos-activos {
+      margin-bottom: 25px;
+    }
+
+    .precios-pendientes h4,
+    .promociones-activas h4,
+    .cambios-catalogo h4,
+    .control-stock h4,
+    .contratos-pendientes h4,
+    .contratos-activos h4 {
+      color: #2c3e50;
+      margin-bottom: 15px;
+      font-size: 1.1rem;
+    }
+
+    .precio-item,
+    .promocion-item,
+    .catalogo-item,
+    .contrato-item,
+    .contrato-activo {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 15px;
+      background: #f8f9fa;
+      border-radius: 8px;
+      margin-bottom: 10px;
+      border-left: 4px solid #4caf50;
+    }
+
+    .precio-info,
+    .promocion-info,
+    .catalogo-info,
+    .contrato-info,
+    .contrato-activo-info {
+      flex: 1;
+    }
+
+    .precio-info strong,
+    .promocion-info strong,
+    .catalogo-info strong,
+    .contrato-info strong,
+    .contrato-activo-info strong {
+      display: block;
+      color: #2c3e50;
+      font-size: 1rem;
+      margin-bottom: 5px;
+    }
+
+    .precio-desc,
+    .precio-propuesta,
+    .promocion-desc,
+    .promocion-fecha,
+    .catalogo-desc,
+    .catalogo-stock,
+    .contrato-desc,
+    .contrato-valor,
+    .contrato-activo-desc,
+    .contrato-activo-fecha {
+      display: block;
+      color: #6c757d;
+      font-size: 0.9rem;
+      margin-bottom: 3px;
+    }
+
+    .precio-propuesta {
+      color: #4caf50;
+      font-weight: 500;
+    }
+
+    .precio-actions,
+    .promocion-actions,
+    .catalogo-actions,
+    .contrato-actions,
+    .contrato-activo-actions {
+      display: flex;
+      gap: 8px;
+    }
+
+    .btn-approve,
+    .btn-reject,
+    .btn-edit,
+    .btn-view,
+    .btn-deactivate,
+    .btn-reorder,
+    .btn-promote,
+    .btn-renew {
+      padding: 8px 12px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 0.9rem;
+      font-weight: 500;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .btn-approve {
+      background: #4caf50;
+      color: white;
+    }
+
+    .btn-approve:hover {
+      background: #45a049;
+      transform: scale(1.05);
+    }
+
+    .btn-reject {
+      background: #f44336;
+      color: white;
+    }
+
+    .btn-reject:hover {
+      background: #d32f2f;
+      transform: scale(1.05);
+    }
+
+    .btn-edit {
+      background: #17a2b8;
+      color: white;
+    }
+
+    .btn-edit:hover {
+      background: #138496;
+      transform: scale(1.05);
+    }
+
+    .btn-view {
+      background: #6c757d;
+      color: white;
+    }
+
+    .btn-view:hover {
+      background: #5a6268;
+      transform: scale(1.05);
+    }
+
+    .btn-deactivate {
+      background: #ffc107;
+      color: #212529;
+    }
+
+    .btn-deactivate:hover {
+      background: #e0a800;
+      transform: scale(1.05);
+    }
+
+    .btn-reorder {
+      background: #28a745;
+      color: white;
+    }
+
+    .btn-reorder:hover {
+      background: #218838;
+      transform: scale(1.05);
+    }
+
+    .btn-promote {
+      background: #fd7e14;
+      color: white;
+    }
+
+    .btn-promote:hover {
+      background: #e8650e;
+      transform: scale(1.05);
+    }
+
+    .btn-renew {
+      background: #6f42c1;
+      color: white;
+    }
+
+    .btn-renew:hover {
+      background: #5a32a3;
+      transform: scale(1.05);
+    }
+
+    .stock-alerts {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .alert-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 12px 15px;
+      border-radius: 8px;
+      font-weight: 500;
+    }
+
+    .alert-item.low-stock {
+      background: #fff3cd;
+      color: #856404;
+      border-left: 4px solid #ffc107;
+    }
+
+    .alert-item.out-stock {
+      background: #f8d7da;
+      color: #721c24;
+      border-left: 4px solid #dc3545;
+    }
+
+    .alert-item.excess-stock {
+      background: #d1ecf1;
+      color: #0c5460;
+      border-left: 4px solid #17a2b8;
+    }
+
+    .form-productos {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 15px;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .form-group label {
+      color: #2c3e50;
+      font-weight: 600;
+      margin-bottom: 8px;
+      font-size: 0.95rem;
+    }
+
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+      padding: 12px 15px;
+      border: 2px solid #e9ecef;
+      border-radius: 8px;
+      font-size: 1rem;
+      transition: all 0.3s ease;
+      background: #f8f9fa;
+    }
+
+    .form-group input:focus,
+    .form-group select:focus,
+    .form-group textarea:focus {
+      border-color: #4caf50;
+      outline: none;
+      background: white;
+      box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.1);
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, #4caf50, #45a049);
+      color: white;
+      border: none;
+      padding: 12px 20px;
+      border-radius: 8px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(76, 175, 80, 0.3);
+    }
+
+    .btn-secondary {
+      background: #6c757d;
+      color: white;
+      text-decoration: none;
+      padding: 10px 20px;
+      border-radius: 6px;
+      font-weight: 500;
+      transition: background 0.3s ease;
+    }
+
+    .btn-secondary:hover {
+      background: #5a6268;
+    }
+
+    .chart-card {
+      grid-column: 1 / -1;
+    }
+
+    .chart-card .card-content {
+      padding: 20px;
+    }
+
+    .mensaje {
+      margin-top: 20px;
+      padding: 15px;
+      border-radius: 8px;
+      font-weight: 500;
+      text-align: center;
+      min-height: 20px;
+    }
+
+    .mensaje.success {
+      background: #d4edda;
+      color: #155724;
+      border: 1px solid #c3e6cb;
+    }
+
+    .mensaje.error {
+      background: #f8d7da;
+      color: #721c24;
+      border: 1px solid #f5c6cb;
+    }
+
+    .no-access {
+      text-align: center;
+      background: rgba(255, 255, 255, 0.95);
+      padding: 60px 40px;
+      border-radius: 15px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+      backdrop-filter: blur(10px);
+    }
+
+    .no-access i {
+      font-size: 4rem;
+      color: #dc3545;
+      margin-bottom: 20px;
+    }
+
+    .no-access h2 {
+      color: #2c3e50;
+      margin-bottom: 15px;
+      font-size: 1.8rem;
+    }
+
+    .no-access p {
+      color: #6c757d;
+      font-size: 1.1rem;
+      margin-bottom: 25px;
+    }
+
+    @media (max-width: 768px) {
+      .dashboard-productos {
+        grid-template-columns: 1fr;
+      }
+      
+      .metricas-comerciales {
+        grid-template-columns: 1fr;
+      }
+      
+      .form-row {
+        grid-template-columns: 1fr;
+      }
+      
+      .precio-item,
+      .promocion-item,
+      .catalogo-item,
+      .contrato-item,
+      .contrato-activo {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+      }
+      
+      .alert-item {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+      }
+    }
+  </style>
+
+  <script src="js/role-verifier.js"></script>
+  <script src="navbar.js"></script>
+  <script>
+    // Verificación de roles - DEBE SER LO PRIMERO
+    if (!roleVerifier.init('gestionprodser.html')) {
+      // Si no tiene acceso, la función ya redirige automáticamente
+      // No ejecutar el resto del código
+      throw new Error('Acceso denegado');
+    }
+
+    // Verificación de gerente (código existente)
+    async function verificarGerente() {
+      const token = localStorage.getItem('token');
+      if (!token) return false;
+      try {
+        const res = await fetch('http://localhost:4545/mi-rol', {
+          headers: { 'Authorization': 'Bearer ' + token }
+        });
+        const data = await res.json();
+        return data.rol === 'gerente';
+      } catch {
+        return false;
+      }
+    }
+
+    // Mostrar mensaje
+    function mostrarMensaje(texto, tipo = 'success') {
+      const mensaje = document.getElementById('mensaje');
+      mensaje.textContent = texto;
+      mensaje.className = `mensaje ${tipo}`;
+      setTimeout(() => {
+        mensaje.textContent = '';
+        mensaje.className = 'mensaje';
+      }, 5000);
+    }
+
+    // Funciones para gestión de precios
+    async function aprobarPrecio(id) {
+      try {
+        const token = localStorage.getItem('token');
+        const response = await fetch(`http://localhost:4545/gestion/cambios-precio/${id}/aprobar`, {
+          method: 'PUT',
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+          }
+        });
+        const result = await response.json();
+        mostrarMensaje(result.message, result.success ? 'success' : 'error');
+        if (result.success) {
+          cargarCambiosPrecio();
+        }
+      } catch (error) {
+        mostrarMensaje('Error al aprobar precio', 'error');
+      }
+    }
+
+    async function rechazarPrecio(id) {
+      try {
+        const token = localStorage.getItem('token');
+        const response = await fetch(`http://localhost:4545/gestion/cambios-precio/${id}/rechazar`, {
+          method: 'PUT',
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+          }
+        });
+        const result = await response.json();
+        mostrarMensaje(result.message, result.success ? 'success' : 'error');
+        if (result.success) {
+          cargarCambiosPrecio();
+        }
+      } catch (error) {
+        mostrarMensaje('Error al rechazar precio', 'error');
+      }
+    }
+
+    function editarPromocion(id) {
+      mostrarMensaje(`✏️ Editando promoción ${id}...`, 'success');
+    }
+
+    function desactivarPromocion(id) {
+      mostrarMensaje(`⏸️ Promoción ${id} desactivada`, 'success');
+    }
+
+    // Funciones para cargar datos de la base de datos
+    async function cargarCambiosPrecio() {
+      try {
+        const token = localStorage.getItem('token');
+        const response = await fetch('http://localhost:4545/gestion/cambios-precio', {
+          headers: { 'Authorization': `Bearer ${token}` }
+        });
+        const result = await response.json();
+        
+        if (result.success && result.data) {
+          actualizarListaCambiosPrecio(result.data);
+        }
+      } catch (error) {
+        console.error('Error al cargar cambios de precio:', error);
+      }
+    }
+
+    async function cargarPromociones() {
+      try {
+        const token = localStorage.getItem('token');
+        const response = await fetch('http://localhost:4545/gestion/promociones', {
+          headers: { 'Authorization': `Bearer ${token}` }
+        });
+        const result = await response.json();
+        
+        if (result.success && result.data) {
+          actualizarListaPromociones(result.data);
+        }
+      } catch (error) {
+        console.error('Error al cargar promociones:', error);
+      }
+    }
+
+    async function cargarCambiosCatalogo() {
+      try {
+        const token = localStorage.getItem('token');
+        const response = await fetch('http://localhost:4545/gestion/cambios-catalogo', {
+          headers: { 'Authorization': `Bearer ${token}` }
+        });
+        const result = await response.json();
+        
+        if (result.success && result.data) {
+          actualizarListaCambiosCatalogo(result.data);
+        }
+      } catch (error) {
+        console.error('Error al cargar cambios en catálogo:', error);
+      }
+    }
+
+    async function cargarContratos() {
+      try {
+        const token = localStorage.getItem('token');
+        const response = await fetch('http://localhost:4545/gestion/contratos', {
+          headers: { 'Authorization': `Bearer ${token}` }
+        });
+        const result = await response.json();
+        
+        if (result.success && result.data) {
+          actualizarListaContratos(result.data);
+        }
+      } catch (error) {
+        console.error('Error al cargar contratos:', error);
+      }
+    }
+
+    async function cargarMetricasComerciales() {
+      try {
+        const token = localStorage.getItem('token');
+        const response = await fetch('http://localhost:4545/gestion/metricas-comerciales', {
+          headers: { 'Authorization': `Bearer ${token}` }
+        });
+        const result = await response.json();
+        
+        if (result.success && result.data) {
+          actualizarMetricasComerciales(result.data);
+        }
+      } catch (error) {
+        console.error('Error al cargar métricas comerciales:', error);
+      }
+    }
+
+    function actualizarListaCambiosPrecio(cambios) {
+      const container = document.querySelector('.precios-pendientes');
+      if (!container) return;
+
+      container.innerHTML = '<h4>Cambios de Precio Pendientes</h4>';
+      
+      cambios.forEach(cambio => {
+        const cambioElement = document.createElement('div');
+        cambioElement.className = 'precio-item';
+        cambioElement.innerHTML = `
+          <div class="precio-info">
+            <strong>${cambio.nombreProducto}</strong>
+            <span class="precio-desc">Precio actual: $${cambio.precioActual.toLocaleString()}</span>
+            <span class="precio-propuesta">Nuevo precio: $${cambio.precioNuevo.toLocaleString()}</span>
+          </div>
+          <div class="precio-actions">
+            <button class="btn-approve" onclick="aprobarPrecio(${cambio.idCambio})">
+              <i class="fas fa-check"></i> Aprobar
+            </button>
+            <button class="btn-reject" onclick="rechazarPrecio(${cambio.idCambio})">
+              <i class="fas fa-times"></i> Rechazar
+            </button>
+          </div>
+        `;
+        container.appendChild(cambioElement);
+      });
+    }
+
+    function actualizarListaPromociones(promociones) {
+      const container = document.querySelector('.promociones-activas');
+      if (!container) return;
+
+      container.innerHTML = '<h4>Promociones Activas</h4>';
+      
+      promociones.forEach(promocion => {
+        const promocionElement = document.createElement('div');
+        promocionElement.className = 'promocion-item';
+        promocionElement.innerHTML = `
+          <div class="promocion-info">
+            <strong>${promocion.nombre}</strong>
+            <span class="promocion-desc">${promocion.descripcion}</span>
+            <span class="promocion-fecha">Hasta: ${new Date(promocion.fechaFin).toLocaleDateString()}</span>
+          </div>
+          <div class="promocion-actions">
+            <button class="btn-edit" onclick="editarPromocion(${promocion.idPromocion})">
+              <i class="fas fa-edit"></i> Editar
+            </button>
+            <button class="btn-deactivate" onclick="desactivarPromocion(${promocion.idPromocion})">
+              <i class="fas fa-pause"></i> Desactivar
+            </button>
+          </div>
+        `;
+        container.appendChild(promocionElement);
+      });
+    }
+
+    function actualizarListaCambiosCatalogo(cambios) {
+      const container = document.querySelector('.cambios-catalogo');
+      if (!container) return;
+
+      container.innerHTML = '<h4>Cambios en Catálogo Pendientes</h4>';
+      
+      cambios.forEach(cambio => {
+        const cambioElement = document.createElement('div');
+        cambioElement.className = 'catalogo-item';
+        cambioElement.innerHTML = `
+          <div class="catalogo-info">
+            <strong>${cambio.tipo}: ${cambio.nombreProducto || 'Nuevo Producto'}</strong>
+            <span class="catalogo-desc">${cambio.descripcion}</span>
+          </div>
+          <div class="catalogo-actions">
+            <button class="btn-approve" onclick="aprobarCatalogo(${cambio.idCambio})">
+              <i class="fas fa-check"></i> Aprobar
+            </button>
+            <button class="btn-reject" onclick="rechazarCatalogo(${cambio.idCambio})">
+              <i class="fas fa-times"></i> Rechazar
+            </button>
+          </div>
+        `;
+        container.appendChild(cambioElement);
+      });
+    }
+
+    function actualizarListaContratos(contratos) {
+      const containerPendientes = document.querySelector('.contratos-pendientes');
+      const containerActivos = document.querySelector('.contratos-activos');
+      
+      if (containerPendientes) {
+        containerPendientes.innerHTML = '<h4>Contratos Pendientes de Aprobación</h4>';
+        
+        contratos.filter(c => c.estado === 'pendiente').forEach(contrato => {
+          const contratoElement = document.createElement('div');
+          contratoElement.className = 'contrato-item';
+          contratoElement.innerHTML = `
+            <div class="contrato-info">
+              <strong>${contrato.tipo}: ${contrato.parteContratante}</strong>
+              <span class="contrato-desc">${contrato.descripcion}</span>
+              <span class="contrato-valor">Valor: $${contrato.valor.toLocaleString()}</span>
+            </div>
+            <div class="contrato-actions">
+              <button class="btn-approve" onclick="aprobarContrato(${contrato.idContrato})">
+                <i class="fas fa-check"></i> Aprobar
+              </button>
+              <button class="btn-reject" onclick="rechazarContrato(${contrato.idContrato})">
+                <i class="fas fa-times"></i> Rechazar
+              </button>
+              <button class="btn-view" onclick="verContrato(${contrato.idContrato})">
+                <i class="fas fa-eye"></i> Ver
+              </button>
+            </div>
+          `;
+          containerPendientes.appendChild(contratoElement);
+        });
+      }
+
+      if (containerActivos) {
+        containerActivos.innerHTML = '<h4>Contratos Activos</h4>';
+        
+        contratos.filter(c => c.estado === 'activo').forEach(contrato => {
+          const contratoElement = document.createElement('div');
+          contratoElement.className = 'contrato-activo';
+          contratoElement.innerHTML = `
+            <div class="contrato-activo-info">
+              <strong>${contrato.tipo}: ${contrato.parteContratante}</strong>
+              <span class="contrato-activo-desc">${contrato.descripcion}</span>
+              <span class="contrato-activo-fecha">Vigencia: Hasta ${new Date(contrato.fechaFin).toLocaleDateString()}</span>
+            </div>
+            <div class="contrato-activo-actions">
+              <button class="btn-edit" onclick="editarContrato(${contrato.idContrato})">
+                <i class="fas fa-edit"></i> Modificar
+              </button>
+              <button class="btn-renew" onclick="renovarContrato(${contrato.idContrato})">
+                <i class="fas fa-sync"></i> Renovar
+              </button>
+            </div>
+          `;
+          containerActivos.appendChild(contratoElement);
+        });
+      }
+    }
+
+    function actualizarMetricasComerciales(metricas) {
+      const metricCards = document.querySelectorAll('.metric-card');
+      if (metricCards.length >= 4) {
+        metricCards[0].querySelector('.metric-value').textContent = `$${metricas.ventasMes?.toLocaleString() || '0'}`;
+        metricCards[1].querySelector('.metric-value').textContent = metricas.productosActivos || '0';
+        metricCards[2].querySelector('.metric-value').textContent = `${metricas.margenPromedio?.toFixed(1) || '0'}%`;
+        metricCards[3].querySelector('.metric-value').textContent = `${metricas.rotacionInventario || '0'}x`;
+      }
+    }
+
+    // Funciones para gestión de catálogo
+    async function aprobarCatalogo(id) {
+      try {
+        const token = localStorage.getItem('token');
+        const response = await fetch(`http://localhost:4545/gestion/cambios-catalogo/${id}/aprobar`, {
+          method: 'PUT',
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+          }
+        });
+        const result = await response.json();
+        mostrarMensaje(result.message, result.success ? 'success' : 'error');
+        if (result.success) {
+          cargarCambiosCatalogo();
+        }
+      } catch (error) {
+        mostrarMensaje('Error al aprobar cambio en catálogo', 'error');
+      }
+    }
+
+    function rechazarCatalogo(id) {
+      mostrarMensaje(`❌ Cambio en catálogo ${id} rechazado`, 'error');
+    }
+
+    function reordenarStock(producto) {
+      mostrarMensaje(`📦 Reordenando stock de ${producto}...`, 'success');
+    }
+
+    function promocionarStock(producto) {
+      mostrarMensaje(`🏷️ Creando promoción para ${producto}...`, 'success');
+    }
+
+    // Funciones para gestión de contratos
+    async function aprobarContrato(id) {
+      try {
+        const token = localStorage.getItem('token');
+        const response = await fetch(`http://localhost:4545/gestion/contratos/${id}/aprobar`, {
+          method: 'PUT',
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+          }
+        });
+        const result = await response.json();
+        mostrarMensaje(result.message, result.success ? 'success' : 'error');
+        if (result.success) {
+          cargarContratos();
+        }
+      } catch (error) {
+        mostrarMensaje('Error al aprobar contrato', 'error');
+      }
+    }
+
+    function rechazarContrato(id) {
+      mostrarMensaje(`❌ Contrato ${id} rechazado`, 'error');
+    }
+
+    function verContrato(id) {
+      mostrarMensaje(`👁️ Visualizando contrato ${id}`, 'success');
+    }
+
+    function editarContrato(id) {
+      mostrarMensaje(`✏️ Editando contrato ${id}...`, 'success');
+    }
+
+    function renovarContrato(id) {
+      mostrarMensaje(`🔄 Renovando contrato ${id}...`, 'success');
+    }
+
+    // Inicialización
+    (async () => {
+      const esGerente = await verificarGerente();
+      document.getElementById('soloGerente').style.display = esGerente ? 'block' : 'none';
+      document.getElementById('noGerente').style.display = esGerente ? 'none' : 'block';
+      
+      if (esGerente) {
+        inicializarGrafico();
+        establecerFechasMinimas();
+        cargarCambiosPrecio();
+        cargarPromociones();
+        cargarCambiosCatalogo();
+        cargarContratos();
+        cargarMetricasComerciales();
+      }
+    })();
+
+    // Gestión de Promociones
+    document.getElementById('formPromocion')?.addEventListener('submit', async function(e) {
+      e.preventDefault();
+      const formData = new FormData(this);
+      const datos = Object.fromEntries(formData.entries());
+      
+      try {
+        const token = localStorage.getItem('token');
+        const response = await fetch('http://localhost:4545/gestion/promociones', {
+          method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(datos)
+        });
+        const result = await response.json();
+        mostrarMensaje(result.message, result.success ? 'success' : 'error');
+        if (result.success) {
+          this.reset();
+          cargarPromociones();
+        }
+      } catch (error) {
+        mostrarMensaje('Error al crear promoción', 'error');
+      }
+    });
+
+    // Gestión de Productos
+    document.getElementById('formProducto')?.addEventListener('submit', async function(e) {
+      e.preventDefault();
+      const formData = new FormData(this);
+      const datos = Object.fromEntries(formData.entries());
+      
+      try {
+        const token = localStorage.getItem('token');
+        const response = await fetch('http://localhost:4545/gestion/cambios-catalogo', {
+          method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            tipo: 'nuevo_producto',
+            datosProducto: JSON.stringify(datos),
+            descripcion: `Nuevo producto: ${datos.nombreProducto}`
+          })
+        });
+        const result = await response.json();
+        mostrarMensaje(result.message, result.success ? 'success' : 'error');
+        if (result.success) {
+          this.reset();
+          cargarCambiosCatalogo();
+        }
+      } catch (error) {
+        mostrarMensaje('Error al crear producto', 'error');
+      }
+    });
+
+    // Gestión de Contratos
+    document.getElementById('formContrato')?.addEventListener('submit', async function(e) {
+      e.preventDefault();
+      const formData = new FormData(this);
+      const datos = Object.fromEntries(formData.entries());
+      
+      try {
+        const token = localStorage.getItem('token');
+        const response = await fetch('http://localhost:4545/gestion/contratos', {
+          method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(datos)
+        });
+        const result = await response.json();
+        mostrarMensaje(result.message, result.success ? 'success' : 'error');
+        if (result.success) {
+          this.reset();
+          cargarContratos();
+        }
+      } catch (error) {
+        mostrarMensaje('Error al crear contrato', 'error');
+      }
+    });
+
+    // Establecer fechas mínimas
+    function establecerFechasMinimas() {
+      const fechaInicioPromocion = document.getElementById('fechaInicioPromocion');
+      const fechaFinPromocion = document.getElementById('fechaFinPromocion');
+      
+      if (fechaInicioPromocion) {
+        const hoy = new Date().toISOString().split('T')[0];
+        fechaInicioPromocion.min = hoy;
+      }
+      
+      if (fechaFinPromocion) {
+        fechaFinPromocion.addEventListener('change', function() {
+          if (fechaInicioPromocion.value) {
+            fechaFinPromocion.min = fechaInicioPromocion.value;
+          }
+        });
+      }
+    }
+
+    // Inicializar gráfico de ventas por categoría
+    function inicializarGrafico() {
+      const ctx = document.getElementById('ventasCategoriaChart').getContext('2d');
+      new Chart(ctx, {
+        type: 'doughnut',
+        data: {
+          labels: ['Frutas', 'Verduras', 'Legumbres', 'Cereales', 'Hortalizas'],
+          datasets: [{
+            data: [35, 28, 15, 12, 10],
+            backgroundColor: [
+              '#4caf50',
+              '#2196f3',
+              '#ff9800',
+              '#9c27b0',
+              '#f44336'
+            ],
+            borderWidth: 2,
+            borderColor: '#fff'
+          }]
+        },
+        options: {
+          responsive: true,
+          plugins: {
+            title: {
+              display: true,
+              text: 'Distribución de Ventas por Categoría (%)'
+            },
+            legend: {
+              position: 'bottom'
+            }
+          }
+        }
+      });
+    }
+  </script>
+</body>
+</html>

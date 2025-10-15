@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>Editar Perfil</title>
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    body {
+      font-family: "Segoe UI", sans-serif;
+      background-color: #f4f4f4;
+      margin: 0;
+      padding: 20px;
+    }
+
+    .container {
+      max-width: 500px;
+      margin: 80px auto;
+      background: white;
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0 0 12px rgba(0, 0, 0, 0.1);
+    }
+
+    h2 {
+      text-align: center;
+      color: #2d8659;
+    }
+
+    label {
+      display: block;
+      margin-top: 10px;
+      font-weight: bold;
+    }
+
+    input {
+      width: 100%;
+      padding: 10px;
+      margin-top: 5px;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+    }
+
+    button {
+      background-color: #2d8659;
+      color: white;
+      padding: 12px;
+      width: 100%;
+      border: none;
+      border-radius: 5px;
+      margin-top: 20px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #256d4d;
+    }
+
+    #mensaje {
+      margin-top: 15px;
+      text-align: center;
+      font-weight: bold;
+    }
+
+    #mensaje.error {
+      color: red;
+    }
+
+    #mensaje.success {
+      color: green;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>Editar Perfil</h2>
+
+    <form id="perfilForm">
+      <label for="nombres">Nombres:</label>
+      <input type="text" id="nombres" name="nombres" maxlength="50" required />
+
+      <label for="telefono">Teléfono:</label>
+      <input type="text" id="telefono" name="telefono" maxlength="10" required />
+
+      <label for="correo">Correo:</label>
+      <input type="email" id="correo" name="correo" maxlength="100" required />
+
+      <button type="submit">Guardar Cambios</button>
+    </form>
+
+    <p id="mensaje"></p>
+  </div>
+
+  <script>
+    const token = localStorage.getItem("token");
+    const mensaje = document.getElementById("mensaje");
+
+    if (!token) {
+      mensaje.textContent = "⚠️ No estás autenticado. Inicia sesión.";
+      mensaje.className = "error";
+      document.getElementById("perfilForm").style.display = "none";
+    } else {
+      fetch("/usuario/perfil", {
+        headers: {
+          Authorization: "Bearer " + token
+        }
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          if (data.error) {
+            mensaje.textContent = "❌ " + data.error;
+            mensaje.className = "error";
+          } else {
+            document.getElementById("nombres").value = data.nombres || "";
+            document.getElementById("telefono").value = data.telefono || "";
+            document.getElementById("correo").value = data.correo || "";
+          }
+        });
+
+      document
+        .getElementById("perfilForm")
+        .addEventListener("submit", function (e) {
+          e.preventDefault();
+
+          const correo = document.getElementById("correo").value.trim();
+          const correoValido = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(correo);
+
+          if (!correoValido) {
+            mensaje.textContent = "❌ El correo electrónico no es válido.";
+            mensaje.className = "error";
+            return;
+          }
+
+          const payload = {
+            nombres: document.getElementById("nombres").value.trim(),
+            telefono: document.getElementById("telefono").value.trim(),
+            correo: correo
+          };
+
+          fetch("/usuario/editar", {
+            method: "PUT",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: "Bearer " + token
+            },
+            body: JSON.stringify(payload)
+          })
+            .then((res) => res.json())
+            .then((data) => {
+              if (data.error) {
+                mensaje.textContent = "❌ " + data.error;
+                mensaje.className = "error";
+              } else {
+                mensaje.textContent = "✅ Cambios guardados. Redirigiendo...";
+                mensaje.className = "success";
+                setTimeout(() => (window.location.href = "perfil.html"), 2000);
+              }
+            })
+            .catch(() => {
+              mensaje.textContent = "❌ Error al guardar cambios";
+              mensaje.className = "error";
+            });
+        });
+    }
+  </script>
+
+  <script src="navbar.js"></script>
+</body>
+</html>

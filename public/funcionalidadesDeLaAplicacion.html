@@ -1,0 +1,767 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Funcionalidades - Legumbrería JM</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            text-align: center;
+            background: rgba(255, 255, 255, 0.95);
+            padding: 40px 20px;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            margin-bottom: 30px;
+            backdrop-filter: blur(10px);
+        }
+
+        .header h1 {
+            color: #2c3e50;
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+
+        .header .subtitle {
+            color: #7f8c8d;
+            font-size: 1.2rem;
+            margin-bottom: 20px;
+        }
+
+        .header .description {
+            color: #34495e;
+            font-size: 1rem;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .modules-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 25px;
+            margin-bottom: 40px;
+        }
+
+        .module-card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .module-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15);
+        }
+
+        .module-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #ecf0f1;
+        }
+
+        .module-icon {
+            font-size: 2rem;
+            margin-right: 15px;
+            width: 50px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            background: linear-gradient(45deg, #3498db, #2980b9);
+            color: white;
+        }
+
+        .module-title {
+            font-size: 1.4rem;
+            font-weight: 600;
+            color: #2c3e50;
+        }
+
+        .feature-section {
+            margin-bottom: 20px;
+        }
+
+        .feature-section h3 {
+            color: #34495e;
+            font-size: 1.1rem;
+            margin-bottom: 10px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+        }
+
+        .feature-section h3 i {
+            margin-right: 8px;
+            color: #3498db;
+        }
+
+        .feature-list {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .feature-list li {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 8px;
+            padding: 5px 0;
+            color: #555;
+        }
+
+        .feature-list li i {
+            color: #27ae60;
+            margin-right: 10px;
+            margin-top: 2px;
+            font-size: 0.9rem;
+        }
+
+        .feature-list li .feature-text {
+            flex: 1;
+        }
+
+        .sub-features {
+            margin-left: 20px;
+            margin-top: 5px;
+        }
+
+        .sub-features li {
+            font-size: 0.9rem;
+            color: #666;
+            margin-bottom: 3px;
+        }
+
+        .sub-features li:before {
+            content: "•";
+            color: #3498db;
+            font-weight: bold;
+            margin-right: 8px;
+        }
+
+        .summary-section {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .summary-section h2 {
+            color: #2c3e50;
+            font-size: 1.8rem;
+            margin-bottom: 20px;
+            text-align: center;
+            font-weight: 600;
+        }
+
+        .summary-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+
+        .summary-item {
+            background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            border-left: 4px solid #3498db;
+        }
+
+        .summary-item h3 {
+            color: #2c3e50;
+            margin-bottom: 10px;
+            font-size: 1.2rem;
+        }
+
+        .summary-item p {
+            color: #555;
+            font-size: 0.95rem;
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 40px;
+            padding: 20px;
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        @media (max-width: 768px) {
+            .modules-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .module-card {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1><i class="fas fa-leaf"></i> Funcionalidades de la Aplicación</h1>
+            <p class="subtitle">Legumbrería JM - Sistema de Comercio Electrónico</p>
+            <p class="description">
+                Una aplicación web completa desarrollada con arquitectura MVC que incluye gestión de usuarios, 
+                catálogo de productos, sistema de ventas, gestión empresarial avanzada, control financiero, 
+                gestión del personal, procesos operativos, seguridad robusta y notificaciones automáticas.
+            </p>
+        </div>
+
+        <div class="modules-grid">
+            <!-- Módulo 1: Gestión de Usuarios -->
+            <div class="module-card">
+                <div class="module-header">
+                    <div class="module-icon">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <h2 class="module-title">Gestión de Usuarios y Autenticación</h2>
+                </div>
+                
+                <div class="feature-section">
+                    <h3><i class="fas fa-user-plus"></i> Registro de Usuarios (RF-01)</h3>
+                    <ul class="feature-list">
+                        <li><i class="fas fa-check"></i><span class="feature-text">Registro completo de nuevos clientes</span></li>
+                        <li><i class="fas fa-check"></i><span class="feature-text">Validaciones exhaustivas de campos:</span></li>
+                        <ul class="sub-features">
+                            <li>Documento (8-10 dígitos)</li>
+                            <li>Nombres completos (3-100 caracteres, solo letras)</li>
+                            <li>Teléfono (exactamente 10 dígitos)</li>
+                            <li>Correo electrónico válido</li>
+                            <li>Contraseña segura (mínimo 8 caracteres, mayúscula, minúscula, número y símbolo)</li>
+                            <li>Pregunta y respuesta de seguridad</li>
+                        </ul>
+                        <li><i class="fas fa-check"></i><span class="feature-text">Encriptación de contraseñas con bcrypt</span></li>
+                        <li><i class="fas fa-check"></i><span class="feature-text">Envío automático de correo de bienvenida</span></li>
+                        <li><i class="fas fa-check"></i><span class="feature-text">Generación automática de token JWT</span></li>
+                    </ul>
+                </div>
+
+                <div class="feature-section">
+                    <h3><i class="fas fa-sign-in-alt"></i> Inicio de Sesión Seguro</h3>
+                    <ul class="feature-list">
+                        <li><i class="fas fa-check"></i><span class="feature-text">Validación de credenciales</span></li>
+                        <li><i class="fas fa-check"></i><span class="feature-text">Sistema de intentos fallidos (máximo 3 intentos)</span></li>
+                        <li><i class="fas fa-check"></i><span class="feature-text">Bloqueo automático de cuentas tras múltiples fallos</span></li>
+                        <li><i class="fas fa-check"></i><span class="feature-text">Generación y gestión de tokens JWT</span></li>
+                        <li><i class="fas fa-check"></i><span class="feature-text">Envío de correo de confirmación de inicio de sesión</span></li>
+                        <li><i class="fas fa-check"></i><span class="feature-text">Verificación de tokens en base de datos</span></li>
+                    </ul>
+                </div>
+
+                <div class="feature-section">
+                    <h3><i class="fas fa-user-edit"></i> Gestión de Perfiles</h3>
+                    <ul class="feature-list">
+                        <li><i class="fas fa-check"></i><span class="feature-text">Visualización del perfil del usuario autenticado</span></li>
+                        <li><i class="fas fa-check"></i><span class="feature-text">Edición de datos personales (nombres, teléfono, correo)</span></li>
+                        <li><i class="fas fa-check"></i><span class="feature-text">Envío de correo de confirmación al actualizar perfil</span></li>
+                        <li><i class="fas fa-check"></i><span class="feature-text">Validación de permisos por token</span></li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Módulo 2: Gestión de Productos -->
+            <div class="module-card">
+                <div class="module-header">
+                    <div class="module-icon">
+                        <i class="fas fa-shopping-basket"></i>
+                    </div>
+                    <h2 class="module-title">Gestión de Productos</h2>
+                </div>
+                
+                <div class="feature-section">
+                    <h3><i class="fas fa-list"></i> Catálogo de Productos</h3>
+                    <ul class="feature-list">
+                        <li><i class="fas fa-check"></i><span class="feature-text">Visualización de productos disponibles</span></li>
+                        <li><i class="fas fa-check"></i><span class="feature-text">Categorización automática (frutas, verduras, promociones, legumbres, cereales, hortalizas)</span></li>
+                        <li><i class="fas fa-check"></i><span class="feature-text">Gestión de imágenes de productos</span></li>
+                        <li><i class="fas fa-check"></i><span class="feature-text">Información detallada: precio, unidad, stock, descripción</span></li>
+                    </ul>
+                </div>
+
+                <div class="feature-section">
+                    <h3><i class="fas fa-cogs"></i> Administración de Productos</h3>
+                    <ul class="feature-list">
+                        <li><i class="fas fa-check"></i><span class="feature-text">Agregar nuevos productos con imagen</span></li>
+                        <li><i class="fas fa-check"></i><span class="feature-text">Normalización automática de categorías</span></li>
+                        <li><i class="fas fa-check"></i><span class="feature-text">Gestión de unidades (kg, lb, unidad)</span></li>
+                        <li><i class="fas fa-check"></i><span class="feature-text">Registro de precios de compra y venta</span></li>
+                        <li><i class="fas fa-check"></i><span class="feature-text">Control de stock</span></li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Módulo 3: Sistema de Ventas -->
+            <div class="module-card">
+                <div class="module-header">
+                    <div class="module-icon">
+                        <i class="fas fa-cash-register"></i>
+                    </div>
+                    <h2 class="module-title">Sistema de Ventas y Facturación</h2>
+                </div>
+                
+                <div class="feature-section">
+                    <h3><i class="fas fa-shopping-cart"></i> Carrito de Compras</h3>
+                    <ul class="feature-list">
+                        <li><i class="fas fa-check"></i><span class="feature-text">Agregar productos al carrito</span></li>
+                        <li><i class="fas fa-check"></i><span class="feature-text">Cálculo automático de precios según cantidad</span></li>
+                        <li><i class="fas fa-check"></i><span class="feature-text">Conversión automática de libras a kilogramos</span></li>
+                        <li><i class="fas fa-check"></i><span class="feature-text">Precios diferenciados por volumen (≥10kg precio menor)</span></li>
+                    </ul>
+                </div>
+
+                <div class="feature-section">
+                    <h3><i class="fas fa-credit-card"></i> Proceso de Checkout</h3>
+                    <ul class="feature-list">
+                        <li><i class="fas fa-check"></i><span class="feature-text">Creación de facturas con detalles</span></li>
+                        <li><i class="fas fa-check"></i><span class="feature-text">Múltiples métodos de pago:</span></li>
+                        <ul class="sub-features">
+                            <li>Contra entrega</li>
+                            <li>Bancolombia</li>
+                            <li>Nequi</li>
+                        </ul>
+                        <li><i class="fas fa-check"></i><span class="feature-text">Cálculo automático de totales</span></li>
+                        <li><i class="fas fa-check"></i><span class="feature-text">Gestión de stock en tiempo real</span></li>
+                        <li><i class="fas fa-check"></i><span class="feature-text">Transacciones seguras con rollback</span></li>
+                    </ul>
+                </div>
+
+                <div class="feature-section">
+                    <h3><i class="fas fa-clipboard-list"></i> Gestión de Pedidos</h3>
+                    <ul class="feature-list">
+                        <li><i class="fas fa-check"></i><span class="feature-text">Visualización de facturas por usuario</span></li>
+                        <li><i class="fas fa-check"></i><span class="feature-text">Sistema de estados de pedidos (pendiente, aprobado, rechazado)</span></li>
+                        <li><i class="fas fa-check"></i><span class="feature-text">Control de acceso por roles (empleados/gerentes)</span></li>
+                        <li><i class="fas fa-check"></i><span class="feature-text">Actualización de estados de pedidos</span></li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Módulo 4: Seguridad -->
+            <div class="module-card">
+                <div class="module-header">
+                    <div class="module-icon">
+                        <i class="fas fa-shield-alt"></i>
+                    </div>
+                    <h2 class="module-title">Seguridad y Autorización</h2>
+                </div>
+                
+                <div class="feature-section">
+                    <h3><i class="fas fa-user-tag"></i> Sistema de Roles</h3>
+                    <ul class="feature-list">
+                        <li><i class="fas fa-check"></i><span class="feature-text">Roles implementados: usuario, empleado, gerente</span></li>
+                        <li><i class="fas fa-check"></i><span class="feature-text">Middleware de autenticación JWT</span></li>
+                        <li><i class="fas fa-check"></i><span class="feature-text">Control de acceso por roles</span></li>
+                        <li><i class="fas fa-check"></i><span class="feature-text">Verificación de tokens en base de datos</span></li>
+                    </ul>
+                </div>
+
+                <div class="feature-section">
+                    <h3><i class="fas fa-key"></i> Gestión de Tokens</h3>
+                    <ul class="feature-list">
+                        <li><i class="fas fa-check"></i><span class="feature-text">Generación segura de tokens JWT</span></li>
+                        <li><i class="fas fa-check"></i><span class="feature-text">Almacenamiento de tokens en base de datos</span></li>
+                        <li><i class="fas fa-check"></i><span class="feature-text">Revocación de tokens al cerrar sesión</span></li>
+                        <li><i class="fas fa-check"></i><span class="feature-text">Limpieza automática de tokens expirados</span></li>
+                        <li><i class="fas fa-check"></i><span class="feature-text">Verificación de validez de tokens</span></li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Módulo 5: Notificaciones -->
+            <div class="module-card">
+                <div class="module-header">
+                    <div class="module-icon">
+                        <i class="fas fa-envelope"></i>
+                    </div>
+                    <h2 class="module-title">Sistema de Notificaciones</h2>
+                </div>
+                
+                <div class="feature-section">
+                    <h3><i class="fas fa-paper-plane"></i> Correos Automáticos</h3>
+                    <ul class="feature-list">
+                        <li><i class="fas fa-check"></i><span class="feature-text">Correo de bienvenida al registrarse</span></li>
+                        <li><i class="fas fa-check"></i><span class="feature-text">Confirmación de inicio de sesión</span></li>
+                        <li><i class="fas fa-check"></i><span class="feature-text">Notificación de actualización de perfil</span></li>
+                        <li><i class="fas fa-check"></i><span class="feature-text">Plantillas HTML personalizadas</span></li>
+                        <li><i class="fas fa-check"></i><span class="feature-text">Integración con Gmail SMTP</span></li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Módulo 6: Interfaz de Usuario -->
+            <div class="module-card">
+                <div class="module-header">
+                    <div class="module-icon">
+                        <i class="fas fa-desktop"></i>
+                    </div>
+                    <h2 class="module-title">Interfaz de Usuario</h2>
+                </div>
+                
+                <div class="feature-section">
+                    <h3><i class="fas fa-globe"></i> Páginas Web Implementadas</h3>
+                    <ul class="feature-list">
+                        <li><i class="fas fa-check"></i><span class="feature-text">Página principal con catálogo</span></li>
+                        <li><i class="fas fa-check"></i><span class="feature-text">Formulario de registro</span></li>
+                        <li><i class="fas fa-check"></i><span class="feature-text">Página de inicio de sesión</span></li>
+                        <li><i class="fas fa-check"></i><span class="feature-text">Perfil de usuario</span></li>
+                        <li><i class="fas fa-check"></i><span class="feature-text">Edición de perfil</span></li>
+                        <li><i class="fas fa-check"></i><span class="feature-text">Carrito de compras</span></li>
+                        <li><i class="fas fa-check"></i><span class="feature-text">Facturación</span></li>
+                        <li><i class="fas fa-check"></i><span class="feature-text">Gestión de pedidos (empleados/gerentes)</span></li>
+                        <li><i class="fas fa-check"></i><span class="feature-text">Cambio de roles</span></li>
+                    </ul>
+                </div>
+
+                <div class="feature-section">
+                    <h3><i class="fas fa-user-circle"></i> Sistema de Avatares</h3>
+                    <ul class="feature-list">
+                        <li><i class="fas fa-check"></i><span class="feature-text">21 avatares diferentes disponibles</span></li>
+                        <li><i class="fas fa-check"></i><span class="feature-text">Avatar por defecto</span></li>
+                        <li><i class="fas fa-check"></i><span class="feature-text">Gestión automática de imágenes</span></li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Módulo 7: Base de Datos -->
+            <div class="module-card">
+                <div class="module-header">
+                    <div class="module-icon">
+                        <i class="fas fa-database"></i>
+                    </div>
+                    <h2 class="module-title">Base de Datos</h2>
+                </div>
+                
+                <div class="feature-section">
+                    <h3><i class="fas fa-table"></i> Estructura Completa</h3>
+                    <ul class="feature-list">
+                        <li><i class="fas fa-check"></i><span class="feature-text">Tabla de usuarios con roles</span></li>
+                        <li><i class="fas fa-check"></i><span class="feature-text">Tabla de productos y registros</span></li>
+                        <li><i class="fas fa-check"></i><span class="feature-text">Tabla de facturas y detalles</span></li>
+                        <li><i class="fas fa-check"></i><span class="feature-text">Tabla de tokens para seguridad</span></li>
+                        <li><i class="fas fa-check"></i><span class="feature-text">Triggers para gestión automática de stock</span></li>
+                        <li><i class="fas fa-check"></i><span class="feature-text">Índices optimizados</span></li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Módulo 8: Gestión del Personal -->
+            <div class="module-card">
+                <div class="module-header">
+                    <div class="module-icon">
+                        <i class="fas fa-users-cog"></i>
+                    </div>
+                    <h2 class="module-title">Gestión del Personal</h2>
+                </div>
+                
+                <div class="feature-section">
+                    <h3><i class="fas fa-calendar-check"></i> Gestión de Vacaciones y Permisos</h3>
+                    <ul class="feature-list">
+                        <li><i class="fas fa-check"></i><span class="feature-text">Aprobación o rechazo de solicitudes de vacaciones</span></li>
+                        <li><i class="fas fa-check"></i><span class="feature-text">Gestión de permisos especiales</span></li>
+                        <li><i class="fas fa-check"></i><span class="feature-text">Control de días disponibles por empleado</span></li>
+                        <li><i class="fas fa-check"></i><span class="feature-text">Notificaciones automáticas de cambios de estado</span></li>
+                    </ul>
+                </div>
+
+                <div class="feature-section">
+                    <h3><i class="fas fa-clock"></i> Gestión de Horarios y Turnos</h3>
+                    <ul class="feature-list">
+                        <li><i class="fas fa-check"></i><span class="feature-text">Modificación de horarios de trabajo</span></li>
+                        <li><i class="fas fa-check"></i><span class="feature-text">Asignación de turnos especiales</span></li>
+                        <li><i class="fas fa-check"></i><span class="feature-text">Control de horas extras</span></li>
+                        <li><i class="fas fa-check"></i><span class="feature-text">Gestión de cambios de turno</span></li>
+                    </ul>
+                </div>
+
+                <div class="feature-section">
+                    <h3><i class="fas fa-chart-line"></i> Evaluación de Rendimiento</h3>
+                    <ul class="feature-list">
+                        <li><i class="fas fa-check"></i><span class="feature-text">Sistema de evaluación de empleados</span></li>
+                        <li><i class="fas fa-check"></i><span class="feature-text">Métricas de productividad</span></li>
+                        <li><i class="fas fa-check"></i><span class="feature-text">Reportes de rendimiento</span></li>
+                        <li><i class="fas fa-check"></i><span class="feature-text">Seguimiento de objetivos</span></li>
+                    </ul>
+                </div>
+
+                <div class="feature-section">
+                    <h3><i class="fas fa-user-plus"></i> Gestión de Contrataciones</h3>
+                    <ul class="feature-list">
+                        <li><i class="fas fa-check"></i><span class="feature-text">Autorización de nuevas contrataciones</span></li>
+                        <li><i class="fas fa-check"></i><span class="feature-text">Proceso de selección de personal</span></li>
+                        <li><i class="fas fa-check"></i><span class="feature-text">Gestión de despidos (según rango)</span></li>
+                        <li><i class="fas fa-check"></i><span class="feature-text">Actualización de datos laborales</span></li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Módulo 9: Control Financiero -->
+            <div class="module-card">
+                <div class="module-header">
+                    <div class="module-icon">
+                        <i class="fas fa-chart-pie"></i>
+                    </div>
+                    <h2 class="module-title">Control Financiero y Presupuestal</h2>
+                </div>
+                
+                <div class="feature-section">
+                    <h3><i class="fas fa-receipt"></i> Gestión de Gastos Operativos</h3>
+                    <ul class="feature-list">
+                        <li><i class="fas fa-check"></i><span class="feature-text">Aprobación de gastos dentro de límites establecidos</span></li>
+                        <li><i class="fas fa-check"></i><span class="feature-text">Control de gastos por categoría</span></li>
+                        <li><i class="fas fa-check"></i><span class="feature-text">Seguimiento de presupuestos por área</span></li>
+                        <li><i class="fas fa-check"></i><span class="feature-text">Reportes financieros automáticos</span></li>
+                    </ul>
+                </div>
+
+                <div class="feature-section">
+                    <h3><i class="fas fa-coins"></i> Gestión de Presupuestos</h3>
+                    <ul class="feature-list">
+                        <li><i class="fas fa-check"></i><span class="feature-text">Creación y modificación de presupuestos del área</span></li>
+                        <li><i class="fas fa-check"></i><span class="feature-text">Control de desviaciones presupuestarias</span></li>
+                        <li><i class="fas fa-check"></i><span class="feature-text">Alertas de límites presupuestarios</span></li>
+                        <li><i class="fas fa-check"></i><span class="feature-text">Proyecciones financieras</span></li>
+                    </ul>
+                </div>
+
+                <div class="feature-section">
+                    <h3><i class="fas fa-credit-card"></i> Autorización de Compras</h3>
+                    <ul class="feature-list">
+                        <li><i class="fas fa-check"></i><span class="feature-text">Autorización de compras menores</span></li>
+                        <li><i class="fas fa-check"></i><span class="feature-text">Control de pagos y facturas</span></li>
+                        <li><i class="fas fa-check"></i><span class="feature-text">Gestión de proveedores</span></li>
+                        <li><i class="fas fa-check"></i><span class="feature-text">Seguimiento de cuentas por pagar</span></li>
+                    </ul>
+                </div>
+
+                <div class="feature-section">
+                    <h3><i class="fas fa-chart-bar"></i> Control de Costos</h3>
+                    <ul class="feature-list">
+                        <li><i class="fas fa-check"></i><span class="feature-text">Análisis de costos operativos</span></li>
+                        <li><i class="fas fa-check"></i><span class="feature-text">Reportes de resultados financieros</span></li>
+                        <li><i class="fas fa-check"></i><span class="feature-text">Indicadores de rentabilidad</span></li>
+                        <li><i class="fas fa-check"></i><span class="feature-text">Dashboard financiero en tiempo real</span></li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Módulo 10: Gestión de Procesos y Operaciones -->
+            <div class="module-card">
+                <div class="module-header">
+                    <div class="module-icon">
+                        <i class="fas fa-cogs"></i>
+                    </div>
+                    <h2 class="module-title">Gestión de Procesos y Operaciones</h2>
+                </div>
+                
+                <div class="feature-section">
+                    <h3><i class="fas fa-clipboard-list"></i> Gestión de Procedimientos</h3>
+                    <ul class="feature-list">
+                        <li><i class="fas fa-check"></i><span class="feature-text">Modificación de procedimientos internos del departamento</span></li>
+                        <li><i class="fas fa-check"></i><span class="feature-text">Versionado de procedimientos</span></li>
+                        <li><i class="fas fa-check"></i><span class="feature-text">Control de cambios y aprobaciones</span></li>
+                        <li><i class="fas fa-check"></i><span class="feature-text">Documentación de procesos</span></li>
+                    </ul>
+                </div>
+
+                <div class="feature-section">
+                    <h3><i class="fas fa-tasks"></i> Gestión de Planes de Trabajo</h3>
+                    <ul class="feature-list">
+                        <li><i class="fas fa-check"></i><span class="feature-text">Actualización de planes de trabajo del área</span></li>
+                        <li><i class="fas fa-check"></i><span class="feature-text">Establecimiento de metas y objetivos</span></li>
+                        <li><i class="fas fa-check"></i><span class="feature-text">Seguimiento de progreso de proyectos</span></li>
+                        <li><i class="fas fa-check"></i><span class="feature-text">Gestión de recursos y asignaciones</span></li>
+                    </ul>
+                </div>
+
+                <div class="feature-section">
+                    <h3><i class="fas fa-chart-line"></i> Indicadores de Rendimiento (KPIs)</h3>
+                    <ul class="feature-list">
+                        <li><i class="fas fa-check"></i><span class="feature-text">Ajuste de indicadores de rendimiento</span></li>
+                        <li><i class="fas fa-check"></i><span class="feature-text">Monitoreo de KPIs en tiempo real</span></li>
+                        <li><i class="fas fa-check"></i><span class="feature-text">Alertas de desviaciones</span></li>
+                        <li><i class="fas fa-check"></i><span class="feature-text">Reportes de rendimiento automáticos</span></li>
+                    </ul>
+                </div>
+
+                <div class="feature-section">
+                    <h3><i class="fas fa-lightbulb"></i> Estrategias Operativas</h3>
+                    <ul class="feature-list">
+                        <li><i class="fas fa-check"></i><span class="feature-text">Implementación de nuevas estrategias operativas</span></li>
+                        <li><i class="fas fa-check"></i><span class="feature-text">Gestión de iniciativas de mejora</span></li>
+                        <li><i class="fas fa-check"></i><span class="feature-text">Seguimiento de resultados estratégicos</span></li>
+                        <li><i class="fas fa-check"></i><span class="feature-text">Evaluación de impacto de cambios</span></li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Módulo 11: Gestión de Productos y Servicios -->
+            <div class="module-card">
+                <div class="module-header">
+                    <div class="module-icon">
+                        <i class="fas fa-store"></i>
+                    </div>
+                    <h2 class="module-title">Gestión de Productos y Servicios</h2>
+                </div>
+                
+                <div class="feature-section">
+                    <h3><i class="fas fa-tags"></i> Gestión de Precios y Promociones</h3>
+                    <ul class="feature-list">
+                        <li><i class="fas fa-check"></i><span class="feature-text">Actualización de precios de productos</span></li>
+                        <li><i class="fas fa-check"></i><span class="feature-text">Creación y gestión de promociones</span></li>
+                        <li><i class="fas fa-check"></i><span class="feature-text">Modificación de características de productos</span></li>
+                        <li><i class="fas fa-check"></i><span class="feature-text">Control de descuentos y ofertas especiales</span></li>
+                    </ul>
+                </div>
+
+                <div class="feature-section">
+                    <h3><i class="fas fa-boxes"></i> Gestión de Catálogo e Inventario</h3>
+                    <ul class="feature-list">
+                        <li><i class="fas fa-check"></i><span class="feature-text">Aprobación de cambios en el catálogo</span></li>
+                        <li><i class="fas fa-check"></i><span class="feature-text">Control de inventario y stock</span></li>
+                        <li><i class="fas fa-check"></i><span class="feature-text">Gestión de productos nuevos</span></li>
+                        <li><i class="fas fa-check"></i><span class="feature-text">Control de productos descontinuados</span></li>
+                    </ul>
+                </div>
+
+                <div class="feature-section">
+                    <h3><i class="fas fa-handshake"></i> Gestión de Contratos</h3>
+                    <ul class="feature-list">
+                        <li><i class="fas fa-check"></i><span class="feature-text">Revisión y modificación de contratos con proveedores</span></li>
+                        <li><i class="fas fa-check"></i><span class="feature-text">Gestión de acuerdos con clientes</span></li>
+                        <li><i class="fas fa-check"></i><span class="feature-text">Control de términos y condiciones</span></li>
+                        <li><i class="fas fa-check"></i><span class="feature-text">Seguimiento de renovaciones</span></li>
+                    </ul>
+                </div>
+
+                <div class="feature-section">
+                    <h3><i class="fas fa-chart-pie"></i> Métricas Comerciales</h3>
+                    <ul class="feature-list">
+                        <li><i class="fas fa-check"></i><span class="feature-text">Análisis de ventas por producto</span></li>
+                        <li><i class="fas fa-check"></i><span class="feature-text">Rendimiento de promociones</span></li>
+                        <li><i class="fas fa-check"></i><span class="feature-text">Análisis de rentabilidad</span></li>
+                        <li><i class="fas fa-check"></i><span class="feature-text">Reportes comerciales automáticos</span></li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Módulo 12: Funcionalidades Técnicas -->
+            <div class="module-card">
+                <div class="module-header">
+                    <div class="module-icon">
+                        <i class="fas fa-code"></i>
+                    </div>
+                    <h2 class="module-title">Funcionalidades Técnicas</h2>
+                </div>
+                
+                <div class="feature-section">
+                    <h3><i class="fas fa-sitemap"></i> Arquitectura MVC</h3>
+                    <ul class="feature-list">
+                        <li><i class="fas fa-check"></i><span class="feature-text">Separación clara de responsabilidades</span></li>
+                        <li><i class="fas fa-check"></i><span class="feature-text">Controladores para lógica de negocio</span></li>
+                        <li><i class="fas fa-check"></i><span class="feature-text">Modelos para acceso a datos</span></li>
+                        <li><i class="fas fa-check"></i><span class="feature-text">Vistas para rutas y endpoints</span></li>
+                    </ul>
+                </div>
+
+                <div class="feature-section">
+                    <h3><i class="fas fa-lock"></i> Validaciones y Seguridad</h3>
+                    <ul class="feature-list">
+                        <li><i class="fas fa-check"></i><span class="feature-text">Validación de entrada en frontend y backend</span></li>
+                        <li><i class="fas fa-check"></i><span class="feature-text">Sanitización de datos</span></li>
+                        <li><i class="fas fa-check"></i><span class="feature-text">Protección contra inyección SQL</span></li>
+                        <li><i class="fas fa-check"></i><span class="feature-text">Manejo seguro de archivos</span></li>
+                    </ul>
+                </div>
+
+                <div class="feature-section">
+                    <h3><i class="fas fa-plug"></i> Integración de Servicios</h3>
+                    <ul class="feature-list">
+                        <li><i class="fas fa-check"></i><span class="feature-text">MySQL2 para base de datos</span></li>
+                        <li><i class="fas fa-check"></i><span class="feature-text">Multer para carga de archivos</span></li>
+                        <li><i class="fas fa-check"></i><span class="feature-text">Nodemailer para correos</span></li>
+                        <li><i class="fas fa-check"></i><span class="feature-text">QR Code para códigos QR</span></li>
+                        <li><i class="fas fa-check"></i><span class="feature-text">Speakeasy para autenticación 2FA</span></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="summary-section">
+            <h2><i class="fas fa-star"></i> Resumen del Proyecto</h2>
+            <div class="summary-grid">
+                <div class="summary-item">
+                    <h3><i class="fas fa-layer-group"></i> Módulos Principales</h3>
+                    <p>12 módulos completamente funcionales con arquitectura escalable</p>
+                </div>
+                <div class="summary-item">
+                    <h3><i class="fas fa-shield-alt"></i> Seguridad Robusta</h3>
+                    <p>Sistema de autenticación JWT con gestión de roles y tokens</p>
+                </div>
+                <div class="summary-item">
+                    <h3><i class="fas fa-shopping-cart"></i> E-commerce Completo</h3>
+                    <p>Carrito, facturación y múltiples métodos de pago</p>
+                </div>
+                <div class="summary-item">
+                    <h3><i class="fas fa-mobile-alt"></i> Interfaz Moderna</h3>
+                    <p>Diseño responsive con experiencia de usuario optimizada</p>
+                </div>
+                <div class="summary-item">
+                    <h3><i class="fas fa-envelope"></i> Notificaciones</h3>
+                    <p>Sistema automático de correos con plantillas personalizadas</p>
+                </div>
+                <div class="summary-item">
+                    <h3><i class="fas fa-database"></i> Base de Datos</h3>
+                    <p>Estructura optimizada con triggers y gestión automática</p>
+                </div>
+                <div class="summary-item">
+                    <h3><i class="fas fa-users-cog"></i> Gestión Empresarial</h3>
+                    <p>Módulos de gestión del personal, finanzas y operaciones</p>
+                </div>
+                <div class="summary-item">
+                    <h3><i class="fas fa-chart-line"></i> Analytics Avanzado</h3>
+                    <p>KPIs, métricas comerciales y reportes en tiempo real</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="footer">
+        <p>&copy; 2024 Legumbrería JM - Sistema de Comercio Electrónico</p>
+        <p>Desarrollado con arquitectura MVC y tecnologías modernas</p>
+    </div>
+</body>
+</html>

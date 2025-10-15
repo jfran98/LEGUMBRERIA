@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Carrito de Compras - Legumbrería JM</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f1f8e9;
+      margin: 0;
+      padding: 0;
+    }
+
+    .container {
+      max-width: 800px;
+      margin: 40px auto;
+      padding: 20px;
+      background: white;
+      border-radius: 10px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    }
+
+    h2 {
+      color: #388e3c;
+      border-bottom: 2px solid #c8e6c9;
+      padding-bottom: 10px;
+      margin-bottom: 20px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 20px;
+    }
+
+    th, td {
+      padding: 12px;
+      text-align: left;
+      border-bottom: 1px solid #ddd;
+    }
+
+    th {
+      background-color: #f0f4c3;
+      color: #33691e;
+    }
+
+    td button {
+      background: #e53935;
+      color: white;
+      border: none;
+      padding: 6px 10px;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    td button:hover {
+      background: #c62828;
+    }
+
+    .total {
+      text-align: right;
+      font-size: 18px;
+      font-weight: bold;
+      color: #2e7d32;
+    }
+
+    .acciones {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 20px;
+    }
+
+    .acciones button {
+      background-color: #ff9800;
+      border: none;
+      color: white;
+      padding: 10px 16px;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+
+    .acciones button:hover {
+      background-color: #f57c00;
+    }
+  </style>
+  <script src="navbar.js"></script>
+</head>
+<body>
+
+  <div class="container">
+    <h2>🛒 Tu Carrito</h2>
+    <table id="tabla-carrito">
+      <thead>
+        <tr>
+          <th>Producto</th>
+          <th>Unidad</th>
+          <th>Cantidad</th>
+          <th>Precio x kg</th>
+          <th>Subtotal</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody id="cuerpo-tabla">
+        <!-- Aquí se cargan los productos -->
+      </tbody>
+    </table>
+
+    <div class="total" id="total">Total: $0</div>
+
+    <div style="margin-bottom: 20px;">
+      <label for="metodo-pago" style="display: block; margin-bottom: 8px; font-weight: bold;">Selecciona método de pago:</label>
+      <select id="metodo-pago" style="padding: 10px; border-radius: 5px; border: 1px solid #ccc; width: 100%; max-width: 300px;">
+        <option value="contraentrega">Pago contraentrega</option>
+        <option value="bancolombia">Bancolombia (transferencia)</option>
+        <option value="nequi">Nequi (transferencia)</option>
+      </select>
+    </div>
+
+    <div class="acciones">
+      <button onclick="vaciarCarrito()">Vaciar Carrito</button>
+      <button onclick="realizarCompra()">Finalizar Compra</button>
+    </div>
+  </div>
+
+  <script>
+    function cargarCarrito() {
+      const cuerpo = document.getElementById('cuerpo-tabla');
+      const totalEl = document.getElementById('total');
+      let carrito = JSON.parse(localStorage.getItem('carrito')) || [];
+      let total = 0;
+      cuerpo.innerHTML = '';
+
+      carrito.forEach((item, index) => {
+        const fila = document.createElement('tr');
+        const precioKg = Number(item.precioPorKg || 0);
+        const subtotal = Number(item.subtotal || 0);
+        fila.innerHTML = `
+          <td>${item.nombre}</td>
+          <td>${item.unidad || ''}</td>
+          <td>${Number(item.cantidad || 0).toFixed(2)}</td>
+          <td>$${precioKg.toLocaleString()}</td>
+          <td>$${subtotal.toLocaleString()}</td>
+          <td><button onclick="eliminarProducto(${index})">Eliminar</button></td>
+        `;
+        cuerpo.appendChild(fila);
+        total += subtotal;
+      });
+
+      totalEl.textContent = 'Total: $' + total.toLocaleString();
+    }
+
+    function eliminarProducto(indice) {
+      let carrito = JSON.parse(localStorage.getItem('carrito')) || [];
+      carrito.splice(indice, 1);
+      localStorage.setItem('carrito', JSON.stringify(carrito));
+      cargarCarrito();
+    }
+
+    function vaciarCarrito() {
+      if (confirm('¿Estás seguro de vaciar el carrito?')) {
+        localStorage.removeItem('carrito');
+        cargarCarrito();
+      }
+    }
+
+    async function realizarCompra() {
+      const carrito = JSON.parse(localStorage.getItem('carrito')) || [];
+      if (carrito.length === 0) {
+        alert('Tu carrito está vacío.');
+        return;
+      }
+
+      const token = localStorage.getItem('token');
+      if (!token) {
+        alert('Debes iniciar sesión para finalizar la compra.');
+        window.location.href = '/login.html';
+        return;
+      }
+
+      const metodoPago = document.getElementById('metodo-pago').value;
+
+      try {
+        const res = await fetch('/venta/checkout', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + token
+          },
+          body: JSON.stringify({ items: carrito, metodoPago: metodoPago })
+        });
+        const data = await res.json();
+        if (!res.ok) {
+          const mensaje = [data?.mensaje, data?.detalle].filter(Boolean).join(' - ');
+          throw new Error(mensaje || 'No se pudo crear la factura');
+        }
+
+        localStorage.removeItem('carrito');
+        window.location.href = '/factura.html?id=' + encodeURIComponent(data.idFactura);
+      } catch (e) {
+        alert('❌ Error: ' + (e?.message || 'No fue posible finalizar la compra'));
+      }
+    }
+
+    // Cargar carrito al iniciar
+    cargarCarrito();
+  </script>
+
+</body>
+</html>

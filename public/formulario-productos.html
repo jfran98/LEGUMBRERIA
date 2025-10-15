@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Agregar Producto - Legumbrería JM</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f1f8e9;
+      padding: 30px;
+    }
+
+    .form-container {
+      background: white;
+      max-width: 600px;
+      margin: auto;
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+
+    h2 {
+      text-align: center;
+      color: #388e3c;
+    }
+
+    label {
+      display: block;
+      margin-top: 15px;
+      color: #333;
+    }
+
+    input, select, textarea {
+      width: 100%;
+      padding: 10px;
+      margin-top: 5px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+
+    button {
+      background: #4caf50;
+      color: white;
+      border: none;
+      padding: 12px 20px;
+      border-radius: 6px;
+      margin-top: 20px;
+      cursor: pointer;
+      width: 100%;
+      font-size: 16px;
+    }
+
+    button:hover {
+      background: #388e3c;
+    }
+  </style>
+ 
+</head>
+<body><div class="form-container">
+  <h2>Agregar Nuevo Producto</h2>
+  <form action="/legumbreria/productos" method="POST" enctype="multipart/form-data">
+    <label for="nombre">Nombre del producto:</label>
+    <input type="text" id="nombre" name="nombre" required>
+
+    <label for="categoria">Categoría:</label>
+    <select id="categoria" name="categoria" required>
+      <option value="">Seleccionar</option>
+      <option value="frutas">Frutas</option>
+      <option value="verduras">Verduras</option>
+      <option value="legumbres">Legumbres</option>
+      <option value="hortalizas">Hortalizas</option>
+      <option value="cereales">Cereales</option>
+      <option value="promociones">Promociones</option>
+    </select>
+
+    <label for="precio">Precio:</label>
+    <input type="number" id="precio" name="precio" step="0.01" required>
+
+    <label for="cantidad">Cantidad:</label>
+    <input type="number" id="cantidad" name="cantidad" step="0.01" required>
+
+    <label for="unidad">Unidad de venta:</label>
+    <select id="unidad" name="unidad" required>
+      <option value="kg">Kilogramo (kg)</option>
+      <option value="lb">Libra (lb)</option>
+      <option value="unidad">Unidad</option>
+    </select>
+
+    <label for="imagen">Imagen del producto:</label>
+    <input type="file" id="imagen" name="imagen" accept="image/*" required>
+
+    <label for="descripcion">Descripción:</label>
+    <textarea id="descripcion" name="descripcion" rows="4"></textarea>
+
+    <label for="precioCompra">Precio de compra:</label>
+    <input type="number" id="precioCompra" name="precioCompra" step="0.01" required>
+
+    <label for="precioVentaMenor">Precio de venta menor:</label>
+    <input type="number" id="precioVentaMenor" name="precioVentaMenor" step="0.01" required>
+
+    <label for="precioVentaMayor">Precio de venta mayor:</label>
+    <input type="number" id="precioVentaMayor" name="precioVentaMayor" step="0.01" required>
+
+
+
+    <button type="submit">Agregar Producto</button>
+    <div id="mensaje" style="margin-top: 10px; text-align: center;"></div>
+  </form>
+</div>
+<script src="js/role-verifier.js"></script>
+<script>
+  // Verificación de roles - DEBE SER LO PRIMERO
+  if (!roleVerifier.init('formulario-productos.html')) {
+    // Si no tiene acceso, la función ya redirige automáticamente
+    // No ejecutar el resto del código
+    throw new Error('Acceso denegado');
+  }
+</script>
+</body>
+<script src="navbar.js"></script>
+  
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const form = document.querySelector('.form-container form');
+      const mensaje = document.getElementById('mensaje');
+      if (!form) return;
+
+      form.addEventListener('submit', async function(e) {
+        e.preventDefault();
+
+        mensaje.style.color = '#333';
+        mensaje.textContent = 'Guardando...';
+
+        try {
+          const formData = new FormData(form);
+          const inputImagen = document.getElementById('imagen');
+          if (!inputImagen || !inputImagen.files || inputImagen.files.length === 0) {
+            mensaje.style.color = 'red';
+            mensaje.textContent = 'Selecciona una imagen antes de guardar.';
+            return;
+          }
+          const token = localStorage.getItem('token');
+          const headers = {};
+          if (token) headers['Authorization'] = 'Bearer ' + token;
+
+          const origin = window.location.origin;
+          const baseUrl = origin && origin.startsWith('http') ? origin : 'http://localhost:4545';
+          const res = await fetch(baseUrl + '/legumbreria/productos', {
+            method: 'POST',
+            headers,
+            body: formData
+          });
+
+          if (!res.ok) {
+            let errMsg = 'No se pudo guardar el producto.';
+            try {
+              const data = await res.json();
+              if (data) {
+                if (typeof data === 'string') errMsg = data;
+                else if (data.mensaje) errMsg = data.mensaje;
+                else if (data.error) errMsg = typeof data.error === 'string' ? data.error : (data.error.message || JSON.stringify(data.error));
+              }
+            } catch (_) {}
+            throw new Error(errMsg);
+          }
+
+          const respuesta = await res.json();
+          const rutaImagen = respuesta && respuesta.imagen ? respuesta.imagen : '';
+          mensaje.style.color = 'green';
+          mensaje.innerHTML = `
+          Producto agregado correctamente.<br>
+          ${rutaImagen ? `<img src="${rutaImagen}" alt="Imagen del producto" style="max-width: 150px; margin-top: 10px;">` : ''}
+          <br><a href="formulario-productos.html">Agregar otro producto</a>
+          `;
+          form.reset();
+          setTimeout(function() {
+            window.location.href = 'formulario-productos.html';
+          }, 2200);
+        } catch (err) {
+          mensaje.style.color = 'red';
+          const texto = (err && err.message) ? err.message : (typeof err === 'string' ? err : JSON.stringify(err));
+          mensaje.textContent = texto || 'Error al guardar.';
+        }
+      });
+    });
+  </script>
+</body>
+</html>
