@@ -1,0 +1,442 @@
+/* Global Minimalism & Design Tokens (Synced with index.css) */
+:root {
+    --primary: #1a4d2e;
+    --accent: #4f6f52;
+    --bg: #ffffff;
+    --bg-alt: #f8faf9;
+    --text: #1a1a1a;
+    --text-light: #666666;
+    --white: #ffffff;
+    --shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+    --radius: 12px;
+    --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+body {
+    font-family: 'Outfit', sans-serif;
+    color: var(--text);
+    background-color: var(--bg);
+    line-height: 1.6;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 40px auto;
+    padding: 0 20px;
+}
+
+h2 {
+    font-size: 2.25rem;
+    font-weight: 700;
+    color: var(--primary);
+    margin-bottom: 30px;
+    text-align: center;
+}
+
+/* Filtros */
+.categoria-filtros {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    margin-bottom: 50px;
+    flex-wrap: wrap;
+}
+
+.btn-categoria {
+    padding: 10px 24px;
+    border-radius: 99px;
+    border: 1.5px solid #eee;
+    background: var(--white);
+    font-family: inherit;
+    font-weight: 600;
+    color: var(--text-light);
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+.btn-categoria:hover {
+    border-color: var(--primary);
+    color: var(--primary);
+}
+
+.btn-categoria.active {
+    background: var(--primary);
+    color: var(--white);
+    border-color: var(--primary);
+}
+
+/* Secciones de Categoría */
+.categorias-container {
+    display: flex;
+    flex-direction: column;
+    gap: 100px;
+    /* More space between categories */
+}
+
+.categoria-section {
+    position: relative;
+}
+
+/* Separador visual entre categorías */
+.categoria-section:not(:last-child)::after {
+    content: "-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------";
+    display: block;
+    color: #eee;
+    letter-spacing: 5px;
+    height: 1px;
+    overflow: hidden;
+    margin-top: 50px;
+}
+
+.category-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin-bottom: 24px;
+    padding-bottom: 12px;
+    border-bottom: 2px solid #f0f0f0;
+}
+
+.category-header h3 {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--primary);
+    position: relative;
+}
+
+.category-header .count {
+    font-size: 0.85rem;
+    color: var(--text-light);
+    font-weight: 500;
+}
+
+/* Grid de Productos (Global/Búsqueda) */
+.producto-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 30px;
+}
+
+/* Category Carousel Specifics */
+.category-carousel {
+    position: relative;
+    width: 100%;
+    margin-bottom: 20px;
+}
+
+.category-grid {
+    display: flex;
+    overflow-x: auto;
+    scroll-behavior: smooth;
+    gap: 25px;
+    padding: 10px 5px 25px 5px;
+    /* Padding bottom for shadow space */
+    scrollbar-width: none;
+    /* Firefox */
+}
+
+.category-grid::-webkit-scrollbar {
+    display: none;
+    /* Chrome/Safari */
+}
+
+.category-grid .producto-card {
+    flex: 0 0 280px;
+    /* Fixed width for carousel items */
+}
+
+/* Tarjetas de Producto */
+.producto-card {
+    background: var(--white);
+    border-radius: var(--radius);
+    overflow: hidden;
+    transition: var(--transition);
+    border: 1px solid #eee;
+    display: flex;
+    flex-direction: column;
+}
+
+.producto-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.06);
+}
+
+.card-img {
+    position: relative;
+    height: 180px;
+}
+
+.card-img img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.badge {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    background: rgba(255, 255, 255, 0.9);
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-size: 0.7rem;
+    font-weight: 700;
+    color: var(--primary);
+    text-transform: uppercase;
+}
+
+.sold-out {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(255, 255, 255, 0.8);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 800;
+    color: #ef4444;
+    text-transform: uppercase;
+    font-size: 1.2rem;
+}
+
+.card-body {
+    padding: 20px;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.card-body h4 {
+    font-size: 1.15rem;
+    margin-bottom: 6px;
+    color: var(--text);
+}
+
+.card-body p {
+    color: var(--text-light);
+    font-size: 0.85rem;
+    margin-bottom: 20px;
+    height: 2.6em;
+    overflow: hidden;
+}
+
+.card-footer {
+    margin-top: auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+.price {
+    font-size: 1.35rem;
+    font-weight: 700;
+    color: var(--primary);
+}
+
+.actions {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    flex: 1;
+    min-width: fit-content;
+}
+
+.cantidad-input {
+    width: 45px;
+    padding: 6px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    font-size: 0.8rem;
+    text-align: center;
+}
+
+.unid-label {
+    font-size: 0.85rem;
+    color: var(--text-light);
+    font-weight: 500;
+}
+
+.btn-add-mini {
+    background: var(--primary);
+    color: var(--white);
+    border: none;
+    padding: 8px 16px;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 0.85rem;
+    cursor: pointer;
+    transition: var(--transition);
+    white-space: nowrap;
+}
+
+.btn-add-mini:hover {
+    filter: brightness(1.2);
+}
+
+.btn-add-mini.success {
+    background: #2e7d32;
+}
+
+.sin-resultados {
+    text-align: center;
+    padding: 100px 0;
+    color: var(--text-light);
+    font-size: 1.2rem;
+}
+
+/* Carrusel Section */
+.carousel-section {
+    margin-bottom: 60px;
+    position: relative;
+    background: var(--bg-alt);
+    padding: 40px 20px;
+    border-radius: var(--radius);
+}
+
+.carousel-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 24px;
+}
+
+.carousel-section h3 {
+    margin: 0;
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--primary);
+}
+
+.carousel-controls {
+    display: flex;
+    gap: 12px;
+}
+
+.carousel-btn {
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    border: 1.5px solid #eee;
+    background: var(--white);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.25rem;
+    transition: var(--transition);
+}
+
+.carousel-btn:hover {
+    border-color: var(--primary);
+    color: var(--primary);
+    box-shadow: var(--shadow);
+}
+
+.carousel-grid {
+    display: flex;
+    overflow-x: auto;
+    scroll-behavior: smooth;
+    gap: 25px;
+    padding: 15px 5px;
+    scrollbar-width: none;
+}
+
+.carousel-grid::-webkit-scrollbar {
+    display: none;
+}
+
+.carousel-item {
+    flex: 0 0 280px;
+    background: var(--white);
+    border: 1px solid #eee;
+    border-radius: 16px;
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    transition: var(--transition);
+    height: 220px;
+    box-shadow: var(--shadow);
+    position: relative;
+    overflow: hidden;
+}
+
+.carousel-item:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+}
+
+.bad-cat {
+    display: inline-block;
+    font-size: 0.7rem;
+    font-weight: 700;
+    color: var(--accent);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 8px;
+    background: rgba(26, 77, 46, 0.1);
+    padding: 2px 8px;
+    border-radius: 4px;
+}
+
+.carousel-item h5 {
+    margin: 8px 0;
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: var(--text);
+}
+
+.carousel-item p {
+    font-size: 0.85rem;
+    color: var(--text-light);
+    line-height: 1.4;
+}
+
+.carousel-item .price {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--primary);
+}
+
+/* Animaciones */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.fade-in {
+    animation: fadeIn 0.5s ease-out forwards;
+}
+
+/* Responsive */
+@media (max-width: 640px) {
+    .producto-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .categoria-filtros {
+        gap: 8px;
+    }
+
+    .btn-categoria {
+        padding: 8px 16px;
+        font-size: 0.8rem;
+    }
+
+    .carousel-item {
+        flex: 0 0 240px;
+    }
+}

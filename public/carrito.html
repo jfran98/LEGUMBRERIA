@@ -1,91 +1,18 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
   <meta charset="UTF-8">
-  <title>Carrito de Compras - Legumbrería JM</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      background: #f1f8e9;
-      margin: 0;
-      padding: 0;
-    }
-
-    .container {
-      max-width: 800px;
-      margin: 40px auto;
-      padding: 20px;
-      background: white;
-      border-radius: 10px;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-    }
-
-    h2 {
-      color: #388e3c;
-      border-bottom: 2px solid #c8e6c9;
-      padding-bottom: 10px;
-      margin-bottom: 20px;
-    }
-
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      margin-bottom: 20px;
-    }
-
-    th, td {
-      padding: 12px;
-      text-align: left;
-      border-bottom: 1px solid #ddd;
-    }
-
-    th {
-      background-color: #f0f4c3;
-      color: #33691e;
-    }
-
-    td button {
-      background: #e53935;
-      color: white;
-      border: none;
-      padding: 6px 10px;
-      border-radius: 5px;
-      cursor: pointer;
-    }
-
-    td button:hover {
-      background: #c62828;
-    }
-
-    .total {
-      text-align: right;
-      font-size: 18px;
-      font-weight: bold;
-      color: #2e7d32;
-    }
-
-    .acciones {
-      display: flex;
-      justify-content: space-between;
-      margin-top: 20px;
-    }
-
-    .acciones button {
-      background-color: #ff9800;
-      border: none;
-      color: white;
-      padding: 10px 16px;
-      border-radius: 6px;
-      cursor: pointer;
-    }
-
-    .acciones button:hover {
-      background-color: #f57c00;
-    }
-  </style>
-  <script src="navbar.js"></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Carrito de Compras - legumbreria</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/carrito.css">
+  <script src="navbar.js" defer></script>
 </head>
+
 <body>
+
+  <header id="navbar-container"></header>
 
   <div class="container">
     <h2>🛒 Tu Carrito</h2>
@@ -93,9 +20,9 @@
       <thead>
         <tr>
           <th>Producto</th>
-          <th>Unidad</th>
+          <th>Tipo</th>
           <th>Cantidad</th>
-          <th>Precio x kg</th>
+          <th>Precio</th>
           <th>Subtotal</th>
           <th>Acciones</th>
         </tr>
@@ -105,48 +32,420 @@
       </tbody>
     </table>
 
-    <div class="total" id="total">Total: $0</div>
+    <div class="resumen-compra" id="resumen-compra">
+      <div class="resumen-row">
+        <span>Subtotal Productos:</span>
+        <span id="subtotal-val">$0</span>
+      </div>
+      <div class="resumen-row">
+        <span>Peso Total:</span>
+        <span id="peso-val">0 kg</span>
+      </div>
+      <div class="resumen-row">
+        <span>Tipo de Bolsa:</span>
+        <span id="bolsa-val">-</span>
+      </div>
+      <div class="resumen-row">
+        <span>Valor Domicilio:</span>
+        <span id="domicilio-val">$0</span>
+      </div>
+      <hr>
+      <div class="total-final" id="total-final">Total Final: $0</div>
+    </div>
 
-    <div style="margin-bottom: 20px;">
-      <label for="metodo-pago" style="display: block; margin-bottom: 8px; font-weight: bold;">Selecciona método de pago:</label>
-      <select id="metodo-pago" style="padding: 10px; border-radius: 5px; border: 1px solid #ccc; width: 100%; max-width: 300px;">
+    <div class="payment-section">
+      <label for="metodo-pago">Método de Pago</label>
+      <select id="metodo-pago">
         <option value="contraentrega">Pago contraentrega</option>
         <option value="bancolombia">Bancolombia (transferencia)</option>
         <option value="nequi">Nequi (transferencia)</option>
       </select>
+
+      <div class="politicas-buttons-container">
+        <button type="button" class="btn-politica" id="abrirModalPoliticas">
+          <span class="icon">💳</span> Políticas de Pago
+        </button>
+        <button type="button" class="btn-politica" id="abrirModalEnvios">
+          <span class="icon">🚚</span> Políticas de Envío
+        </button>
+        <button type="button" class="btn-politica" id="abrirModalDevoluciones">
+          <span class="icon">↩️</span> Devoluciones
+        </button>
+      </div>
     </div>
 
     <div class="acciones">
-      <button onclick="vaciarCarrito()">Vaciar Carrito</button>
-      <button onclick="realizarCompra()">Finalizar Compra</button>
+      <button class="btn-empty" onclick="vaciarCarrito()">Vaciar Carrito</button>
+      <button class="btn-checkout" onclick="realizarCompra()">Finalizar Compra</button>
+    </div>
+  </div>
+
+  <!-- Modal de Políticas -->
+  <div id="politicasModal" class="modal">
+    <div class="modal-content">
+      <span class="close-modal">&times;</span>
+      <h2>PAYMENT AND REFUND POLICY</h2>
+      <div class="politicas-text">
+        <p><strong>LEGUMBRERÍA Web Platform</strong></p>
+        <p>Effective Date: April 6, 2026<br>Owner: LEGUMBRERÍA<br>Location: Itagüí, Antioquia, Colombia</p>
+
+        <h3>1. Accepted Payment Methods</h3>
+        <p>LEGUMBRERÍA accepts the following payment methods:</p>
+        <ul>
+          <li>Credit and debit cards (Visa, MasterCard, or other authorized providers)</li>
+          <li>Bank transfers (when enabled)</li>
+          <li>Authorized electronic payment platforms</li>
+          <li>Cash on delivery (if applicable and available in the selected area)</li>
+        </ul>
+        <p>All payments must be made in Colombian Pesos (COP) unless otherwise indicated.</p>
+        <p>The Company reserves the right to modify or restrict payment methods at any time without prior notice.</p>
+
+        <h3>2. Payment Processing</h3>
+        <p><strong>2.1 Authorization</strong><br>All payments are subject to verification and authorization by the
+          corresponding financial institution.</p>
+        <p><strong>2.2 Order Confirmation</strong><br>An order is considered confirmed only after payment has been
+          successfully processed and verified.</p>
+        <p><strong>2.3 Fraud Prevention</strong><br>LEGUMBRERÍA reserves the right to cancel or suspend any transaction
+          suspected of fraud, unauthorized use, or violation of security policies.</p>
+        <p>Additional identity verification may be required before approving certain transactions.</p>
+
+        <h3>3. Pricing and Billing</h3>
+        <p>Prices displayed on the Platform include applicable taxes unless otherwise specified.</p>
+        <p>In case of pricing errors due to technical issues, the Company reserves the right to cancel the order and
+          notify the User before processing.</p>
+        <p>The User agrees to provide accurate billing information.</p>
+
+        <h3>4. Refund Policy</h3>
+        <p><strong>4.1 Eligibility for Refunds</strong><br>Refunds may be granted in the following cases:</p>
+        <ul>
+          <li>Payment was successfully processed but the order was not delivered.</li>
+          <li>The delivered product was incorrect.</li>
+          <li>The product was significantly damaged during delivery.</li>
+          <li>The order was cancelled before shipment.</li>
+        </ul>
+
+        <p><strong>4.2 Non-Refundable Situations</strong><br>Refunds will not be granted in cases where:</p>
+        <ul>
+          <li>The User provides incorrect delivery information.</li>
+          <li>The product deterioration is due to improper storage after delivery.</li>
+          <li>The claim is made outside the established timeframe.</li>
+        </ul>
+
+        <h3>5. Refund Request Procedure</h3>
+        <p>To request a refund, the User must:</p>
+        <ul>
+          <li>Submit a written request via the official contact email.</li>
+          <li>Provide order number, payment proof, and description of the issue.</li>
+          <li>Attach photographic evidence (if applicable).</li>
+        </ul>
+        <p>Refund requests must be submitted within 48 hours of product delivery.</p>
+
+        <h3>6. Refund Processing Time</h3>
+        <p>Approved refunds will be processed within 5 to 10 business days.</p>
+        <p>Refunds will be issued using the original payment method whenever possible.</p>
+        <p>Processing times may vary depending on the financial institution.</p>
+        <p>LEGUMBRERÍA is not responsible for delays caused by banking institutions.</p>
+
+        <h3>7. Partial Refunds</h3>
+        <p>In certain situations (e.g., partial damage or incomplete orders), the Company may grant a partial refund
+          proportional to the affected products.</p>
+
+        <h3>8. Right to Refuse Refund</h3>
+        <p>The Company reserves the right to deny refund requests that:</p>
+        <ul>
+          <li>Do not meet eligibility requirements</li>
+          <li>Contain false or misleading information</li>
+          <li>Show signs of abuse of the refund policy</li>
+        </ul>
+
+        <h3>9. Legal Compliance</h3>
+        <p>This Payment and Refund Policy complies with applicable Colombian consumer protection regulations.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal de Políticas de Envío -->
+  <div id="enviosModal" class="modal">
+    <div class="modal-content">
+      <span class="close-modal" id="closeEnvios">&times;</span>
+      <h2>SHIPPING POLICY</h2>
+      <div class="politicas-text">
+        <p><strong>LEGUMBRERÍA Web Platform</strong></p>
+        <p>Effective Date: April 6, 2026<br>Owner: LEGUMBRERÍA<br>Location: Itagüí, Antioquia, Colombia</p>
+
+        <h3>1. Shipping Coverage</h3>
+        <p>LEGUMBRERÍA provides delivery services within:</p>
+        <ul>
+          <li>Itagüí, Antioquia</li>
+          <li>Selected areas of the Metropolitan Area of the Aburrá Valley</li>
+        </ul>
+        <p>Delivery to additional locations may be enabled in the future. Availability depends on logistics capacity and
+          operational conditions.</p>
+
+        <h3>2. Shipping Methods</h3>
+        <p>Orders may be delivered through:</p>
+        <ul>
+          <li>Internal delivery personnel</li>
+          <li>Authorized third-party logistics providers</li>
+        </ul>
+        <p>The Company reserves the right to select the most appropriate shipping method for each order.</p>
+
+        <h3>3. Processing Time</h3>
+        <p><strong>3.1 Order Preparation</strong><br>Orders are processed within 1 to 2 business days after payment
+          confirmation.</p>
+        <p><strong>3.2 Delivery Time</strong><br>Estimated delivery time is between 1 to 3 business days, depending on
+          the delivery location and product availability.</p>
+        <p>Delivery times are estimates and may vary due to operational or external factors.</p>
+
+        <h3>4. Shipping Costs</h3>
+        <p>Shipping fees are calculated based on delivery location and order size.</p>
+        <p>The total shipping cost will be displayed before final payment confirmation.</p>
+        <p>Promotional free shipping may be offered under specific conditions.</p>
+        <p>LEGUMBRERÍA reserves the right to modify shipping fees at any time.</p>
+
+        <h3>5. Delivery Conditions</h3>
+        <p>The User must provide accurate and complete delivery information.</p>
+        <p>A responsible person must be available at the delivery address to receive the order.</p>
+        <p>A signature or delivery confirmation may be required.</p>
+        <p>If delivery cannot be completed due to incorrect information or absence of the recipient, additional charges
+          may apply for rescheduling.</p>
+
+        <h3>6. Inspection Upon Delivery</h3>
+        <p>Users are advised to inspect products at the time of delivery.</p>
+        <p>If visible damage or discrepancies are detected, the User must:</p>
+        <ul>
+          <li>Notify the delivery personnel immediately, and</li>
+          <li>Report the issue through official communication channels within 48 hours.</li>
+        </ul>
+        <p>Failure to report within this timeframe may limit eligibility for claims.</p>
+
+        <h3>7. Risk Transfer</h3>
+        <p>Risk of loss or damage transfers to the User at the moment the order is delivered to the specified address.
+        </p>
+
+        <h3>8. Delays and Force Majeure</h3>
+        <p>LEGUMBRERÍA shall not be held responsible for delays caused by:</p>
+        <ul>
+          <li>Weather conditions</li>
+          <li>Traffic disruptions</li>
+          <li>Government restrictions</li>
+          <li>Natural disasters</li>
+          <li>Events beyond reasonable control (force majeure)</li>
+        </ul>
+        <p>In such cases, the Company will make reasonable efforts to inform the User.</p>
+
+        <h3>9. Failed Delivery Attempts</h3>
+        <p>If delivery fails after multiple attempts due to User unavailability or incorrect information, the order may
+          be:</p>
+        <ul>
+          <li>Returned to the store, and</li>
+          <li>Subject to additional shipping fees for redelivery.</li>
+        </ul>
+
+        <h3>10. Policy Updates</h3>
+        <p>LEGUMBRERÍA reserves the right to modify this Shipping Policy at any time. Updates will be published on the
+          Platform and become effective upon publication.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal de Políticas de Devolución -->
+  <div id="devolucionesModal" class="modal">
+    <div class="modal-content">
+      <span class="close-modal" id="closeDevoluciones">&times;</span>
+      <h2>RETURNS POLICY</h2>
+      <div class="politicas-text">
+        <p><strong>LEGUMBRERÍA Web Platform</strong></p>
+        <p>Effective Date: April 6, 2026<br>Owner: LEGUMBRERÍA<br>Location: Itagüí, Antioquia, Colombia</p>
+
+        <h3>1. Purpose</h3>
+        <p>This Returns Policy establishes the conditions under which customers may return products purchased through
+          the LEGUMBRERÍA platform, in compliance with applicable Colombian consumer protection regulations.</p>
+
+        <h3>2. Eligibility for Returns</h3>
+        <p>Returns may be accepted under the following circumstances:</p>
+        <ul>
+          <li>The product delivered does not match the order placed.</li>
+          <li>The product was delivered in visibly damaged condition.</li>
+          <li>The product shows quality defects at the time of delivery.</li>
+          <li>The product is expired at the time of receipt.</li>
+        </ul>
+        <p>All return requests must be submitted within 48 hours of delivery.</p>
+
+        <h3>3. Non-Eligible Products for Return</h3>
+        <p>Due to the perishable nature of agricultural goods (legumes, vegetables, fruits, herbs, cereals), returns
+          will not be accepted when:</p>
+        <ul>
+          <li>The product deterioration is due to improper storage after delivery.</li>
+          <li>The return request is made outside the 48-hour period.</li>
+          <li>The product has been partially consumed or altered.</li>
+          <li>The damage is caused by mishandling by the customer.</li>
+        </ul>
+
+        <h3>4. Return Request Procedure</h3>
+        <p>To initiate a return, the customer must:</p>
+        <ul>
+          <li>Contact LEGUMBRERÍA via the official email or customer service channel.</li>
+          <li>Provide the order number and detailed explanation of the issue.</li>
+          <li>Submit photographic evidence when applicable.</li>
+        </ul>
+        <p>The Company reserves the right to request additional information to evaluate the claim.</p>
+
+        <h3>5. Inspection and Approval</h3>
+        <p>All return requests are subject to verification by LEGUMBRERÍA.</p>
+        <p>If the return is approved, the Company may offer:</p>
+        <ul>
+          <li>Replacement of the product, or</li>
+          <li>Refund in accordance with the Payment and Refund Policy.</li>
+        </ul>
+        <p>The decision will be communicated within 3 to 5 business days after reviewing the request.</p>
+
+        <h3>6. Return Logistics</h3>
+        <p>If a physical return of the product is required:</p>
+        <ul>
+          <li>The Company will coordinate pickup, or</li>
+          <li>The customer may be instructed to return the product to the physical store (if applicable).</li>
+        </ul>
+        <p>Shipping costs for approved returns due to company error will be assumed by LEGUMBRERÍA.</p>
+
+        <h3>7. Right of Withdrawal (Derecho de Retracto)</h3>
+        <p>In accordance with Colombian consumer protection laws, the right of withdrawal may apply except for:</p>
+        <ul>
+          <li>Perishable goods</li>
+          <li>Goods that cannot be returned due to their nature</li>
+        </ul>
+        <p>Given the nature of agricultural products, the right of withdrawal may be limited in accordance with legal
+          exceptions.</p>
+
+        <h3>8. Abuse of Policy</h3>
+        <p>LEGUMBRERÍA reserves the right to deny return requests in cases of:</p>
+        <ul>
+          <li>Repeated misuse of the return system</li>
+          <li>False claims</li>
+          <li>Evidence of fraud</li>
+        </ul>
+
+        <h3>9. Policy Modifications</h3>
+        <p>LEGUMBRERÍA may update this Returns Policy at any time. Updated versions will be published on the Platform
+          and become effective immediately.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal de Registro de Dirección -->
+  <div id="direccionModal" class="modal">
+    <div class="modal-content modal-addr-content">
+      <span class="close-modal" id="closeDireccion">&times;</span>
+      <h2>🚩 Registrar Dirección de Envío</h2>
+      <p class="addr-msg">
+        Necesitamos una dirección para saber a dónde llevar tu pedido.
+      </p>
+      <form id="formDireccion" class="form-address">
+        <div class="form-group-addr">
+          <label>Título / Alias (Eje: Casa, Oficina)</label>
+          <input type="text" id="addr-titulo" placeholder="Ej: Mi Casa" required>
+        </div>
+        <div class="form-group-addr">
+          <label>Dirección completa</label>
+          <input type="text" id="addr-direccion" placeholder="Calle, Carrera, Edificio, Apto" required>
+        </div>
+        <div class="form-group-addr">
+          <label>Ciudad</label>
+          <input type="text" id="addr-ciudad" value="Itagüí" placeholder="Ciudad" required>
+        </div>
+        <div class="form-group-addr">
+          <label>Referencia / Indicaciones</label>
+          <textarea id="addr-referencia" placeholder="Cerca de..., Portería, etc."></textarea>
+        </div>
+        <button type="submit" class="btn-checkout btn-full">Guardar y Finalizar Compra</button>
+      </form>
     </div>
   </div>
 
   <script>
+    // Fallback local por si window.formatCurrency no está disponible aún
+    if (typeof window.formatCurrency !== 'function') {
+      window.formatCurrency = (num) => {
+        if (num === undefined || num === null) return '$ 0';
+        return new Intl.NumberFormat('es-CO', {
+          style: 'currency',
+          currency: 'COP',
+          minimumFractionDigits: 0
+        }).format(num);
+      };
+    }
+
     function cargarCarrito() {
       const cuerpo = document.getElementById('cuerpo-tabla');
-      const totalEl = document.getElementById('total');
+      const subtotalEl = document.getElementById('subtotal-val');
+      const pesoEl = document.getElementById('peso-val');
+      const bolsaEl = document.getElementById('bolsa-val');
+      const domicilioEl = document.getElementById('domicilio-val');
+      const totalFinalEl = document.getElementById('total-final');
+
       let carrito = JSON.parse(localStorage.getItem('carrito')) || [];
-      let total = 0;
+      let subtotal = 0;
+      let pesoTotal = 0;
       cuerpo.innerHTML = '';
 
       carrito.forEach((item, index) => {
         const fila = document.createElement('tr');
-        const precioKg = Number(item.precioPorKg || 0);
-        const subtotal = Number(item.subtotal || 0);
+        const precio = Number(item.precio || 0);
+        const cant = Number(item.cantidad || 0);
+        const st = Number(item.subtotal || 0);
+
+        // Regla de Peso: 1kg por KG, 0.5kg por UNIDAD (si no existe peso_kg)
+        const pesoUnitario = item.peso_kg || (item.tipoventa === 'KG' ? 1.0 : 0.5);
+        pesoTotal += (pesoUnitario * cant);
+
         fila.innerHTML = `
-          <td>${item.nombre}</td>
-          <td>${item.unidad || ''}</td>
-          <td>${Number(item.cantidad || 0).toFixed(2)}</td>
-          <td>$${precioKg.toLocaleString()}</td>
-          <td>$${subtotal.toLocaleString()}</td>
-          <td><button onclick="eliminarProducto(${index})">Eliminar</button></td>
+          <td>
+            <div class="product-info">
+              <span class="product-name">${item.nombre}</span>
+            </div>
+          </td>
+          <td><span class="unit-tag">${item.tipoventa || 'unid'}</span></td>
+          <td><span class="qty-val">${cant.toFixed(2)}</span></td>
+          <td>${formatCurrency(precio)}</td>
+          <td class="subtotal-cell">${formatCurrency(st)}</td>
+          <td>
+            <button class="btn-delete" onclick="eliminarProducto(${index})" title="Eliminar">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg>
+            </button>
+          </td>
         `;
         cuerpo.appendChild(fila);
-        total += subtotal;
+        subtotal += st;
       });
 
-      totalEl.textContent = 'Total: $' + total.toLocaleString();
+      // Cálculo de Domicilio basado en Peso
+      let valorDomicilio = 0;
+      let tipoBolsa = "-";
+
+      if (carrito.length > 0) {
+        if (pesoTotal <= 20) {
+          valorDomicilio = 15000;
+          tipoBolsa = "Pequeña (Hasta 20kg)";
+        } else if (pesoTotal <= 30) {
+          valorDomicilio = 25000;
+          tipoBolsa = "Mediana (20-30kg)";
+        } else {
+          valorDomicilio = 30000;
+          tipoBolsa = "Grande (Más de 30kg)";
+        }
+      }
+
+      const totalFinal = subtotal + valorDomicilio;
+
+      // Actualizar UI
+      subtotalEl.textContent = formatCurrency(subtotal);
+      pesoEl.textContent = pesoTotal.toFixed(2) + ' kg';
+      bolsaEl.textContent = tipoBolsa;
+      domicilioEl.textContent = formatCurrency(valorDomicilio);
+      totalFinalEl.textContent = 'Total Final: ' + formatCurrency(totalFinal);
+
+      // Guardar info extra para el checkout
+      window.lastResumen = { subtotal, pesoTotal, valorDomicilio, totalFinal };
     }
 
     function eliminarProducto(indice) {
@@ -177,6 +476,26 @@
         return;
       }
 
+      // 1. Verificar si el usuario tiene dirección registrada
+      try {
+        const resAddr = await fetch('/perfil/direcciones', {
+          headers: { 'Authorization': 'Bearer ' + token }
+        });
+        const direcciones = await resAddr.json();
+
+        if (!direcciones || direcciones.length === 0) {
+          // Abrir modal si no hay direcciones
+          document.getElementById('direccionModal').style.display = 'block';
+          return;
+        }
+      } catch (err) {
+        console.error('Error al verificar direcciones:', err);
+      }
+
+      procesarCheckout(token, carrito);
+    }
+
+    async function procesarCheckout(token, carrito) {
       const metodoPago = document.getElementById('metodo-pago').value;
 
       try {
@@ -186,7 +505,12 @@
             'Content-Type': 'application/json',
             'Authorization': 'Bearer ' + token
           },
-          body: JSON.stringify({ items: carrito, metodoPago: metodoPago })
+          body: JSON.stringify({
+            items: carrito,
+            metodopago: metodoPago,
+            domicilio: window.lastResumen?.valorDomicilio || 0,
+            peso_total: window.lastResumen?.pesoTotal || 0
+          })
         });
         const data = await res.json();
         if (!res.ok) {
@@ -195,15 +519,113 @@
         }
 
         localStorage.removeItem('carrito');
-        window.location.href = '/factura.html?id=' + encodeURIComponent(data.idFactura);
+        window.location.href = '/factura.html?id=' + encodeURIComponent(data.idfactura);
       } catch (e) {
         alert('❌ Error: ' + (e?.message || 'No fue posible finalizar la compra'));
       }
     }
 
-    // Cargar carrito al iniciar
-    cargarCarrito();
-  </script>
+    // Manejar registro de dirección desde el modal
+    document.getElementById('formDireccion').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const token = localStorage.getItem('token');
+      const payload = {
+        titulo: document.getElementById('addr-titulo').value,
+        direccion: document.getElementById('addr-direccion').value,
+        ciudad: document.getElementById('addr-ciudad').value,
+        referencia: document.getElementById('addr-referencia').value
+      };
 
+      try {
+        const res = await fetch('/perfil/direcciones', {
+          method: 'POST',
+          headers: {
+            'Authorization': 'Bearer ' + token,
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(payload)
+        });
+
+        if (res.ok) {
+          document.getElementById('direccionModal').style.display = 'none';
+          // Una vez guardado, reintentar la compra
+          const carrito = JSON.parse(localStorage.getItem('carrito')) || [];
+          procesarCheckout(token, carrito);
+        } else {
+          const data = await res.json();
+          alert('Error al guardar dirección: ' + (data.mensaje || data.error));
+        }
+      } catch (err) {
+        alert('Error de conexión al guardar la dirección');
+      }
+    });
+
+    // Cerrar modal de dirección
+    document.getElementById('closeDireccion').onclick = function () {
+      document.getElementById('direccionModal').style.display = 'none';
+    }
+
+    // Cargar carrito al iniciar con manejo de errores
+    try {
+      cargarCarrito();
+    } catch (e) {
+      console.error('Error al cargar carrito:', e);
+    }
+
+    // Modal Logic
+    const modal = document.getElementById("politicasModal");
+    const btn = document.getElementById("abrirModalPoliticas");
+    const span = document.getElementsByClassName("close-modal")[0];
+
+    btn.onclick = function () {
+      modal.style.display = "block";
+    }
+
+    span.onclick = function () {
+      modal.style.display = "none";
+    }
+
+    window.onclick = function (event) {
+      if (event.target == document.getElementById('direccionModal')) {
+        document.getElementById('direccionModal').style.display = "none";
+      }
+      if (event.target == modal) {
+        modal.style.display = "none";
+      }
+      if (event.target == modalEnvios) {
+        modalEnvios.style.display = "none";
+      }
+      if (event.target == modalDevoluciones) {
+        modalDevoluciones.style.display = "none";
+      }
+    }
+
+    // Shipping Modal Logic
+    const modalEnvios = document.getElementById("enviosModal");
+    const btnEnvios = document.getElementById("abrirModalEnvios");
+    const spanEnvios = document.getElementById("closeEnvios");
+
+    btnEnvios.onclick = function () {
+      modalEnvios.style.display = "block";
+    }
+
+    spanEnvios.onclick = function () {
+      modalEnvios.style.display = "none";
+    }
+
+    // Returns Modal Logic
+    const modalDevoluciones = document.getElementById("devolucionesModal");
+    const btnDevoluciones = document.getElementById("abrirModalDevoluciones");
+    const spanDevoluciones = document.getElementById("closeDevoluciones");
+
+    btnDevoluciones.onclick = function () {
+      modalDevoluciones.style.display = "block";
+    }
+
+    spanDevoluciones.onclick = function () {
+      modalDevoluciones.style.display = "none";
+    }
+  </script>
 </body>
+
 </html>

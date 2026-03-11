@@ -11,24 +11,32 @@ const ventaVista = require('./vista/VentaVista');
 const gestionVista = require('./vista/GestionVista');
 const jwt = require('jsonwebtoken');
 
+// Logger global para ver quién intenta conectar
+app.use((req, res, next) => {
+  console.log(`📡 [${new Date().toLocaleTimeString()}] Recibida solicitud: ${req.method} ${req.url} desde ${req.ip}`);
+  next();
+});
+
 
 // Middleware
 app.use(cors({
-    origin: '*', // Cambiar ['http://tu.com', 'http://yo.com'],
-    methods: ['GET', 'POST', 'PUT', 'DELETE'], // Métodos permitidos
-    allowedHeaders: ['Content-Type', 'Authorization'], // Encabezados permitidos
-    credentials: true // Habilita el envío de credenciales si es necesario
-  }));
+  origin: '*', // Cambiar ['http://tu.com', 'http://yo.com'],
+  methods: ['GET', 'POST', 'PUT', 'DELETE'], // Métodos permitidos
+  allowedHeaders: ['Content-Type', 'Authorization'], // Encabezados permitidos
+  credentials: true // Habilita el envío de credenciales si es necesario
+}));
 
-  // Middleware para parseo de solicitudes
+// Middleware para parseo de solicitudes
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.static('public')); // si guardas el HTML ahí
-app.use('/legumbreria', productoVista);
 app.use('/', require('./vista/UsuarioVista'));
 app.use('/venta', ventaVista);
 app.use('/gestion', gestionVista);
+app.use('/legumbreria', productoVista);
+app.use('/notificaciones', require('./vista/NotificacionVista'));
+app.use('/', require('./vista/EmpleadoVista'));
 
 
 // Middleware para autenticar el token JWT
@@ -45,6 +53,12 @@ function autenticarToken(req, res, next) {
     next();
   });
 }
+
+// prueba de conexion movil
+app.get("/api/prueba", (req, res) => {
+  console.log("📢 Intento de conexión desde dispositivo móvil detectado");
+  res.json({ mensaje: "¡Conexión Exitosa con el Backend!" });
+});
 
 // Ruta para obtener el rol del usuario autenticado
 app.get('/mi-rol', autenticarToken, async (req, res) => {
@@ -65,12 +79,15 @@ app.get('/mi-rol', autenticarToken, async (req, res) => {
 // Middleware para manejar errores
 
 // Rutas 
-app.use('/legumbreria', rutaUsuario); //esta lleva a las rutas del cliente
+// Montar rutas de usuario solo en '/'
 //app.use('/', rutaadmin);
-
 // Iniciar el servidor
-app.listen(4545, () => {
-  console.log('Servidor corriendo en http://localhost:4545');
+app.listen(PORT, "0.0.0.0", () => {
+  console.log("=================================");
+  console.log(`🚀 Servidor corriendo en:`);
+  console.log(`👉 http://localhost:${PORT}`);
+  console.log(`👉 http://192.168.1.23:${PORT}`);
+  console.log("=================================");
 });
 
-  
+

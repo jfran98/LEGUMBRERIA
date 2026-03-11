@@ -1,67 +1,13 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
   <meta charset="UTF-8">
   <title>Iniciar Sesión</title>
-  <link rel="stylesheet" href="style.css">
-  <style>
-    body {
-      margin: 0;
-      font-family: Arial, sans-serif;
-      background: url('img/frutas-verduras.jpg') no-repeat center center fixed;
-      background-size: cover;
-    }
-
-    #navbar {
-      position: fixed;
-      top: 0;
-      width: 100%;
-      z-index: 1000;
-    }
-
-    .login-container {
-      background-color: rgba(255, 255, 255, 0.95);
-      max-width: 400px;
-      margin: 120px auto 40px auto;
-      padding: 30px;
-      border-radius: 12px;
-      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.25);
-    }
-
-    h2 {
-      text-align: center;
-      color: #2e7d32; /* Verde */
-      margin-bottom: 25px;
-    }
-
-    input, button {
-      width: 100%;
-      padding: 12px;
-      margin-bottom: 15px;
-      border-radius: 8px;
-      border: 1px solid #ccc;
-      font-size: 15px;
-    }
-
-    button {
-      background-color: #f57c00; /* naranja */
-      color: white;
-      font-weight: bold;
-      border: none;
-      cursor: pointer;
-    }
-
-    button:hover {
-      background-color: #ef6c00;
-    }
-
-    .mensaje {
-      text-align: center;
-      font-weight: bold;
-      margin-top: 10px;
-    }
-  </style>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/login.css">
 </head>
+
 <body>
 
 
@@ -76,7 +22,7 @@
   </div>
 
   <script>
-    document.getElementById('formLogin').addEventListener('submit', async function(e) {
+    document.getElementById('formLogin').addEventListener('submit', async function (e) {
       e.preventDefault();
 
       const formData = new FormData(this);
@@ -84,7 +30,7 @@
       const mensaje = document.getElementById('mensaje');
 
       try {
-        const res = await fetch('http://localhost:4545/login', {
+        const res = await fetch('/login', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ t3: datos.t3, t5: datos.t5 }),
@@ -112,4 +58,5 @@
   <!-- Cargar el navbar después del DOM -->
   <script src="navbar.js"></script>
 </body>
+
 </html>

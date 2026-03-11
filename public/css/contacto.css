@@ -1,0 +1,114 @@
+/* 
+  contacto.css
+  Estilos para la página de contacto.
+*/
+
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+body {
+    /* Fondo claro y tipografía moderna */
+    background-color: #f8f9fa;
+    font-family: 'Inter', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    color: #333;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    margin: 0;
+    padding: 20px;
+}
+
+/* Contenedor principal con bordes redondeados y sombra suave (Tarjeta) */
+.contacto-container {
+    background-color: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+    /* Sombra de tarjeta */
+    max-width: 800px;
+    width: 100%;
+    padding: 40px;
+    box-sizing: border-box;
+    text-align: center;
+}
+
+.contacto-titulo {
+    font-size: 28px;
+    color: #2c3e50;
+    margin-top: 0;
+    margin-bottom: 30px;
+}
+
+.contacto-info {
+    font-size: 16px;
+    line-height: 1.6;
+    margin-bottom: 30px;
+    text-align: left;
+    display: inline-block;
+}
+
+.contacto-info p {
+    margin: 10px 0;
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.contacto-info strong {
+    color: #2c3e50;
+    min-width: 90px;
+    display: inline-block;
+}
+
+/* Enlaces sin estilo predeterminado para no afectar el diseño */
+.contacto-info a {
+    color: #27ae60;
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.contacto-info a:hover {
+    text-decoration: underline;
+}
+
+/* Contenedor del mapa responsivo */
+.mapa-iframe-container {
+    width: 100%;
+    height: 400px;
+    /* Alto especificado */
+    border-radius: 8px;
+    overflow: hidden;
+    margin-bottom: 30px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+}
+
+.mapa-iframe-container iframe {
+    width: 100%;
+    /* Ancho 100% */
+    height: 100%;
+    border: none;
+}
+
+/* Botón de Llamar ahora */
+.btn-llamar {
+    display: inline-block;
+    background-color: #27ae60;
+    color: #ffffff;
+    padding: 14px 32px;
+    text-decoration: none;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: bold;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    box-shadow: 0 4px 6px rgba(39, 174, 96, 0.2);
+}
+
+.btn-llamar:hover {
+    background-color: #219653;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(39, 174, 96, 0.3);
+    text-decoration: none;
+}

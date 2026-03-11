@@ -15,10 +15,10 @@ const verificarToken = async (req, res, next) => {
     try {
         // Verificar el token con JWT
         const decoded = jwt.verify(token, JWT_SECRET);
-        
+
         // Verificar si el token está activo en la base de datos
         const tokenValido = await UsuarioModelo.verificarToken(token);
-        
+
         if (!tokenValido) {
             return res.status(401).json({
                 error: 'Token inválido',
@@ -28,7 +28,7 @@ const verificarToken = async (req, res, next) => {
 
         // Agregar la información del usuario decodificada a la request
         req.usuario = decoded;
-        
+
         // Continuar con la siguiente función
         next();
     } catch (error) {
@@ -40,11 +40,11 @@ const verificarToken = async (req, res, next) => {
 };
 
 function soloGerenteOEmpleado(req, res, next) {
-  const usuario = req.usuario; // Esto lo pone el middleware de autenticación
-  if (usuario.rol === 'gerente' || usuario.rol === 'empleado') {
-    return next();
-  }
-  return res.status(403).json({ error: 'Acceso solo para gerentes o empleados' });
+    const usuario = req.usuario; // Esto lo pone el middleware de autenticación
+    if (usuario.rol === 'gerente' || usuario.rol === 'empleado') {
+        return next();
+    }
+    return res.status(403).json({ error: 'Acceso solo para gerentes o empleados' });
 }
 
 module.exports = { verificarToken, soloGerenteOEmpleado }; 

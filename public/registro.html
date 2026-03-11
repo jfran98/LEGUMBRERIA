@@ -1,187 +1,314 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Registro - Legumbrería</title>
- <link rel="stylesheet" href="/estyle.css">
-
-  <style>
-    :root {
-      --verde: #4CAF50;
-      --naranja: #FF9800;
-      --amarillo: #FFEB3B;
-    }
-
-    body {
-      font-family: 'Segoe UI', sans-serif;
-      background: #f0f8e0;
-    }
-
-    .registro-container {
-      background-color: rgba(255, 255, 255, 0.95);
-      max-width: 500px;
-      margin: 40px auto;
-      padding: 30px;
-      border-radius: 12px;
-      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.25);
-    }
-
-    .registro-container h2 {
-      text-align: center;
-      margin-bottom: 20px;
-      color: var(--verde);
-    }
-
-    form label {
-      display: block;
-      margin-bottom: 5px;
-      font-weight: bold;
-    }
-
-    form input {
-      width: 100%;
-      padding: 10px;
-      margin-bottom: 15px;
-      border: 2px solid var(--naranja);
-      border-radius: 8px;
-    }
-
-    form button {
-      background-color: var(--verde);
-      color: white;
-      padding: 12px 20px;
-      border: none;
-      border-radius: 8px;
-      cursor: pointer;
-      width: 100%;
-      font-size: 16px;
-    }
-
-    form button:hover {
-      background-color: #388e3c;
-    }
-
-    .mensaje {
-      margin-top: 15px;
-      text-align: center;
-      color: red;
-    }
-
-    footer {
-      background-color: var(--verde);
-      color: white;
-      text-align: center;
-      padding: 20px;
-      margin-top: 60px;
-    }
-  </style>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Registro - legumbreria</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/registro.css">
 </head>
+
 <body>
 
 
-  <!-- Formulario de registro -->
-  <div class="registro-container">
-    <h2>Registro de Usuario</h2>
-    <form id="registroForm">
-  <label for="documento">Documento:</label>
-  <input type="text" id="documento" name="t1" required />
+  <div class="page-content">
+    <!-- Formulario de registro -->
+    <div class="registro-container">
+      <h2>Registro de Usuario</h2>
+      <form id="registroForm">
+        <label for="documento">Documento:</label>
+        <input type="text" id="documento" name="t1" required />
 
-  <label for="nombre">Nombre:</label>
-  <input type="text" id="nombre" name="t2" required />
+        <label for="nombre">Nombre:</label>
+        <input type="text" id="nombre" name="t2" required />
 
-  <label for="correo">Correo:</label>
-  <input type="email" id="correo" name="t3" required />
+        <label for="correo">Correo:</label>
+        <input type="email" id="correo" name="t3" required />
 
-  <label for="telefono">Teléfono:</label>
-  <input type="text" id="telefono" name="t4" />
+        <label for="telefono">Teléfono:</label>
+        <input type="text" id="telefono" name="t4" required />
 
-<div style="margin-bottom: 15px;">
-  <label for="pregunta">Pregunta de seguridad:</label>
-  <select id="pregunta" name="pregunta" required style="width: 100%; padding: 10px; border: 2px solid var(--naranja); border-radius: 8px; margin-top: 5px;">
-    <option value="">Selecciona una pregunta</option>
-    <option value="¿Cuál es el nombre de tu primera mascota?">¿Cuál es el nombre de tu primera mascota?</option>
-    <option value="¿En qué ciudad naciste?">¿En qué ciudad naciste?</option>
-    <option value="¿Cuál es tu comida favorita?">¿Cuál es tu comida favorita?</option>
-  </select>
-</div>
+        <div style="margin-bottom: 15px;">
+          <label for="pregunta">Pregunta de seguridad:</label>
+          <select id="pregunta" name="pregunta" required
+            style="width: 100%; padding: 10px; border: 2px solid var(--naranja); border-radius: 8px; margin-top: 5px;">
+            <option value="">Selecciona una pregunta</option>
+            <option value="¿Cuál es el nombre de tu primera mascota?">¿Cuál es el nombre de tu primera mascota?</option>
+            <option value="¿En qué ciudad naciste?">¿En qué ciudad naciste?</option>
+            <option value="¿Cuál es tu comida favorita?">¿Cuál es tu comida favorita?</option>
+          </select>
+        </div>
 
-<div>
-  <label for="respuesta">Tu respuesta:</label>
-  <input type="text" id="respuesta" name="respuesta" required placeholder="Escribe tu respuesta" />
-</div>
-
-
-
-  <label for="contrasena">Contraseña:</label>
-  <input type="password" id="contrasena" name="t5" required />
+        <div>
+          <label for="respuesta">Tu respuesta:</label>
+          <input type="text" id="respuesta" name="respuesta" required placeholder="Escribe tu respuesta" />
+        </div>
 
 
-  <button type="submit">Registrarse</button>
-  <div class="mensaje" id="mensaje"></div>
-</form>
 
+        <label for="contrasena">Contraseña:</label>
+        <input type="password" id="contrasena" name="t5" required />
+
+
+        <div class="checkbox-container">
+          <input type="checkbox" id="terminos" name="terminos" required>
+          <label for="terminos" style="display:inline; margin-bottom:0;">Acepto los <span class="ver-terminos"
+              id="abrirModal">términos y condiciones</span></label>
+        </div>
+
+        <button type="submit">Registrarse</button>
+        <div class="mensaje" id="mensaje"></div>
+      </form>
+
+    </div>
+    <footer>
+      &copy; 2025 Legumbreria. Todos los derechos reservados.
+    </footer>
   </div>
-  <script src="navbar.js"></script>
-  <footer>
-    &copy; 2025 Legumbrería. Todos los derechos reservados.
-  </footer>
+
+  <!-- Modal de Términos -->
+  <div id="termsModal" class="modal">
+    <div class="modal-content">
+      <span class="close-modal">&times;</span>
+      <h2>Términos y Condiciones</h2>
+      <div class="terminos-text">
+        <h3>1. Legal Agreement</h3>
+        <p>These Terms and Conditions (“Terms”) constitute a legally binding agreement between the user (“User”) and
+          LEGUMBRERÍA (“the Company”, “we”, “our”, or “us”) governing access to and use of the LEGUMBRERÍA website,
+          services, and related systems (collectively, the “Platform”).</p>
+        <p>By accessing, registering, or using the Platform, the User expressly agrees to be bound by these Terms. If
+          the User does not agree, they must immediately discontinue use of the Platform.</p>
+
+        <h3>2. Eligibility</h3>
+        <p>Use of the Platform is permitted only to individuals who:</p>
+        <ul>
+          <li>Are at least 18 years of age, or</li>
+          <li>Access the Platform under the supervision of a legal guardian, where applicable under Colombian law.</li>
+        </ul>
+        <p>The Company reserves the right to refuse service or terminate accounts at its sole discretion.</p>
+
+        <h3>3. User Registration and Account Security</h3>
+        <p><strong>3.1 Account Creation</strong><br>Users must provide accurate, complete, and up-to-date information
+          during registration.</p>
+        <p><strong>3.2 Confidentiality of Credentials</strong><br>Users are solely responsible for safeguarding their
+          login credentials. Any activity conducted under a User’s account shall be presumed to be authorized by the
+          User.</p>
+        <p><strong>3.3 Security Measures</strong><br>The Platform implements password encryption, secure authentication
+          protocols, and may include two-factor authentication (2FA) mechanisms to protect user accounts.</p>
+        <p><strong>3.4 Account Suspension or Termination</strong><br>LEGUMBRERÍA reserves the right to suspend or
+          terminate accounts that:</p>
+        <ul>
+          <li>Provide false information</li>
+          <li>Attempt unauthorized system access</li>
+          <li>Violate these Terms</li>
+        </ul>
+
+        <h3>4. Products and Services</h3>
+        <p><strong>4.1 Product Information</strong><br>The Company makes reasonable efforts to ensure that product
+          descriptions, prices, images, and availability are accurate. However, errors may occur.</p>
+        <p><strong>4.2 Pricing</strong><br>All prices are displayed in Colombian Pesos (COP) unless otherwise specified.
+          Prices are subject to change without prior notice.</p>
+        <p><strong>4.3 Availability</strong><br>Product availability is subject to stock levels. The Company does not
+          guarantee uninterrupted product supply.</p>
+        <p><strong>4.4 Right to Refuse Orders</strong><br>The Company reserves the right to refuse or cancel any order
+          due to pricing errors, stock limitations, suspected fraud, or technical issues.</p>
+
+        <h3>5. Administrative and Restricted Access</h3>
+        <p>Administrative modules (inventory management, product modification, category administration, and system
+          supervision) are strictly limited to authorized personnel.</p>
+        <p>Unauthorized access attempts may result in:</p>
+        <ul>
+          <li>Immediate account suspension</li>
+          <li>Legal action under applicable Colombian legislation</li>
+        </ul>
+
+        <h3>6. Data Protection and Privacy</h3>
+        <p><strong>6.1 Data Collection</strong><br>The Platform collects personal information necessary for user
+          registration, authentication, and service provision.</p>
+        <p><strong>6.2 Data Storage and Security</strong><br>Personal data is stored securely using relational database
+          systems with integrity protections and encrypted password storage.</p>
+        <p><strong>6.3 Confidentiality</strong><br>LEGUMBRERÍA will not sell, rent, or disclose personal data to third
+          parties without consent, except where required by law.</p>
+        <p><strong>6.4 Compliance</strong><br>Data processing complies with applicable Colombian data protection
+          regulations.</p>
+
+        <h3>7. Acceptable Use Policy</h3>
+        <p>Users agree not to:</p>
+        <ul>
+          <li>Engage in fraudulent or illegal activities</li>
+          <li>Attempt to disrupt system integrity or security</li>
+          <li>Upload malicious software or harmful content</li>
+          <li>Reverse engineer or attempt to extract source code</li>
+        </ul>
+        <p>Violation of this section may result in permanent termination and legal liability.</p>
+
+        <h3>8. Intellectual Property Rights</h3>
+        <p>All content, including but not limited to:</p>
+        <ul>
+          <li>Software architecture</li>
+          <li>Source code</li>
+          <li>Visual design</li>
+          <li>Logos and trademarks</li>
+          <li>Text, graphics, and system structure</li>
+        </ul>
+        <p>is the exclusive property of LEGUMBRERÍA and protected under intellectual property laws. Unauthorized
+          reproduction or distribution is strictly prohibited.</p>
+
+        <h3>9. System Availability and Maintenance</h3>
+        <p>The Company strives to ensure continuous operation of the Platform. However, it does not guarantee
+          uninterrupted or error-free service.</p>
+        <p>Temporary interruptions may occur due to:</p>
+        <ul>
+          <li>Scheduled maintenance</li>
+          <li>Security updates</li>
+          <li>Technical failures</li>
+          <li>Force majeure events</li>
+        </ul>
+        <p>The Company shall not be held liable for damages resulting from service interruptions beyond its reasonable
+          control.</p>
+
+        <h3>10. Limitation of Liability</h3>
+        <p>To the fullest extent permitted by law, LEGUMBRERÍA shall not be liable for:</p>
+        <ul>
+          <li>Indirect, incidental, or consequential damages</li>
+          <li>Loss of data or business interruption</li>
+          <li>Damages arising from improper use of the Platform</li>
+          <li>Technical errors beyond its control</li>
+        </ul>
+        <p>The User assumes full responsibility for use of the Platform.</p>
+
+        <h3>11. Indemnification</h3>
+        <p>The User agrees to indemnify and hold harmless LEGUMBRERÍA, its employees, administrators, and affiliates
+          from any claims, liabilities, damages, losses, or expenses arising from:</p>
+        <ul>
+          <li>Violation of these Terms</li>
+          <li>Misuse of the Platform</li>
+          <li>Infringement of third-party rights</li>
+        </ul>
+
+        <h3>12. Modifications to the Terms</h3>
+        <p>LEGUMBRERÍA reserves the right to modify these Terms at any time. Updated versions will be published on the
+          Platform. Continued use after publication constitutes acceptance of the revised Terms.</p>
+
+        <h3>13. Governing Law and Jurisdiction</h3>
+        <p>These Terms shall be governed and interpreted in accordance with the laws of the Republic of Colombia.</p>
+        <p>Any dispute arising from these Terms shall be submitted to the competent courts of Colombia.</p>
+
+        <h3>14. Contact Information</h3>
+        <p>For legal inquiries or concerns related to these Terms, users may contact:</p>
+        <p>LEGUMBRERÍA<br>Itagüí, Antioquia, Colombia<br>Email: [official business email]<br>Phone: [official contact
+          number]</p>
+      </div>
+    </div>
+  </div>
+
+  <script src="navbar.js" defer></script>
 
 
 
 
-document.getElementById('registroForm').addEventListener('submit', async function (e) {
-  e.preventDefault();
-const documento = document.getElementById('documento').value;
-const nombre = document.getElementById('nombre').value;
-const correo = document.getElementById('correo').value;
-const telefono = document.getElementById('telefono').value;
-const contrasena = document.getElementById('contrasena').value;
-  const respuesta = document.getElementById('respuesta').value;
-  const pregunta = document.getElementById('pregunta').value;
+  <script>
+    document.getElementById('registroForm').addEventListener('submit', async function (e) {
+      e.preventDefault();
+      const documento = document.getElementById('documento').value;
+      const nombre = document.getElementById('nombre').value;
+      const correo = document.getElementById('correo').value;
+      const telefono = document.getElementById('telefono').value;
+      const contrasena = document.getElementById('contrasena').value;
+      const respuesta = document.getElementById('respuesta').value;
+      const pregunta = document.getElementById('pregunta').value;
 
-  const mensaje = document.getElementById('mensaje');
+      const mensaje = document.getElementById('mensaje');
 
-  if (!pregunta) {
-    mensaje.textContent = 'Por favor selecciona una pregunta de seguridad.';
-    return;
-  }
-
-  try {
-    const res = await fetch('http://localhost:4545/usuario', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        t1: documento,
-        t2: nombre,
-        t3: correo,
-        t4: telefono,
-        t5: contrasena,
-        pregunta,
-        respuesta
-      }),
-    });
-
-    const data = await res.json();
-
-    if (res.ok || res.status === 201) {
-      mensaje.textContent = '✅ Usuario registrado exitosamente';
-      mensaje.style.color = 'green';
-      if (data.token) {
-        localStorage.setItem('token', data.token);
+      if (!pregunta) {
+        mensaje.textContent = 'Por favor selecciona una pregunta de seguridad.';
+        return;
       }
 
-      // Espera un segundo y redirige a perfil.html
-      setTimeout(() => {
-        window.location.href = 'perfil.html';
-      }, 1500);
-    } else {
-      mensaje.textContent = data?.error || data?.mensaje || 'Error al registrar usuario';
-      mensaje.style.color = 'red';
+      const terminos = document.getElementById('terminos').checked;
+      if (!terminos) {
+        mensaje.textContent = 'Debes aceptar los términos y condiciones para registrarte.';
+        mensaje.style.color = 'red';
+        return;
+      }
+
+      try {
+        const res = await fetch('http://localhost:4545/usuario', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            t1: documento,
+            t2: nombre,
+            t3: correo,
+            t4: telefono,
+            t5: contrasena,
+            pregunta,
+            respuesta
+          }),
+        });
+
+        const data = await res.json();
+
+        if (res.ok || res.status === 201) {
+          mensaje.textContent = '✅ Usuario registrado exitosamente';
+          mensaje.style.color = 'green';
+          if (data.token) {
+            localStorage.setItem('token', data.token);
+          }
+
+          // Espera un segundo y redirige a perfil.html
+          setTimeout(() => {
+            window.location.href = 'perfil.html';
+          }, 1500);
+        } else {
+          mensaje.textContent = data?.error || data?.mensaje || 'Error al registrar usuario';
+          mensaje.style.color = 'red';
+        }
+
+      } catch (err) {
+        mensaje.textContent = 'Error de red. Intenta más tarde.';
+      }
+    });
+
+    // Validar contraseña
+    const passwordInput = document.getElementById('contrasena');
+    const registerForm = document.getElementById('registroForm');
+    const messageDiv = document.getElementById('mensaje');
+
+    passwordInput.addEventListener('input', function () {
+      const password = passwordInput.value;
+      const passwordRegex = /^(?=.*[A-Z])(?=.*\d).{8,}$/;
+
+      if (!passwordRegex.test(password)) {
+        passwordInput.setCustomValidity('La contraseña debe tener al menos 8 caracteres, una mayúscula y un número.');
+        messageDiv.textContent = 'La contraseña debe tener al menos 8 caracteres, una mayúscula y un número.';
+        messageDiv.style.color = 'red';
+      } else {
+        passwordInput.setCustomValidity('');
+        messageDiv.textContent = '';
+      }
+    });
+
+    // Modal Logic
+    const modal = document.getElementById("termsModal");
+    const btn = document.getElementById("abrirModal");
+    const span = document.getElementsByClassName("close-modal")[0];
+
+    btn.onclick = function () {
+      modal.style.display = "block";
     }
 
-   } catch (err) {
-    mensaje.textContent = 'Error de red. Intenta más tarde.';
-  }
-});
-</script>
+    span.onclick = function () {
+      modal.style.display = "none";
+    }
+
+    window.onclick = function (event) {
+      if (event.target == modal) {
+        modal.style.display = "none";
+      }
+    }
+  </script>
+</body>
+
+</html>

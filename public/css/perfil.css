@@ -1,0 +1,745 @@
+/* ======================================
+   BASE GENERAL
+======================================*/
+
+html {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  font-family: 'Segoe UI', Arial, sans-serif;
+  background: url('../img/perfil.jpg') no-repeat center center fixed;
+  background-size: cover;
+  min-height: 100vh;
+}
+
+/* ======================================
+   CONTENEDOR PRINCIPAL PERFIL
+======================================*/
+
+.perfil-container {
+  background: rgba(255, 255, 255, 0.97);
+  max-width: 750px;
+  margin: 100px auto;
+  padding: 35px;
+  border-radius: 18px;
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.12);
+  text-align: center;
+}
+
+.perfil-container h2 {
+  margin-bottom: 25px;
+  color: var(--color-primary);
+}
+
+/* ======================================
+   AVATAR
+======================================*/
+
+.avatar-section {
+  margin-bottom: 30px;
+}
+
+.avatar {
+  width: 130px;
+  height: 130px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 4px solid var(--color-accent);
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+
+.avatar:hover {
+  transform: scale(1.07);
+  box-shadow: 0 8px 20px rgba(255, 195, 0, 0.4);
+}
+
+.avatar.clickable::after {
+  content: '✏️';
+  position: absolute;
+  top: -5px;
+  right: -5px;
+  background: var(--color-accent);
+  color: white;
+  border-radius: 50%;
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* ======================================
+   GRID AVATARES
+======================================*/
+
+.avatar-grid {
+  display: flex;
+  gap: 15px;
+  overflow-x: auto;
+  padding: 15px 5px;
+  scroll-behavior: smooth;
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-accent) #f0f2f5;
+  -webkit-overflow-scrolling: touch;
+}
+
+.avatar-grid::-webkit-scrollbar {
+  height: 6px;
+}
+
+.avatar-grid::-webkit-scrollbar-track {
+  background: #f0f2f5;
+  border-radius: 10px;
+}
+
+.avatar-grid::-webkit-scrollbar-thumb {
+  background: var(--color-accent);
+  border-radius: 10px;
+  transition: all 0.3s ease;
+}
+
+.avatar-grid::-webkit-scrollbar-thumb:hover {
+  background: #ffaa00;
+}
+
+.avatar-option {
+  width: 65px;
+  height: 65px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 3px solid transparent;
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+
+.avatar-option:hover {
+  border-color: var(--color-accent);
+  transform: scale(1.1);
+}
+
+.avatar-option.selected {
+  border-color: var(--color-primary);
+  transform: scale(1.1);
+}
+
+/* ======================================
+   BOTONES GENERALES
+======================================*/
+
+/* ======================================
+   SELECTOR DE GÉNERO (AVATAR)
+======================================*/
+.avatar-gender-selector {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  margin-bottom: 25px;
+  background: #f0f2f5;
+  padding: 5px;
+  border-radius: 30px;
+  width: fit-content;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.btn-gender {
+  background: transparent;
+  border: none;
+  padding: 10px 25px;
+  border-radius: 25px;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 14px;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  color: #6b7280;
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-gender:hover {
+  color: #374151;
+}
+
+.btn-gender.active {
+  background: #fff;
+  color: #000;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  transform: scale(1.05);
+}
+
+.btn-gender.active::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 20px;
+  height: 3px;
+  background: var(--color-accent);
+  border-radius: 3px;
+}
+
+/* ======================================
+   BOTONES MODERNOS
+======================================*/
+
+.btn-primary,
+.botones button {
+  background: linear-gradient(135deg, #ffd700 0%, #ffaa00 100%);
+  /* Dorado más vibrante */
+  color: #1a1a1a;
+  border: none;
+  padding: 12px 25px;
+  border-radius: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(255, 170, 0, 0.3);
+  text-transform: uppercase;
+  font-size: 13px;
+  letter-spacing: 0.5px;
+}
+
+.btn-primary:hover,
+.botones button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(255, 170, 0, 0.5);
+  filter: brightness(1.05);
+}
+
+.btn-secondary {
+  background: white;
+  color: #4b5563;
+  border: 2px solid #e5e7eb;
+  padding: 10px 20px;
+  border-radius: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  width: 100%;
+  margin-bottom: 15px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.btn-secondary:hover {
+  border-color: var(--color-accent);
+  color: var(--color-accent);
+  background: #fffdf5;
+}
+
+.btn-cancelar {
+  background: #f3f4f6;
+  color: #374151;
+  border: none;
+  padding: 10px;
+  border-radius: 10px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+
+.btn-cancelar:hover {
+  background: #e5e7eb;
+}
+
+.form-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.botones {
+  margin-top: 30px;
+  /* Eliminamos estilos de botón del contenedor */
+  background: transparent;
+  box-shadow: none;
+  border: none;
+  padding: 0;
+}
+
+.botones:hover {
+  transform: none;
+  box-shadow: none;
+}
+
+
+/* ======================================
+   SECCIONES (Direcciones, Pedidos, Facturas)
+======================================*/
+
+/* ======================================
+   GRID SECCIONES (NUEVO)
+======================================*/
+
+.perfil-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 25px;
+  max-width: 1200px;
+  margin: 40px auto;
+  padding: 0 20px;
+  box-sizing: border-box;
+}
+
+/* ======================================
+   SECCIONES (Direcciones, Pedidos, Facturas)
+======================================*/
+
+.perfil-section {
+  background: rgba(255, 255, 255, 0.95);
+  padding: 25px;
+  border-radius: 18px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+  transition: all 0.3s ease;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  display: flex;
+  flex-direction: column;
+}
+
+.perfil-section:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.12);
+}
+
+.perfil-section h3 {
+  margin: 0 0 15px 0;
+  font-size: 18px;
+  color: #1f2937;
+  border-left: 5px solid var(--color-accent);
+  padding-left: 12px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* ======================================
+   FORM DIRECCIÓN
+======================================*/
+
+.form-direccion input {
+  width: 100%;
+  padding: 11px 14px;
+  margin-bottom: 14px;
+  border: 1px solid #e5e7eb;
+  border-radius: 10px;
+  font-size: 14px;
+  transition: 0.2s ease;
+  box-sizing: border-box;
+  /* Importante para que no se salga */
+}
+
+.form-direccion input:focus {
+  outline: none;
+  border-color: var(--color-accent);
+  box-shadow: 0 0 0 3px rgba(255, 195, 0, 0.2);
+}
+
+.form-row {
+  display: flex;
+  gap: 12px;
+}
+
+.form-row input {
+  flex: 1;
+}
+
+/* ======================================
+   GRID CARDS MEJORADO (Dentro de las secciones)
+======================================*/
+.cards-container {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  margin-top: 15px;
+}
+
+
+
+/* ======================================
+   TARJETAS MÁS PEQUEÑAS Y MODERNAS
+======================================*/
+
+.card-direccion,
+.card-pedido,
+.card-factura {
+  background: #f9fafb;
+  padding: 14px;
+  border-radius: 12px;
+  border: 1px solid #e5e7eb;
+  font-size: 13px;
+  transition: all 0.2s ease;
+}
+
+.card-direccion:hover,
+.card-pedido:hover,
+.card-factura:hover {
+  border-color: var(--color-accent);
+  background: #fff;
+}
+
+/* Títulos más limpios */
+.card-direccion h4,
+.card-pedido h4,
+.card-factura h4 {
+  font-size: 13px;
+  font-weight: 700;
+  margin-bottom: 4px;
+  color: #111827;
+}
+
+/* Texto más compacto */
+.card-direccion p,
+.card-pedido p,
+.card-factura p {
+  font-size: 12px;
+  margin: 2px 0;
+  color: #4b5563;
+}
+
+/* ======================================
+   BADGES ESTADO PEDIDOS
+======================================*/
+
+.badge {
+  display: inline-block;
+  margin-top: 8px;
+  padding: 4px 10px;
+  font-size: 11px;
+  font-weight: 700;
+  border-radius: 20px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.badge-pendiente {
+  background: #fffbeb;
+  color: #b45309;
+  border: 1px solid #fcd34d;
+}
+
+.badge-entregado {
+  background: #ecfdf5;
+  color: #047857;
+  border: 1px solid #6ee7b7;
+}
+
+.badge-cancelado {
+  background: #fef2f2;
+  color: #b91c1c;
+  border: 1px solid #fca5a5;
+}
+
+/* ======================================
+   RESPONSIVE
+======================================*/
+
+@media (max-width: 900px) {
+  .perfil-grid {
+    grid-template-columns: 1fr;
+    /* Una columna en tablets/móviles */
+    padding: 0 15px;
+  }
+}
+
+@media (max-width: 600px) {
+  .perfil-container {
+    margin: 60px 15px 30px 15px;
+    padding: 20px;
+  }
+
+  .form-row {
+    flex-direction: column;
+  }
+}
+
+/* ======================================
+   SECCIONES EXPANDIBLES
+======================================*/
+.section-content {
+  /* Si quieres que se vea el contenido siempre */
+  max-height: 400px;
+  overflow-y: auto;
+  /* Scroll si es muy largo */
+  opacity: 1;
+  margin-top: 15px;
+  padding-right: 5px;
+  /* espacio para scrollbar */
+}
+
+/* Scrollbar fina */
+.section-content::-webkit-scrollbar {
+  width: 6px;
+}
+
+.section-content::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+.section-content::-webkit-scrollbar-thumb {
+  background: #d1d5db;
+  border-radius: 3px;
+}
+
+.section-content::-webkit-scrollbar-thumb:hover {
+  background: #9ca3af;
+}
+
+/* Quitamos la flechita si siempre están abiertas */
+.perfil-section h3 {
+  cursor: default;
+}
+
+.perfil-section h3::after {
+  content: "";
+}
+
+
+
+.msg-vacio {
+  color: #9ca3af;
+  font-style: italic;
+  padding: 10px;
+  text-align: center;
+  font-size: 14px;
+}
+
+/* ======================================
+   MODAL PREMIUM - DETALLE FACTURA
+======================================*/
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(8px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  animation: fadeIn 0.3s ease;
+}
+
+.modal-content {
+  background: white;
+  width: 90%;
+  max-width: 650px;
+  max-height: 85vh;
+  border-radius: 24px;
+  box-shadow: 0 25px 50px rgba(0, 0, 0, 0.25);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  animation: slideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.modal-header {
+  padding: 20px 25px;
+  background: #f9f9f9;
+  border-bottom: 2px solid #f0f0f0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.modal-header h3 {
+  margin: 0;
+  font-size: 20px;
+  color: #1f2937;
+  font-weight: 800;
+}
+
+.close-modal-btn {
+  background: #eeeeee;
+  border: none;
+  width: 35px;
+  height: 35px;
+  border-radius: 50%;
+  font-size: 16px;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.close-modal-btn:hover {
+  background: #e5e7eb;
+  transform: rotate(90deg);
+}
+
+.modal-body {
+  padding: 25px;
+  overflow-y: auto;
+}
+
+/* Tabla de items dentro del modal */
+
+.invoice-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+  font-size: 13px;
+}
+
+.invoice-table th {
+  text-align: left;
+  background: #f8fafc;
+  padding: 12px;
+  color: #64748b;
+  font-weight: 600;
+  border-bottom: 2px solid #eef2f6;
+}
+
+.invoice-table td {
+  padding: 12px;
+  border-bottom: 1px solid #f1f5f9;
+  color: #334155;
+}
+
+.invoice-table tr:last-child td {
+  border-bottom: none;
+}
+
+.invoice-total-row {
+  margin-top: 25px;
+  padding: 15px;
+  background: #fffdf5;
+  border-radius: 12px;
+  border: 1px solid #fdf2bb;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.invoice-total-row h4 {
+  margin: 0;
+  font-size: 18px;
+  color: #111827;
+}
+
+.invoice-info-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 15px;
+  margin-bottom: 25px;
+  background: #fdfdfd;
+  padding: 15px;
+  border-radius: 15px;
+  border: 1px solid #f1f1f1;
+}
+
+.invoice-info-item p {
+  margin: 4px 0;
+  font-size: 12px;
+  color: #6b7280;
+}
+
+.invoice-info-item strong {
+  color: #1f2937;
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(30px);
+    opacity: 0;
+  }
+
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+/* Estilo para las tarjetas en el perfil para indicar que son clickeables */
+.card-factura.clickable {
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+}
+
+.card-factura.clickable:hover {
+  border-color: var(--color-accent);
+  box-shadow: 0 5px 15px rgba(255, 170, 0, 0.15);
+}
+
+/* ======================================
+   MEJORAS MODAL - BOTONES DE ACCIÓN
+======================================*/
+
+.modal-footer-actions {
+  display: flex;
+  gap: 15px;
+  margin-top: 25px;
+  padding-top: 20px;
+  border-top: 1px solid #f1f5f9;
+}
+
+.btn-modal {
+  flex: 1;
+  padding: 12px;
+  border-radius: 12px;
+  font-weight: 700;
+  font-size: 13px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  border: none;
+  text-transform: uppercase;
+}
+
+.btn-print {
+  background: #f8fafc;
+  color: #334155;
+  border: 1px solid #e2e8f0;
+}
+
+.btn-print:hover {
+  background: #eef2f6;
+  border-color: #cbd5e0;
+  transform: translateY(-2px);
+}
+
+.btn-email {
+  background: #27ae60;
+  color: white;
+  box-shadow: 0 4px 12px rgba(39, 174, 96, 0.2);
+}
+
+.btn-email:hover {
+  filter: brightness(1.1);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 15px rgba(39, 174, 96, 0.3);
+}
+
+.btn-email:disabled {
+  background: #9ca3af;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}

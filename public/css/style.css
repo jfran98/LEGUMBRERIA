@@ -1,0 +1,102 @@
+:root {
+  --color-primary: #f0770d;
+  --color-primary-dark: #002244;
+  --color-gradient: #003366;
+  /* Fallback to solid color for revert */
+  --color-accent: #FFC300;
+  --color-background: #F0F0F0;
+  --color-text: #333333;
+  --naranja: #FFC300;
+}
+
+body {
+  font-family: 'Segoe UI', sans-serif;
+  padding-top: 80px;
+  /* espacio para el navbar fijo */
+}
+
+.navbar a {
+  color: white;
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.3s;
+}
+
+.navbar a:hover {
+  color: var(--color-accent);
+}
+
+/* Banner principal */
+.hero {
+  background-image: url('https://cdn.pixabay.com/photo/2017/02/22/17/06/fruits-2085066_1280.jpg');
+  background-size: cover;
+  background-position: center;
+  height: 400px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  text-shadow: 1px 1px 3px black;
+}
+
+.hero h1 {
+  font-size: 48px;
+  background-color: rgba(236, 109, 11, 0.7);
+  padding: 20px;
+  border-radius: 10px;
+}
+
+/* Sección de productos */
+.productos {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  padding: 40px;
+  background-color: var(--color-accent);
+}
+
+.producto {
+  width: 250px;
+  background-color: white;
+  border: 3px solid var(--color-accent);
+  margin: 20px;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s;
+}
+
+.producto:hover {
+  transform: scale(1.05);
+}
+
+.producto img {
+  width: 100%;
+  height: 180px;
+  object-fit: cover;
+}
+
+.producto h3 {
+  text-align: center;
+  padding: 10px;
+}
+
+/* Footer */
+footer {
+  background-color: var(--color-primary);
+  color: white;
+  text-align: center;
+  padding: 15px;
+  /* Un poco más delgado se ve mejor */
+  width: 100%;
+  /* Que ocupe todo el ancho */
+  margin-top: auto;
+}
+
+/* Ajuste para el contenido bajo el navbar */
+main,
+.container,
+.contenido-principal,
+.container-nomina {
+  margin-top: 80px;
+}

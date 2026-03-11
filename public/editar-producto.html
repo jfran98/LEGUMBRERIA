@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Editar Producto - Legumbrería JM</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="css/editar-producto.css">
+</head>
+
+<body>
+    <div id="navbar"></div>
+
+    <div class="form-container">
+        <div class="form-header">
+            <h2>✏️ Editar Producto</h2>
+            <p>Modifica los detalles del producto seleccionado</p>
+        </div>
+
+        <form id="formEditarProducto">
+            <input type="hidden" id="idproducto" name="idproducto">
+
+            <!-- Información Básica -->
+            <div class="form-group">
+                <label for="nombre">Nombre del Producto *</label>
+                <input type="text" id="nombre" name="nombre" list="lista-productos-nombres" required>
+                <datalist id="lista-productos-nombres"></datalist>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="unidad_medida">Tipo de Venta *</label>
+                    <select id="unidad_medida" name="tipo_venta" required>
+                        <option value="">Seleccionar...</option>
+                        <option value="KG">Kilogramo (KG)</option>
+                        <option value="UNIDAD">Unidad</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="categoria">Categoría *</label>
+                    <select id="categoria" name="idcategoria" required>
+                        <option value="">Seleccionar...</option>
+                        <option value="1">Legumbres</option>
+                        <option value="2">Frutas</option>
+                        <option value="3">Hortalizas</option>
+                        <option value="4">Cereales</option>
+                        <option value="5">Hierbas</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="descripcion">Descripción</label>
+                <textarea id="descripcion" name="descripcion" rows="3"></textarea>
+            </div>
+
+            <h3 class="form-section-title">📊 Datos de Inventario</h3>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="cantidad">Stock Actual *</label>
+                    <input type="number" id="cantidad" name="cantidad" min="0" step="0.01" required>
+                </div>
+                <div class="form-group">
+                    <label for="precioventamenor">Precio Unitario ($) *</label>
+                    <input type="number" id="precioventamenor" name="precio" min="0" step="0.01" required>
+                </div>
+            </div>
+
+            <div class="form-actions">
+                <button type="submit" class="btn-submit" id="btnSubmit">Guardar Cambios</button>
+                <button type="button" class="btn-delete" id="btnDelete">Eliminar Producto</button>
+                <a href="gestionproop.html" class="btn-cancel">Cancelar</a>
+            </div>
+
+            <div id="mensaje" class="mensaje"></div>
+        </form>
+    </div>
+
+    <!-- Modal Confirmación Eliminar -->
+    <div id="modalConfirmDelete" class="modal-overlay" style="display: none;">
+        <div class="modal-dialog">
+            <h3>¿Eliminar producto?</h3>
+            <p>Esta acción marcará el producto como inactivo y dejará de aparecer en el catálogo.</p>
+            <div class="modal-actions">
+                <button type="button" id="btnConfirmDelete" class="btn-danger">Sí, eliminar</button>
+                <button type="button" id="btnCancelDelete" class="btn-light">Cancelar</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="navbar.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', async () => {
+            const form = document.getElementById('formEditarProducto');
+            const mensajeDiv = document.getElementById('mensaje');
+            const btnSubmit = document.getElementById('btnSubmit');
+            const btnDelete = document.getElementById('btnDelete');
+            const modalDelete = document.getElementById('modalConfirmDelete');
+            const btnConfirmDelete = document.getElementById('btnConfirmDelete');
+            const btnCancelDelete = document.getElementById('btnCancelDelete');
+
+            // Obtener ID de la URL
+            const urlParams = new URLSearchParams(window.location.search);
+            const productId = urlParams.get('id');
+
+            if (!productId) {
+                mostrarMensaje('🔍 Selecciona un producto para editar', 'success');
+                // No bloqueamos el botón aún, pero el usuario debe seleccionar algo
+            }
+
+            // Cargar datos del producto
+            try {
+                const baseUrl = window.location.origin;
+                const res = await fetch(`${baseUrl}/legumbreria/productos/${productId}`);
+                const product = await res.json();
+
+                if (!res.ok) throw new Error(product.error || 'Error al cargar producto');
+
+                // Llenar formulario
+                document.getElementById('idproducto').value = product.idproductos;
+                document.getElementById('nombre').value = product.nombre;
+                document.getElementById('unidad_medida').value = product.tipo_venta;
+                document.getElementById('descripcion').value = product.descripcion || '';
+                document.getElementById('cantidad').value = product.stock;
+                document.getElementById('precioventamenor').value = product.precio;
+                document.getElementById('categoria').value = product.idcategoria || '';
+
+            } catch (error) {
+                if (productId) {
+                    console.error('Error:', error);
+                    mostrarMensaje('❌ Error: ' + error.message, 'error');
+                }
+            }
+
+            // Envío del formulario (ACTUALIZAR)
+            form.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                btnSubmit.disabled = true;
+                btnSubmit.textContent = 'Actualizando...';
+                mostrarMensaje('', '');
+
+                try {
+                    const formData = new FormData(form);
+                    const dataObj = Object.fromEntries(formData.entries());
+                    const baseUrl = window.location.origin;
+                    const token = localStorage.getItem('token');
+
+                    const res = await fetch(`${baseUrl}/legumbreria/productos/editar/${productId}`, {
+                        method: 'POST',
+                        body: JSON.stringify(dataObj),
+                        headers: {
+                            'Content-Type': 'application/json',
+                            ...(token ? { 'Authorization': 'Bearer ' + token } : {})
+                        }
+                    });
+
+                    const data = await res.json();
+                    if (!res.ok) throw new Error(data.error || 'Error al actualizar');
+
+                    mostrarMensaje('✅ Producto actualizado correctamente!', 'success');
+
+                    setTimeout(() => {
+                        window.location.href = 'gestionproop.html';
+                    }, 1500);
+
+                } catch (error) {
+                    console.error('Error:', error);
+                    mostrarMensaje('❌ Error: ' + error.message, 'error');
+                } finally {
+                    btnSubmit.disabled = false;
+                    btnSubmit.textContent = 'Guardar Cambios';
+                }
+            });
+
+            // Abrir modal de confirmación
+            btnDelete.addEventListener('click', () => {
+                if (!productId) {
+                    mostrarMensaje('⚠️ No hay producto seleccionado para eliminar.', 'error');
+                    return;
+                }
+
+                modalDelete.style.display = 'flex';
+            });
+
+            // Cerrar modal sin eliminar
+            btnCancelDelete.addEventListener('click', () => {
+                modalDelete.style.display = 'none';
+            });
+
+            // Confirmar eliminación
+            btnConfirmDelete.addEventListener('click', async () => {
+
+                btnDelete.disabled = true;
+                btnDelete.textContent = 'Eliminando...';
+                mostrarMensaje('', '');
+
+                try {
+                    const baseUrl = window.location.origin;
+                    const token = localStorage.getItem('token');
+
+                    const res = await fetch(`${baseUrl}/legumbreria/productos/${productId}`, {
+                        method: 'DELETE',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            ...(token ? { 'Authorization': 'Bearer ' + token } : {})
+                        }
+                    });
+
+                    const data = await res.json().catch(() => ({}));
+                    if (!res.ok) {
+                        throw new Error(data.error || data.mensaje || 'Error al eliminar el producto');
+                    }
+
+                    modalDelete.style.display = 'none';
+                    mostrarMensaje('🗑️ Producto eliminado correctamente.', 'success');
+
+                    setTimeout(() => {
+                        window.location.href = 'gestionproop.html';
+                    }, 1500);
+                } catch (error) {
+                    console.error('Error al eliminar producto:', error);
+                    mostrarMensaje('❌ Error: ' + error.message, 'error');
+                } finally {
+                    btnDelete.disabled = false;
+                    btnDelete.textContent = 'Eliminar Producto';
+                }
+            });
+
+            function mostrarMensaje(texto, tipo) {
+                mensajeDiv.textContent = texto;
+                mensajeDiv.className = 'mensaje ' + tipo;
+                mensajeDiv.style.display = texto ? 'block' : 'none';
+            }
+
+            // Cargar nombres para el autocomplete
+            async function cargarNombresExistentes() {
+                try {
+                    const baseUrl = window.location.origin;
+                    const res = await fetch(baseUrl + '/legumbreria/productos');
+                    const productos = await res.json();
+                    if (Array.isArray(productos)) {
+                        const datalist = document.getElementById('lista-productos-nombres');
+                        datalist.innerHTML = productos.map(p => `<option value="${p.nombre}" data-id="${p.idproductos}">`).join('');
+
+                        // Escuchar selección para cargar producto
+                        document.getElementById('nombre').addEventListener('input', (e) => {
+                            const option = Array.from(datalist.options).find(opt => opt.value === e.target.value);
+                            if (option) {
+                                const id = option.getAttribute('data-id');
+                                if (id && id !== productId) {
+                                    window.location.href = `editar-producto.html?id=${id}`;
+                                }
+                            }
+                        });
+                    }
+                } catch (err) {
+                    console.error('Error cargando nombres para autocomplete:', err);
+                }
+            }
+            cargarNombresExistentes();
+        });
+    </script>
+</body>
+
+</html>

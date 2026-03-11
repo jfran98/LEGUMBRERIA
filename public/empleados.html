@@ -1,0 +1,449 @@
+<!-- public/empleados.html -->
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema de Nómina - Legumbrería</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/empleados.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        .badge-metodo {
+            background: rgba(46, 204, 113, 0.1);
+            color: #27ae60;
+            padding: 4px 8px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="navbar"></div>
+
+    <div class="container-nomina">
+        <div class="grid-nomina">
+            <!-- Columna 1: Registro -->
+            <div class="col-registro">
+                <div class="card-nomina">
+                    <div class="card-header">
+                        <i class="fas fa-calendar-check"></i>
+                        <h3>Registrar Turno</h3>
+                    </div>
+                    <form id="formTurno" class="p-4 form-nomina">
+                        <div class="form-group">
+                            <label>Empleado</label>
+                            <select name="id_empleado" id="select-empleados" required class="form-control"
+                                title="Seleccionar Empleado">
+                                <option value="">Seleccione un empleado...</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Fecha</label>
+                            <input type="date" name="fecha" required class="form-control" title="Fecha del Turno">
+                        </div>
+                        <div class="flex-gap">
+                            <div class="form-group flex-1">
+                                <label>Hora Inicio</label>
+                                <input type="time" name="hora_inicio" required class="form-control"
+                                    title="Hora de Inicio">
+                            </div>
+                            <div class="form-group flex-1">
+                                <label>Hora Fin</label>
+                                <input type="time" name="hora_fin" required class="form-control" title="Hora de Fin">
+                            </div>
+                        </div>
+                        <button type="submit" class="btn-nomina btn-primary w-full bg-secondary">
+                            <i class="fas fa-clock"></i> Registrar Jornada
+                        </button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Columna 2: Resumen Personal -->
+            <div class="col-resumen">
+                <div class="card-nomina mb-4">
+                    <div class="card-header">
+                        <i class="fas fa-user-circle"></i>
+                        <h3>Mi Nómina Personal</h3>
+                    </div>
+                    <div id="vistaEmpleado">
+                        <div class="personal-info-grid p-4">
+                            <div class="info-item">
+                                <label>Nombre:</label>
+                                <p id="emp-nombre">--</p>
+                            </div>
+                            <div class="info-item">
+                                <label>Salario Base:</label>
+                                <p id="emp-salario">--</p>
+                            </div>
+                            <div class="info-item">
+                                <label>Descuentos:</label>
+                                <p id="emp-descuentos" class="text-danger">--</p>
+                            </div>
+                            <div class="info-item">
+                                <label>Horas Desc.:</label>
+                                <p id="emp-horas-desc">--</p>
+                            </div>
+                            <div class="info-item highlight">
+                                <label>Salario Final:</label>
+                                <p id="emp-total" class="pago-positivo">--</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Historial de Pagos (Personal) -->
+                <div class="card-nomina">
+                    <div class="card-header">
+                        <i class="fas fa-history"></i>
+                        <h3>Mi Historial de Pagos</h3>
+                    </div>
+                    <div class="p-4 pt-0">
+                        <div class="table-responsive">
+                            <table class="tabla-nomina">
+                                <thead>
+                                    <tr>
+                                        <th>Fecha</th>
+                                        <th>Básico</th>
+                                        <th>Descuentos</th>
+                                        <th>Pagado</th>
+                                        <th>Método</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tabla-mi-historial">
+                                    <!-- JS -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="mensaje" id="mensaje"></div>
+    </div>
+
+    <div id="sinAcceso" style="display: none;">
+        <div class="card-nomina text-center p-4">
+            <i class="fas fa-lock fs-large mb-2 text-danger"></i>
+            <h2>Acceso Restringido</h2>
+            <p>No tienes un perfil de empleado registrado o no tienes permisos suficientes.</p>
+            <br>
+            <a href="index.html" class="btn-nomina btn-primary inline-flex">Volver al Inicio</a>
+        </div>
+    </div>
+    </div>
+
+    <script src="js/role-verifier.js"></script>
+    <script src="navbar.js"></script>
+    <script>
+        (async () => {
+            // 1. Verificación de Seguridad
+            if (!roleVerifier.init('empleados.html')) return;
+
+            const token = localStorage.getItem('token');
+            try {
+                const res = await fetch('/mi-rol', {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+                const data = await res.json();
+
+                if (data.rol === 'gerente' || data.rol === 'empleado') {
+                    console.log('✅ Rol verificado:', data.rol);
+
+                    // Mostramos el resumen personal para todos (Gerente o Empleado)
+                    document.getElementById('vistaEmpleado').style.display = 'block';
+                    document.getElementById('sinAcceso').style.display = 'none';
+
+                    await cargarMiResumen();
+                    await cargarHistorialPagos();
+                    establecerFechaHoy();
+                } else {
+                    console.warn('⚠️ Rol no autorizado:', data.rol);
+                    document.getElementById('vistaEmpleado').style.display = 'none';
+                    document.getElementById('sinAcceso').style.display = 'block';
+                }
+
+            } catch (err) {
+                console.error('❌ Error en inicialización:', err);
+                // window.location.href = 'login.html'; // Comentado temporalmente para ver errores
+            }
+        })();
+
+        async function cargarMiResumen() {
+            console.log('📡 Cargando resumen personal...');
+            const token = localStorage.getItem('token');
+            try {
+                const res = await fetch('/nomina/mi-resumen', {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+                const data = await res.json();
+                console.log('📦 Datos resumen personal:', data);
+
+                if (data.success) {
+                    const info = data.data;
+                    document.getElementById('emp-nombre').textContent = info.nombre;
+                    document.getElementById('emp-salario').textContent = `$${Math.round(info.salario_mensual).toLocaleString()}`;
+                    document.getElementById('emp-descuentos').textContent = `-$${Math.round(info.descuentos).toLocaleString()}`;
+                    document.getElementById('emp-horas-desc').textContent = `${Number(info.horas_descuento_acumuladas).toFixed(1)}h`;
+                    document.getElementById('emp-total').textContent = `$${Math.round(info.total_mes).toLocaleString()}`;
+
+                    const role = roleVerifier.getCurrentUser().rol;
+                    if (role === 'empleado' || role === 'gerente') {
+                        const select = document.getElementById('select-empleados');
+                        if (select) {
+                            select.innerHTML = `<option value="${info.id_empleado}">${info.nombre}</option>`;
+                            select.value = info.id_empleado;
+                            if (role === 'empleado') {
+                                select.disabled = true;
+                                select.title = "Tu ID de empleado está seleccionado automáticamente";
+                            }
+                        }
+                    }
+                } else {
+                    console.warn('⚠️ No se encontró resumen personal:', data.message);
+                }
+            } catch (err) {
+                console.error('❌ Error al cargar resumen personal:', err);
+            }
+        }
+
+        async function inicializarModulos() {
+            await cargarEmpleados();
+            establecerFechaHoy();
+        }
+
+        async function cargarEmpleados() {
+            const token = localStorage.getItem('token');
+            try {
+                const res = await fetch('/empleados', {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+                const data = await res.json();
+                if (data.success) {
+                    const select = document.getElementById('select-empleados');
+                    select.innerHTML = '<option value="">Seleccione un empleado...</option>' +
+                        data.data.map(e => `<option value="${e.id_empleado}">${e.nombre}</option>`).join('');
+
+                    document.getElementById('kpi-empleados-total').textContent = data.data.length;
+                }
+            } catch (err) { console.error(err); }
+        }
+
+
+        // 🚀 Motor de Cálculo Automático - Nómina Colombia 2026
+        function calcularNominaTurno(salario_mensual, fecha_turno, hora_inicio, hora_fin) {
+            const valor_hora = salario_mensual / 240;
+
+            let inicio_dt = new Date(`${fecha_turno}T${hora_inicio}:00`);
+            let fin_dt = new Date(`${fecha_turno}T${hora_fin}:00`);
+
+            // Detectar cruce de medianoche
+            if (fin_dt <= inicio_dt) {
+                fin_dt.setDate(fin_dt.getDate() + 1);
+            }
+
+            const total_minutos = (fin_dt - inicio_dt) / 60000;
+
+            let min_diurno = 0;
+            let min_nocturno = 0;
+            let min_extra_diurno = 0;
+            let min_extra_nocturno = 0;
+            let min_dom_diurno = 0;
+            let min_dom_nocturno = 0;
+            let min_extra_dom_diurno = 0; // Agregado para cobertura completa
+            let min_extra_dom_nocturno = 0;
+
+            // Festivos oficiales Colombia 2026
+            const festivos = [
+                "2026-01-01", "2026-01-12", "2026-03-23", "2026-04-02", "2026-04-03",
+                "2026-05-01", "2026-05-18", "2026-06-08", "2026-06-15", "2026-06-29",
+                "2026-07-20", "2026-08-07", "2026-08-17", "2026-10-12", "2026-11-02",
+                "2026-11-16", "2026-12-08", "2026-12-25"
+            ];
+
+            function esFestivo(fecha) {
+                const d = new Date(fecha);
+                d.setMinutes(d.getMinutes() - d.getTimezoneOffset());
+                return festivos.includes(d.toISOString().split('T')[0]);
+            }
+
+            let current_dt = new Date(inicio_dt);
+
+            // Iteración minuto a minuto para máxima precisión (acumulación y cruce)
+            for (let i = 0; i < total_minutos; i++) {
+                const hour = current_dt.getHours();
+                const is_night = hour >= 21 || hour < 6;
+                const is_sunday = current_dt.getDay() === 0;
+                const is_holiday = esFestivo(current_dt);
+                const is_dom_fest = is_sunday || is_holiday;
+                const is_extra = i >= (8 * 60);
+
+                if (is_dom_fest) {
+                    if (is_extra) {
+                        if (is_night) min_extra_dom_nocturno++;
+                        else min_extra_dom_diurno++;
+                    } else {
+                        if (is_night) min_dom_nocturno++;
+                        else min_dom_diurno++;
+                    }
+                } else {
+                    if (is_extra) {
+                        if (is_night) min_extra_nocturno++;
+                        else min_extra_diurno++;
+                    } else {
+                        if (is_night) min_nocturno++;
+                        else min_diurno++;
+                    }
+                }
+                current_dt.setMinutes(current_dt.getMinutes() + 1);
+            }
+
+            const toHours = (mins) => mins / 60;
+
+            const horas_diurnas = toHours(min_diurno);
+            const horas_nocturnas = toHours(min_nocturno);
+            const horas_extra_diurnas = toHours(min_extra_diurno);
+            const horas_extra_nocturnas = toHours(min_extra_nocturno);
+            const horas_dominicales_diurnas = toHours(min_dom_diurno);
+            const horas_dominicales_nocturnas = toHours(min_dom_nocturno);
+            const horas_extra_dominicales_diurnas = toHours(min_extra_dom_diurno);
+            const horas_extra_dominicales_nocturnas = toHours(min_extra_dom_nocturno);
+
+            // Reglas monetarias (sin redondear hasta el final como se requiere)
+            const val_diurno = horas_diurnas * valor_hora;
+            const val_nocturno = horas_nocturnas * (valor_hora * 1.35);
+            const val_extra_diurno = horas_extra_diurnas * (valor_hora * 1.25);
+            const val_extra_nocturno = horas_extra_nocturnas * (valor_hora * 1.75);
+            const val_dom_diurno = horas_dominicales_diurnas * (valor_hora * 1.75);
+            const val_dom_nocturno = horas_dominicales_nocturnas * (valor_hora * 2.10);
+            const val_extra_dom_diurno = horas_extra_dominicales_diurnas * (valor_hora * 2.0);
+            const val_extra_dom_nocturno = horas_extra_dominicales_nocturnas * (valor_hora * 2.50);
+
+            const total_turno = val_diurno + val_nocturno + val_extra_diurno + val_extra_nocturno +
+                val_dom_diurno + val_dom_nocturno + val_extra_dom_diurno + val_extra_dom_nocturno;
+
+            return {
+                horas_diurnas,
+                horas_nocturnas,
+                horas_extra_diurnas,
+                horas_extra_nocturnas,
+                horas_dominicales_diurnas,
+                horas_dominicales_nocturnas,
+                horas_extra_dominicales_diurnas,
+                horas_extra_dominicales_nocturnas,
+                total_horas_trabajadas: total_minutos / 60,
+                valor_hora,
+                descomposición_monetaria: {
+                    diurna: val_diurno,
+                    nocturna: val_nocturno,
+                    extra_diurna: val_extra_diurno,
+                    extra_nocturna: val_extra_nocturno,
+                    dominical_diurna: val_dom_diurno,
+                    dominical_nocturna: val_dom_nocturno,
+                    extra_dominical_diurna: val_extra_dom_diurno,
+                    extra_dominical_nocturna: val_extra_dom_nocturno
+                },
+                total_turno
+            };
+        }
+
+        // Event Listeners
+
+        document.getElementById('formTurno').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const formData = new FormData(e.target);
+            const payload = Object.fromEntries(formData);
+
+            // Si el select está deshabilitado (caso empleado), FormData no lo captura
+            const select = document.getElementById('select-empleados');
+            if (select.disabled) {
+                payload.id_empleado = select.value;
+            }
+
+            const res = await apiRequest('/turnos', 'POST', payload);
+            if (res && res.success) {
+                const role = roleVerifier.getCurrentUser().rol;
+                if (role === 'gerente') {
+                    // No hacemos nada especial aquí, ya que el resumen es personal
+                } else {
+                    await cargarMiResumen();
+                    await cargarHistorialPagos();
+                }
+
+                // Resetear pero mantener el id_empleado si es empleado
+                const savedId = select.value;
+                const savedText = select.options[select.selectedIndex]?.text;
+                e.target.reset();
+                if (role === 'empleado') {
+                    select.innerHTML = `<option value="${savedId}">${savedText}</option>`;
+                    select.value = savedId;
+                    select.disabled = true;
+                }
+                establecerFechaHoy();
+            }
+        });
+
+        async function apiRequest(path, method, body) {
+            const token = localStorage.getItem('token');
+            try {
+                const res = await fetch(`http://localhost:4545${path}`, {
+                    method,
+                    headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' },
+                    body: JSON.stringify(body)
+                });
+                const data = await res.json();
+                mostrarMensaje(data.message, data.success ? 'success' : 'error');
+                return data;
+            } catch (err) {
+                mostrarMensaje('Error de conexión', 'error');
+            }
+        }
+
+        function mostrarMensaje(txt, tipo) {
+            const div = document.getElementById('mensaje');
+            div.innerText = txt;
+            div.className = `mensaje ${tipo}`;
+            setTimeout(() => div.innerText = '', 3000);
+        }
+
+
+        async function cargarHistorialPagos() {
+            const token = localStorage.getItem('token');
+            try {
+                const res = await fetch('/nomina/historial', {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+                const data = await res.json();
+                if (data.success) {
+                    const tbody = document.getElementById('tabla-mi-historial');
+                    if (!tbody) return;
+
+                    tbody.innerHTML = data.data.map(p => {
+                        const fecha = new Date(p.fecha_pago).toLocaleDateString();
+                        return `
+                            <tr>
+                                <td>${fecha}</td>
+                                <td>$${Number(p.salario_base).toLocaleString()}</td>
+                                <td style="color: var(--danger)">-$${Number(p.descuentos).toLocaleString()}</td>
+                                <td style="color: var(--success); font-weight: bold;">$${Number(p.salario_pagado).toLocaleString()}</td>
+                                <td><span class="badge-metodo">${p.metodo_pago}</span></td>
+                            </tr>
+                        `;
+                    }).join('');
+                }
+            } catch (err) { console.error(err); }
+        }
+
+        function establecerFechaHoy() {
+            const input = document.querySelector('input[name="fecha"]');
+            if (input) input.value = new Date().toISOString().split('T')[0];
+        }
+    </script>
+</body>
+
+</html>

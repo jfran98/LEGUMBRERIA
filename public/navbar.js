@@ -1,21 +1,28 @@
-document.addEventListener("DOMContentLoaded", () => {
-  const navbarHTML = `
+const navbarHTML = `
     <style>
       .navbar {
-        background: linear-gradient(to right, #4caf50, #ff9800);
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        width: 100%;
+        box-sizing: border-box;
+       background: linear-gradient(to right, #27ae60, #d34b21);
         color: white;
-        padding: 15px 30px;
+        padding: 12px 30px;
         font-size: 18px;
         font-weight: bold;
         display: flex;
         justify-content: space-between;
         align-items: center;
         z-index: 1000;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.25);
         transition: all 0.3s ease;
       }
       .navbar.shrink {
-        padding: 10px 20px;
+        padding: 8px 24px;
         font-size: 16px;
+        box-shadow: 0 3px 6px rgba(0, 0, 0, 0.2);
       }
       .navbar .nav-left {
         display: flex;
@@ -26,6 +33,14 @@ document.addEventListener("DOMContentLoaded", () => {
         margin-right: 20px;
         font-weight: bold;
         letter-spacing: 1px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+      .navbar .logo img {
+        height: 40px;
+        width: auto;
+        border-radius: 6px;
       }
       .navbar .search-bar {
         display: flex;
@@ -43,14 +58,14 @@ document.addEventListener("DOMContentLoaded", () => {
         padding: 6px 12px;
         border-radius: 0 6px 6px 0;
         border: none;
-        background: #388e3c;
+        background: var(--color-accent);
         color: white;
         cursor: pointer;
         font-size: 16px;
         transition: background 0.2s;
       }
       .navbar .search-bar button:hover {
-        background: #2e7031;
+        background: #E6B000;
       }
       .navbar .nav-right a {
         color: white;
@@ -59,7 +74,74 @@ document.addEventListener("DOMContentLoaded", () => {
         transition: color 0.3s;
       }
       .navbar .nav-right a:hover {
-        color: #ffe082;
+        color: var(--color-accent);
+      }
+      
+      /* Badge de notificaciones */
+      .notif-badge {
+        position: absolute;
+        top: -8px;
+        right: -10px;
+        background: #e74c3c;
+        color: white;
+        font-size: 11px;
+        padding: 2px 6px;
+        border-radius: 50%;
+        font-weight: bold;
+        display: none;
+      }
+      #notif-link {
+        position: relative;
+      }
+
+      /* Panel de notificaciones */
+      .notif-panel {
+        position: fixed;
+        top: 80px;
+        right: 20px;
+        width: 350px;
+        background: white;
+        border-radius: 12px;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        z-index: 10001;
+        overflow: hidden;
+        display: none;
+        flex-direction: column;
+        animation: fadeInDown 0.3s ease;
+      }
+      .notif-header {
+        padding: 15px;
+        background: #f8faf9;
+        border-bottom: 1px solid #eee;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        color: #1a4d2e;
+      }
+      .notif-header h4 { margin: 0; }
+      .notif-list {
+        max-height: 400px;
+        overflow-y: auto;
+      }
+      .notif-item {
+        padding: 15px;
+        border-bottom: 1px solid #f0f0f0;
+        cursor: pointer;
+        transition: background 0.2s;
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
+      }
+      .notif-item:hover { background: #f9f9f9; }
+      .notif-item.unread { border-left: 4px solid #27ae60; background: #f0fdf4; }
+      .notif-item .title { font-weight: bold; font-size: 14px; color: #333; }
+      .notif-item .msg { font-size: 13px; color: #666; }
+      .notif-item .time { font-size: 11px; color: #999; text-align: right; }
+      .notif-empty { padding: 40px 20px; text-align: center; color: #999; }
+      
+      @keyframes fadeInDown {
+        from { opacity: 0; transform: translateY(-20px); }
+        to { opacity: 1; transform: translateY(0); }
       }
       
       /* Estilos para el menú de opciones adicionales */
@@ -98,7 +180,9 @@ document.addEventListener("DOMContentLoaded", () => {
         border-radius: 12px;
         box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
         padding: 15px 0;
-        min-width: 200px;
+        min-width: 220px;
+        max-height: 70vh;
+        overflow-y: auto;
         z-index: 1000;
         opacity: 0;
         visibility: hidden;
@@ -138,8 +222,8 @@ document.addEventListener("DOMContentLoaded", () => {
       
       .options-dropdown a:hover {
         background: linear-gradient(135deg, #f8f9fa, #e9ecef);
-        color: #4caf50;
-        border-left-color: #4caf50;
+        color: var(--color-primary);
+        border-left-color: var(--color-primary);
         padding-left: 25px;
       }
       
@@ -157,10 +241,61 @@ document.addEventListener("DOMContentLoaded", () => {
         text-transform: uppercase;
         letter-spacing: 0.5px;
       }
+      
+      /* Estilos para el avatar del navbar */
+      .nav-avatar {
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 2px solid rgba(255, 255, 255, 0.8);
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        transition: all 0.3s ease;
+        background-color: #fff;
+      }
+      
+      .options-toggle:hover .nav-avatar {
+        border-color: #fff;
+        transform: scale(1.1);
+      }
+      
+      /* Campana de Notificaciones en Navbar */
+      .notif-bell-container {
+        position: relative;
+        cursor: pointer;
+        padding: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-left: 10px;
+        transition: transform 0.2s;
+      }
+      .notif-bell-container:hover {
+        transform: scale(1.1);
+      }
+      .notif-bell-icon {
+        font-size: 22px;
+      }
+      .notif-bell-badge {
+        position: absolute;
+        top: 2px;
+        right: 2px;
+        background: #e74c3c;
+        color: white;
+        font-size: 10px;
+        font-weight: bold;
+        padding: 2px 5px;
+        border-radius: 50%;
+        display: none;
+        border: 2px solid #27ae60; /* Para que resalte sobre el fondo */
+      }
     </style>
     <div class="navbar" id="navbar">
       <div class="nav-left">
-        <div class="logo">🥦 Legumbrería JM</div>
+        <div class="logo">
+          <img src="img/logo.jpg" alt="Logo">
+          legumbreria
+        </div>
         <form class="search-bar" id="searchForm">
           <input type="text" id="searchInput" placeholder="Buscar productos..." />
           <button type="submit">Buscar</button>
@@ -170,9 +305,18 @@ document.addEventListener("DOMContentLoaded", () => {
       <div class="nav-right" id="menu">
         <!-- Menú dinámico -->
       </div>
+      
+      <!-- Campana de Notificaciones -->
+      <div class="notif-bell-container" id="navbarNotifBell" onclick="showNotifications(event)">
+        <span class="notif-bell-icon">🔔</span>
+        <span class="notif-bell-badge" id="navbarNotifBadge">0</span>
+      </div>
       <div class="options-menu" id="optionsMenu">
         <div class="options-toggle" id="optionsToggle">
-          <span>⚙️</span>
+          <div id="navIconContainer">
+             <img src="img/avatares/avatar-default.png" alt="Perfil" class="nav-avatar" id="navAvatar" style="display: none;">
+             <span id="navDefaultIcon">⚙️</span>
+          </div>
           <span>Más</span>
           <span>▼</span>
         </div>
@@ -181,43 +325,66 @@ document.addEventListener("DOMContentLoaded", () => {
           <!-- Los enlaces administrativos se insertarán aquí dinámicamente -->
           
           <div class="divider"></div>
-          
-          <div class="section-title">Accesos Rápidos</div>
-          <a href="funcionalidadesDeLaAplicacion.html">📋 Funcionalidades</a>
-          <a href="productos.html?categoria=promociones">🔥 Promociones</a>
-          <a href="productos.html?categoria=frutas">🍎 Frutas</a>
-          <a href="productos.html?categoria=verduras">🥬 Verduras</a>
-          
-          <div class="divider"></div>
-          
+
           <div class="section-title">Herramientas</div>
           <a href="#" onclick="toggleDarkMode()">🌙 Modo Oscuro</a>
-          <a href="#" onclick="showNotifications()">🔔 Notificaciones</a>
-          <a href="#" onclick="showHelp()">❓ Ayuda</a>
+          <a href="#" id="notif-link" onclick="showNotifications(event)">🔔 Notificaciones <span class="notif-badge" id="notif-count">0</span></a>
           
           <div class="divider"></div>
           
           <div class="section-title">Información</div>
-          <a href="#" onclick="showAbout()">ℹ️ Acerca de</a>
-          <a href="#" onclick="showContact()">📞 Contacto</a>
-          <a href="#" onclick="showTerms()">📄 Términos</a>
+          <a href="preguntas-frecuentes.html">❓ Preguntas frecuentes</a>
+          <a href="acercade.html">ℹ️ Acerca de</a>
+          <a href="contacto.html">📞 Contacto</a>
+
         </div>
       </div>
     </div>
   `;
-  document.body.insertAdjacentHTML("afterbegin", navbarHTML);
+document.body.insertAdjacentHTML("afterbegin", navbarHTML);
 
-  setTimeout(() => {
-    const token = localStorage.getItem('token');
-    const bienvenida = document.getElementById('bienvenida');
-    const menu = document.getElementById('menu');
+// Función para actualizar el avatar del navbar desde localStorage
+function updateNavAvatar() {
+  const navAvatar = document.getElementById('navAvatar');
+  const navDefaultIcon = document.getElementById('navDefaultIcon');
+  const token = localStorage.getItem('token');
 
-    if (token) {
-      fetch('/usuario/perfil', {
-        headers: {
-          Authorization: 'Bearer ' + token
-        }
-      })
+  if (!navAvatar || !navDefaultIcon) return;
+
+  if (token) {
+    const avatarPersonalizado = localStorage.getItem('avatarPersonalizada');
+    const avatarSeleccionado = localStorage.getItem('avatarSeleccionado');
+
+    if (avatarPersonalizado) {
+      navAvatar.src = avatarPersonalizado;
+    } else if (avatarSeleccionado) {
+      navAvatar.src = avatarSeleccionado;
+    } else {
+      navAvatar.src = 'img/avatares/avatar-default.png';
+    }
+
+    navAvatar.style.display = 'block';
+    navDefaultIcon.style.display = 'none';
+  } else {
+    navAvatar.style.display = 'none';
+    navDefaultIcon.style.display = 'inline';
+  }
+}
+
+// Inicializar avatar
+setTimeout(updateNavAvatar, 50);
+
+setTimeout(() => {
+  const token = localStorage.getItem('token');
+  const bienvenida = document.getElementById('bienvenida');
+  const menu = document.getElementById('menu');
+
+  if (token) {
+    fetch('/usuario/perfil', {
+      headers: {
+        Authorization: 'Bearer ' + token
+      }
+    })
       .then(res => {
         if (!res.ok) throw new Error('Token inválido');
         return res.json();
@@ -232,33 +399,31 @@ document.addEventListener("DOMContentLoaded", () => {
           <a href="carrito.html">Carrito</a>
           <a href="perfil.html">Perfil</a>
         `;
-        
+
         // Los demás enlaces van al menú de opciones
         let additionalMenuHtml = '';
-        
-        // Enlaces comunes para todos los usuarios autenticados
-        additionalMenuHtml += `
-          <a href="editar-perfil.html">✏️ Editar Perfil</a>
-          <a href="factura.html">🧾 Mis Facturas</a>
-        `;
-        
+
+
+
         if (role === 'gerente') {
           additionalMenuHtml += `
             <a href="formulario-productos.html">📦 Agregar Producto</a>
+            <a href="editar-producto.html">✏️🥑 Editar Producto</a>
             <a href="pedidos.html">📋 Gestión de Pedidos</a>
             <a href="cambiar-rol.html">👥 Gestión de Roles</a>
-            <a href="controlfinanciero.html">💰 Control Financiero</a>
-            <a href="gestionproop.html">⚙️ Gestión de Procesos</a>
-            <a href="gestionprodser.html">🏪 Gestión de Productos</a>
+            <a href="gestionproop.html">📈 Panel de Control Gerencial</a>
+            <a href="empleados.html">💰 Gestión de Nómina</a>
           `;
         }
         if (role === 'empleado') {
           additionalMenuHtml += `
             <a href="formulario-productos.html">📦 Agregar Producto</a>
+            <a href="editar-producto.html">✏️🥑 Editar Producto</a>
             <a href="pedidos.html">📋 Gestión de Pedidos</a>
+            <a href="empleados.html">💰 Mi Nómina</a>
           `;
         }
-        
+
         // Agregar los enlaces adicionales al menú de opciones
         if (additionalMenuHtml) {
           const optionsDropdown = document.getElementById('optionsDropdown');
@@ -272,73 +437,76 @@ document.addEventListener("DOMContentLoaded", () => {
 
         // Agregar verificación de acceso a los enlaces protegidos
         addAccessControlToLinks();
-        
+
         menuHtml += `<a href="#" id="logoutBtn">Salir</a>`;
         menu.innerHTML = menuHtml;
         document.getElementById('logoutBtn').addEventListener('click', cerrarSesion);
+
+        // Actualizar avatar al cargar perfil
+        updateNavAvatar();
       })
       .catch(() => {
         localStorage.removeItem('token');
         location.reload();
       });
-    } else {
-      // Menú para no autenticados
-      menu.innerHTML = `
+  } else {
+    // Menú para no autenticados
+    menu.innerHTML = `
         <a href="index.html">Inicio</a>
         <a href="productos.html">Productos</a>
         <a href="registro.html">Registrarse</a>
         <a href="login.html">Iniciar sesión</a>
       `;
-    }
+  }
 
-    // Evento de búsqueda
-    const searchForm = document.getElementById('searchForm');
-    if (searchForm) {
-      searchForm.addEventListener('submit', function(e) {
-        e.preventDefault();
-        const query = document.getElementById('searchInput').value.trim();
-        if (query) {
-          // Redirige a la página de productos con el término de búsqueda como query param
-          window.location.href = `productos.html?buscar=${encodeURIComponent(query)}`;
-        }
-      });
-    }
+  // Evento de búsqueda
+  const searchForm = document.getElementById('searchForm');
+  if (searchForm) {
+    searchForm.addEventListener('submit', function (e) {
+      e.preventDefault();
+      const query = document.getElementById('searchInput').value.trim();
+      if (query) {
+        // Redirige a la página de productos con el término de búsqueda como query param
+        window.location.href = `productos.html?buscar=${encodeURIComponent(query)}`;
+      }
+    });
+  }
 
-    window.addEventListener('scroll', () => {
-      const nav = document.getElementById('navbar');
-      if (window.scrollY > 50) {
-        nav.classList.add('shrink');
-      } else {
-        nav.classList.remove('shrink');
+  window.addEventListener('scroll', () => {
+    const nav = document.getElementById('navbar');
+    if (window.scrollY > 50) {
+      nav.classList.add('shrink');
+    } else {
+      nav.classList.remove('shrink');
+    }
+  });
+
+  // Funcionalidad del menú de opciones adicionales
+  const optionsToggle = document.getElementById('optionsToggle');
+  const optionsDropdown = document.getElementById('optionsDropdown');
+
+  if (optionsToggle && optionsDropdown) {
+    optionsToggle.addEventListener('click', (e) => {
+      e.stopPropagation();
+      optionsDropdown.classList.toggle('show');
+    });
+
+    // Cerrar el menú al hacer clic fuera
+    document.addEventListener('click', (e) => {
+      if (!optionsToggle.contains(e.target) && !optionsDropdown.contains(e.target)) {
+        optionsDropdown.classList.remove('show');
       }
     });
 
-    // Funcionalidad del menú de opciones adicionales
-    const optionsToggle = document.getElementById('optionsToggle');
-    const optionsDropdown = document.getElementById('optionsDropdown');
-    
-    if (optionsToggle && optionsDropdown) {
-      optionsToggle.addEventListener('click', (e) => {
-        e.stopPropagation();
-        optionsDropdown.classList.toggle('show');
-      });
-      
-      // Cerrar el menú al hacer clic fuera
-      document.addEventListener('click', (e) => {
-        if (!optionsToggle.contains(e.target) && !optionsDropdown.contains(e.target)) {
-          optionsDropdown.classList.remove('show');
-        }
-      });
-      
-      // Cerrar el menú al presionar Escape
-      document.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape') {
-          optionsDropdown.classList.remove('show');
-        }
-      });
-    }
-  }, 100);
-});
+    // Cerrar el menú al presionar Escape
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        optionsDropdown.classList.remove('show');
+      }
+    });
+  }
+}, 100);
+
 
 function cerrarSesion(e) {
   e.preventDefault();
@@ -362,7 +530,7 @@ function toggleDarkMode() {
   document.body.classList.toggle('dark-mode');
   const isDark = document.body.classList.contains('dark-mode');
   localStorage.setItem('darkMode', isDark);
-  
+
   // Aplicar estilos de modo oscuro
   if (isDark) {
     document.body.style.backgroundColor = '#1a1a1a';
@@ -371,24 +539,143 @@ function toggleDarkMode() {
     document.body.style.backgroundColor = '';
     document.body.style.color = '';
   }
-  
+
   showNotification(isDark ? 'Modo oscuro activado' : 'Modo claro activado');
 }
 
-function showNotifications() {
-  showNotification('🔔 No tienes notificaciones nuevas');
+function showNotifications(e) {
+  if (e) {
+    e.preventDefault();
+    e.stopPropagation();
+  }
+
+  const panel = document.getElementById('notificationPanel');
+  if (!panel) {
+    createNotificationPanel();
+    loadNotifications();
+  } else {
+    panel.style.display = panel.style.display === 'flex' ? 'none' : 'flex';
+    if (panel.style.display === 'flex') loadNotifications();
+  }
 }
 
-function showHelp() {
-  showNotification('❓ Ayuda: Contacta soporte en legumbreriajmla84@gmail.com');
+function createNotificationPanel() {
+  const panel = document.createElement('div');
+  panel.id = 'notificationPanel';
+  panel.className = 'notif-panel';
+  panel.innerHTML = `
+    <div class="notif-header">
+      <h4>🔔 Notificaciones</h4>
+      <div style="display: flex; gap: 15px; align-items: center;">
+        <span style="font-size: 13px; font-weight: bold; cursor: pointer; color: #e74c3c; transition: opacity 0.2s;" onmouseover="this.style.opacity='0.7'" onmouseout="this.style.opacity='1'" onclick="limpiarNotificaciones()">Limpiar</span>
+        <span style="font-size: 13px; cursor: pointer; color: #666;" onclick="document.getElementById('notificationPanel').style.display='none'">Cerrar</span>
+      </div>
+    </div>
+    <div class="notif-list" id="notif-list">
+      <div class="notif-empty">Cargando...</div>
+    </div>
+  `;
+  document.body.appendChild(panel);
+
+  // Cerrar al hacer clic fuera
+  document.addEventListener('click', (e) => {
+    if (panel.style.display === 'flex' && !panel.contains(e.target) && e.target.id !== 'notif-link') {
+      panel.style.display = 'none';
+    }
+  });
 }
+
+async function loadNotifications() {
+  const token = localStorage.getItem('token');
+  if (!token) return;
+
+  try {
+    const res = await fetch('/notificaciones', {
+      headers: { 'Authorization': 'Bearer ' + token }
+    });
+    const notifs = await res.json();
+
+    const list = document.getElementById('notif-list');
+    const badgeDropdown = document.getElementById('notif-count');
+    const badgeNavbar = document.getElementById('navbarNotifBadge');
+
+    if (!notifs || notifs.length === 0) {
+      list.innerHTML = '<div class="notif-empty">No hay notificaciones</div>';
+      if (badgeDropdown) badgeDropdown.style.display = 'none';
+      if (badgeNavbar) badgeNavbar.style.display = 'none';
+      return;
+    }
+
+    const unreadCount = notifs.filter(n => !n.leido).length;
+
+    // Función auxiliar para actualizar badges
+    const updateBadge = (el) => {
+      if (el) {
+        if (unreadCount > 0) {
+          el.textContent = unreadCount;
+          el.style.display = 'block';
+        } else {
+          el.style.display = 'none';
+        }
+      }
+    };
+
+    updateBadge(badgeDropdown);
+    updateBadge(badgeNavbar);
+
+    list.innerHTML = notifs.map(n => `
+      <div class="notif-item ${n.leido ? '' : 'unread'}" onclick="marcarNotificacionLeida(${n.idnotificacion})">
+        <span class="title">${n.titulo}</span>
+        <span class="msg">${n.mensaje}</span>
+        <span class="time">${new Date(n.fecha).toLocaleString()}</span>
+      </div>
+    `).join('');
+
+  } catch (err) {
+    console.error('Error al cargar notificaciones:', err);
+  }
+}
+
+async function marcarNotificacionLeida(id) {
+  const token = localStorage.getItem('token');
+  try {
+    await fetch(`/notificaciones/leer/${id}`, {
+      method: 'PUT',
+      headers: { 'Authorization': 'Bearer ' + token }
+    });
+    loadNotifications(); // Recargar
+  } catch (err) {
+    console.error('Error al marcar como leída:', err);
+  }
+}
+
+async function limpiarNotificaciones() {
+  const token = localStorage.getItem('token');
+  if (!token) return;
+
+  if (!confirm('¿Estás seguro de que quieres eliminar todas las notificaciones?')) return;
+
+  try {
+    await fetch('/notificaciones/limpiar', {
+      method: 'DELETE',
+      headers: { 'Authorization': 'Bearer ' + token }
+    });
+    loadNotifications(); // Recargar lista
+  } catch (err) {
+    console.error('Error al limpiar notificaciones:', err);
+  }
+}
+
+// Cargar conteo inicial
+setTimeout(loadNotifications, 500);
 
 function showAbout() {
-  showNotification('ℹ️ Legumbrería JM v1.0 - Sistema de comercio electrónico');
+  window.location.href = 'acercade.html';
 }
 
 function showContact() {
-  showNotification('📞 Contacto: WhatsApp +57 300 123 4567');
+  const whatsappUrl = "https://wa.me/573243538359?text=Hola%20Legumbrería%20JM,%20me%20gustaría%20más%20información.";
+  showNotification(`📞 <a href="${whatsappUrl}" target="_blank" style="color:white; text-decoration:underline;">Chat WhatsApp: 324 353 8359</a> <br> ✉️ legumbreriajmla84@gmail.com`);
 }
 
 function showTerms() {
@@ -402,7 +689,7 @@ function showNotification(message) {
     position: fixed;
     top: 80px;
     right: 20px;
-    background: linear-gradient(135deg, #4caf50, #45a049);
+    background: var(--color-primary);
     color: white;
     padding: 15px 20px;
     border-radius: 8px;
@@ -412,10 +699,10 @@ function showNotification(message) {
     max-width: 300px;
     animation: slideIn 0.3s ease;
   `;
-  
-  notification.textContent = message;
+
+  notification.innerHTML = message;
   document.body.appendChild(notification);
-  
+
   // Remover después de 3 segundos
   setTimeout(() => {
     notification.style.animation = 'slideOut 0.3s ease';
@@ -446,25 +733,25 @@ function addAccessControlToLinks() {
   // Definir páginas que requieren verificación de roles
   const protectedPages = {
     'cambiar-rol.html': ['gerente'],
-    'controlfinanciero.html': ['gerente'],
     'gestionproop.html': ['gerente'],
-    'gestionprodser.html': ['gerente'],
     'pedidos.html': ['gerente', 'empleado'],
-    'formulario-productos.html': ['gerente', 'empleado']
+    'formulario-productos.html': ['gerente', 'empleado'],
+    'editar-producto.html': ['gerente', 'empleado'],
+    'empleados.html': ['gerente', 'empleado']
   };
 
   // Obtener todos los enlaces del navbar
   const allLinks = document.querySelectorAll('a[href]');
-  
+
   allLinks.forEach(link => {
     const href = link.getAttribute('href');
     const pageName = href.split('/').pop().split('?')[0]; // Obtener solo el nombre del archivo
-    
+
     // Si es una página protegida, agregar verificación
     if (protectedPages[pageName]) {
-      link.addEventListener('click', function(e) {
+      link.addEventListener('click', function (e) {
         e.preventDefault();
-        
+
         // Verificar si el usuario tiene acceso
         if (hasAccessToPage(pageName, protectedPages[pageName])) {
           // Si tiene acceso, navegar normalmente
@@ -482,7 +769,7 @@ function addAccessControlToLinks() {
 function hasAccessToPage(pageName, requiredRoles) {
   const token = localStorage.getItem('token');
   if (!token) return false;
-  
+
   try {
     const payload = JSON.parse(atob(token.split('.')[1]));
     const userRole = payload.rol;
@@ -500,9 +787,9 @@ function showAccessDeniedMessage(requiredRoles) {
     'empleado': 'Empleado',
     'usuario': 'Usuario'
   };
-  
+
   const requiredRoleNames = requiredRoles.map(role => roleNames[role] || role).join(' o ');
-  
+
   // Crear notificación de acceso denegado
   const notification = document.createElement('div');
   notification.style.cssText = `
@@ -520,7 +807,7 @@ function showAccessDeniedMessage(requiredRoles) {
     font-weight: 600;
     max-width: 400px;
   `;
-  
+
   notification.innerHTML = `
     <div style="font-size: 24px; margin-bottom: 10px;">
       <i class="fas fa-lock"></i>
@@ -543,9 +830,9 @@ function showAccessDeniedMessage(requiredRoles) {
       Entendido
     </button>
   `;
-  
+
   document.body.appendChild(notification);
-  
+
   // Remover automáticamente después de 5 segundos
   setTimeout(() => {
     if (notification.parentNode) {
@@ -559,3 +846,13 @@ function showAccessDeniedMessage(requiredRoles) {
     }
   }, 5000);
 }
+
+// Helper global para formatear moneda (Pesos Colombianos)
+window.formatCurrency = (num) => {
+  if (num === undefined || num === null) return '$ 0';
+  return new Intl.NumberFormat('es-CO', {
+    style: 'currency',
+    currency: 'COP',
+    minimumFractionDigits: 0
+  }).format(num);
+};

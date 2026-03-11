@@ -1,0 +1,99 @@
+/* Reset básico */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* Fondo */
+body {
+    background-image: url('../img/login.jpg'); /* Asegúrate de que la ruta sea correcta */
+    background-size: cover;      /* Hace que la imagen cubra toda la pantalla */
+    background-position: center; /* Mantiene el espacio vacío justo en el medio */
+    background-repeat: no-repeat; /* Evita que la imagen se duplique */
+    min-height: 100vh;           /* Asegura que ocupe todo el alto de la ventana */
+    display: flex;
+    justify-content: center;     /* Centra tu formulario de login */
+    align-items: center;
+}
+
+/* Contenedor */
+.login-container {
+  background: #ffffff;
+  padding: 2.5rem;
+  width: 100%;
+  max-width: 380px;
+  border-radius: 14px;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+  animation: fadeIn 0.6s ease;
+}
+
+/* Título */
+.login-container h2 {
+  text-align: center;
+  margin-bottom: 1.8rem;
+  color: #2c3e50;
+}
+
+/* Inputs */
+.login-container input {
+  width: 100%;
+  padding: 12px 14px;
+  margin-bottom: 1rem;
+  border-radius: 8px;
+  border: 1px solid #dcdcdc;
+  font-size: 0.95rem;
+  transition: border 0.3s, box-shadow 0.3s;
+}
+
+.login-container input:focus {
+  outline: none;
+  border-color: #2ecc71;
+  box-shadow: 0 0 0 3px rgba(46, 204, 113, 0.2);
+}
+
+/* Botón */
+.login-container button {
+  width: 100%;
+  padding: 12px;
+  border: none;
+  border-radius: 8px;
+  background: #2ecc71;
+  color: white;
+  font-size: 1rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background 0.3s, transform 0.2s, box-shadow 0.2s;
+}
+
+.login-container button:hover {
+  background: #27ae60;
+  transform: translateY(-1px);
+  box-shadow: 0 8px 20px rgba(46, 204, 113, 0.4);
+}
+
+.login-container button:active {
+  transform: translateY(0);
+  box-shadow: none;
+}
+
+/* Mensajes */
+.mensaje {
+  margin-top: 1rem;
+  text-align: center;
+  font-size: 0.9rem;
+  min-height: 1.2em;
+}
+
+/* Animación */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

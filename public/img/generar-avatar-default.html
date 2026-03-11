@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -11,36 +12,41 @@
             padding: 20px;
             background-color: #f0f0f0;
         }
+
         .avatar-container {
             display: inline-block;
             margin: 20px;
         }
+
         .avatar {
             width: 120px;
             height: 120px;
             border-radius: 50%;
-            background: linear-gradient(45deg, #ff9800, #ffb300);
+            background: linear-gradient(45deg, #FFC300, #FFD700);
             display: flex;
             align-items: center;
             justify-content: center;
             font-size: 48px;
             color: white;
             font-weight: bold;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
         }
+
         .download-btn {
             margin-top: 10px;
             padding: 10px 20px;
-            background-color: #388e3c;
+            background-color: #2563EB;
             color: white;
             border: none;
             border-radius: 6px;
             cursor: pointer;
             font-size: 16px;
         }
+
         .download-btn:hover {
-            background-color: #2e7d32;
+            background-color: #002244;
         }
+
         .instructions {
             max-width: 600px;
             margin: 20px auto;
@@ -48,13 +54,14 @@
             background: white;
             padding: 20px;
             border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         }
     </style>
 </head>
+
 <body>
     <h1>🖼️ Generador de Avatar por Defecto</h1>
-    
+
     <div class="avatar-container">
         <div class="avatar" id="avatar">👤</div>
         <br>
@@ -69,11 +76,11 @@
             <li>Colócalo en la carpeta <code>public/img/</code> de tu proyecto</li>
             <li>¡Listo! Ahora tendrás un avatar por defecto</li>
         </ol>
-        
+
         <h3>🎨 Personalización:</h3>
         <p>Puedes cambiar el emoji o símbolo editando la línea:</p>
         <code>&lt;div class="avatar" id="avatar"&gt;👤&lt;/div&gt;</code>
-        
+
         <p>Algunos emojis sugeridos: 👤 🧑 👨 👩 🎭 🦊 🐱 🐶 🦁 🐯</p>
     </div>
 
@@ -83,25 +90,25 @@
             const ctx = canvas.getContext('2d');
             canvas.width = 120;
             canvas.height = 120;
-            
+
             // Crear gradiente de fondo
             const gradient = ctx.createLinearGradient(0, 0, 120, 120);
-            gradient.addColorStop(0, '#ff9800');
-            gradient.addColorStop(1, '#ffb300');
-            
+            gradient.addColorStop(0, '#FFC300');
+            gradient.addColorStop(1, '#FFD700');
+
             // Dibujar círculo con gradiente
             ctx.beginPath();
             ctx.arc(60, 60, 60, 0, 2 * Math.PI);
             ctx.fillStyle = gradient;
             ctx.fill();
-            
+
             // Agregar emoji en el centro
             ctx.font = '48px Arial';
             ctx.textAlign = 'center';
             ctx.textBaseline = 'middle';
             ctx.fillStyle = 'white';
             ctx.fillText('👤', 60, 60);
-            
+
             // Crear enlace de descarga
             const link = document.createElement('a');
             link.download = 'avatar-default.png';
@@ -110,4 +117,5 @@
         }
     </script>
 </body>
+
 </html>

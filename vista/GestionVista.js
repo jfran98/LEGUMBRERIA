@@ -252,6 +252,17 @@ router.put('/cambios-catalogo/:id/aprobar', jwtAuth.verificarToken, async (req, 
   }
 });
 
+// Rechazar cambio en catálogo
+router.put('/cambios-catalogo/:id/rechazar', jwtAuth.verificarToken, async (req, res) => {
+  try {
+    const { id } = req.params;
+    const resultado = await GestionControlador.rechazarCambioCatalogo(id);
+    res.json(resultado);
+  } catch (error) {
+    res.status(500).json({ success: false, message: 'Error interno del servidor' });
+  }
+});
+
 // Obtener contratos
 router.get('/contratos', jwtAuth.verificarToken, async (req, res) => {
   try {
@@ -297,6 +308,48 @@ router.get('/metricas-comerciales', jwtAuth.verificarToken, async (req, res) => 
 router.get('/ventas-categoria', jwtAuth.verificarToken, async (req, res) => {
   try {
     const resultado = await GestionControlador.obtenerVentasPorCategoria();
+    res.json(resultado);
+  } catch (error) {
+    res.status(500).json({ success: false, message: 'Error interno del servidor' });
+  }
+});
+
+// Obtener alertas de stock
+router.get('/alertas-stock', jwtAuth.verificarToken, async (req, res) => {
+  try {
+    const resultado = await GestionControlador.obtenerAlertasStock();
+    res.json(resultado);
+  } catch (error) {
+    res.status(500).json({ success: false, message: 'Error interno del servidor' });
+  }
+});
+
+// ========== ANÁLISIS DE VENTAS (NUEVO) ==========
+
+// Obtener análisis completo
+router.get('/analisis-ventas', jwtAuth.verificarToken, async (req, res) => {
+  try {
+    const resultado = await GestionControlador.obtenerAnalisisVentasCompleto();
+    res.json(resultado);
+  } catch (error) {
+    res.status(500).json({ success: false, message: 'Error interno del servidor' });
+  }
+});
+
+// Obtener reporte diario
+router.get('/reporte-diario', jwtAuth.verificarToken, async (req, res) => {
+  try {
+    const resultado = await GestionControlador.obtenerReporteDiario();
+    res.json(resultado);
+  } catch (error) {
+    res.status(500).json({ success: false, message: 'Error interno del servidor' });
+  }
+});
+
+// Obtener historial de ventas
+router.get('/historial-ventas', jwtAuth.verificarToken, async (req, res) => {
+  try {
+    const resultado = await GestionControlador.obtenerHistorialVentas();
     res.json(resultado);
   } catch (error) {
     res.status(500).json({ success: false, message: 'Error interno del servidor' });

@@ -1,0 +1,21 @@
+Pitch del Proyecto (Propuesta de Valor)
+El Problema
+Muchos negocios locales de venta de legumbres enfrentan desafíoscríticos: inventarios manuales imprecisos, cálculos de nómina complejos por turnos rotativos y falta de visibilidad en las ventas en tiempo real. Esto genera pérdidas económicas y errores administrativos constantes.
+
+La Solución: LEGUMBRERIA
+Es una plataforma integral de gestión diseñada específicamente para optimizar la cadena de valor de los negocios de verduras y hortalizas. No es solo un punto de venta; es el cerebro operativo del negocio.
+
+¿Qué nos hace diferentes?
+Gestión Multi-unidad: Control de stock tanto por kilogramos como por unidades, adaptándose a la naturaleza real de los productos.
+Nómina Automatizada: Cálculo inteligente de salarios, turnos nocturnos, auxilio de transporte y descuentos por horas, eliminando el error humano en los pagos.
+Facturación Digital Premium: Generación instantánea de facturas con diseño profesional para imprimir o enviar directamente al correo del cliente.
+Gestión Limpia: Un panel de administración que se auto-limpia, eliminando pedidos procesados y manteniendo solo lo que requiere atención inmediata.
+🎯 Objetivos del Proyecto
+Objetivo General
+Desarrollar e implementar un sistema de información web y móvil bajo el patrón MVC que centralice y automatice la gestión administrativa, de inventarios y de nómina para una legumbrería, mejorando la eficiencia operativa en un 40%.
+
+Objetivos Específicos
+Optimizar el Control de Inventarios: Seguimiento en tiempo real del stock con soporte para ventas por peso (KG) y unidades.
+Automatizar la Gestión Humana: Motor de cálculo de nómina que procesa automáticamente turnos, recargos y deducciones según acuerdos internos.
+Digitalizar la Experiencia de Venta: Implementar un sistema de facturación profesional con opciones de impresión física y envío por correo electrónico automatizado.
+Garantizar la Eficiencia Administrativa: Diseñar interfaces de gestión que faciliten la toma de decisiones mediante una visualización clara de pedidos pendientes y completados.

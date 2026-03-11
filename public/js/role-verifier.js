@@ -1,5 +1,5 @@
 /**
- * Verificador de Roles - Legumbrería JM
+ * Verificador de Roles - BluePrint
  * Utilidad para verificar permisos de acceso basados en roles de usuario
  */
 
@@ -7,11 +7,10 @@ class RoleVerifier {
     constructor() {
         this.requiredRoles = {
             'cambiar-rol.html': ['gerente'],
-            'controlfinanciero.html': ['gerente'],
             'gestionproop.html': ['gerente'],
-            'gestionprodser.html': ['gerente'],
             'pedidos.html': ['gerente', 'empleado'],
-            'formulario-productos.html': ['gerente', 'empleado']
+            'formulario-productos.html': ['gerente', 'empleado'],
+            'empleados.html': ['gerente', 'empleado']
         };
     }
 
@@ -136,7 +135,7 @@ class RoleVerifier {
         // Guardar información para mostrar en la pantalla de acceso denegado
         localStorage.setItem('lastRequiredRole', requiredRoles[0]); // Usar el rol principal requerido
         localStorage.setItem('lastAttemptedPage', pageName);
-        
+
         // Redirigir a la pantalla de acceso denegado
         window.location.href = 'access-denied.html';
     }
@@ -311,7 +310,7 @@ const roleVerifier = new RoleVerifier();
 document.addEventListener('DOMContentLoaded', () => {
     const currentPage = window.location.pathname.split('/').pop();
     const pagesRequiringVerification = Object.keys(roleVerifier.requiredRoles);
-    
+
     if (pagesRequiringVerification.includes(currentPage)) {
         roleVerifier.init();
     }

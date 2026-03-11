@@ -3,30 +3,33 @@ class AvatarManager {
     constructor() {
         this.avatarSeleccionado = null;
         this.imagenPersonalizada = null;
-        this.avataresPredefinidos = [
-            'img/avatares/avatar-1.png',
-            'img/avatares/avatar-2.png', 
-            'img/avatares/avatar-3.png',
-            'img/avatares/avatar-4.png',
-            'img/avatares/avatar-5.png',
-            'img/avatares/avatar-6.png',
-            'img/avatares/avatar-7.png',
-            'img/avatares/avatar-8.png',
-            'img/avatares/avatar-9.png',
-            'img/avatares/avatar-10.png',
-            'img/avatares/avatar-11.png',
-            'img/avatares/avatar-12.png',
-            'img/avatares/avatar-13.png',
-            'img/avatares/avatar-14.png',
-            'img/avatares/avatar-15.png',
-            'img/avatares/avatar-16.png',
-            'img/avatares/avatar-17.png',
-            'img/avatares/avatar-18.png',
-            'img/avatares/avatar-19.png',
-            'img/avatares/avatar-20.png',
-            'img/avatares/avatar-21.png'
+        this.generoActual = 'hombre'; // Default
+
+        // Listas de avatares (basado en los archivos existentes)
+        this.avataresHombre = [
+            'img/avatares/hombre/avatar-1.png', 'img/avatares/hombre/avatar-2.png', 'img/avatares/hombre/avatar-3.png',
+            'img/avatares/hombre/avatar-4.png', 'img/avatares/hombre/avatar-5.png', 'img/avatares/hombre/avatar-6.png',
+            'img/avatares/hombre/avatar-7.png', 'img/avatares/hombre/avatar-8.png', 'img/avatares/hombre/avatar-9.png',
+            'img/avatares/hombre/avatar-10.png', 'img/avatares/hombre/avatar-11.png', 'img/avatares/hombre/avatar-12.png',
+            'img/avatares/hombre/avatar-13.png', 'img/avatares/hombre/avatar-14.png', 'img/avatares/hombre/avatar-15.png',
+            'img/avatares/hombre/avatar-16.png', 'img/avatares/hombre/avatar-17.png', 'img/avatares/hombre/avatar-18.png',
+            'img/avatares/hombre/avatar-19.png', 'img/avatares/hombre/avatar-20.png', 'img/avatares/hombre/avatar-21.png'
         ];
-        
+
+        this.avataresMujer = [
+            'img/avatares/mujer/avatar-1.png', 'img/avatares/mujer/avatar-2.png', 'img/avatares/mujer/avatar-3.png',
+            'img/avatares/mujer/avatar-4.png', 'img/avatares/mujer/avatar-5.png', 'img/avatares/mujer/avatar-6.png',
+            'img/avatares/mujer/avatar-7.png', 'img/avatares/mujer/avatar-8.png', 'img/avatares/mujer/avatar-9.png',
+            'img/avatares/mujer/avatar-10.png', 'img/avatares/mujer/avatar-11.png', 'img/avatares/mujer/avatar-12.png',
+            'img/avatares/mujer/avatar-13.png', 'img/avatares/mujer/avatar-14.png', 'img/avatares/mujer/avatar-15.png',
+            'img/avatares/mujer/avatar-16.png', 'img/avatares/mujer/avatar-17.png', 'img/avatares/mujer/avatar-18.png',
+            'img/avatares/mujer/avatar-19.png', 'img/avatares/mujer/avatar-20.png', 'img/avatares/mujer/avatar-21.png',
+            'img/avatares/mujer/avatar-22.png', 'img/avatares/mujer/avatar-23.png', 'img/avatares/mujer/avatar-24.png'
+        ];
+
+        // Inicialmente mostramos los de hombre
+        this.avataresPredefinidos = this.avataresHombre;
+
         this.init();
     }
 
@@ -39,83 +42,69 @@ class AvatarManager {
     generarAvatares() {
         const grid = document.getElementById('avatarGrid');
         if (!grid) return;
-        
+
         grid.innerHTML = '';
-        
-        this.avataresPredefinidos.forEach((avatarSrc, index) => {
+
+        this.avataresPredefinidos.forEach((avatarSrc) => {
             const avatarDiv = document.createElement('div');
+            // Check if selected
+            const isSelected = avatarSrc === this.avatarSeleccionado ? 'selected' : '';
+
             avatarDiv.innerHTML = `
-                <img src="${avatarSrc}" 
-                     alt="Avatar ${index + 1}" 
-                     class="avatar-option" 
+                <img src="${avatarSrc}"
+                     class="avatar-option ${isSelected}"
                      onclick="avatarManager.seleccionarAvatar('${avatarSrc}', this)"
                      onerror="this.style.display='none'">
             `;
             grid.appendChild(avatarDiv);
         });
-        
-        // Agregar indicadores de scroll si hay muchos avatares
-        this.agregarIndicadoresScroll();
     }
 
-    agregarIndicadoresScroll() {
-        const grid = document.getElementById('avatarGrid');
-        if (!grid) return;
-        
-        // Agregar botones de navegación si hay muchos avatares
-        if (this.avataresPredefinidos.length > 8) {
-            const navContainer = document.createElement('div');
-            navContainer.className = 'avatar-navigation';
-            navContainer.innerHTML = `
-                <button class="nav-btn prev" onclick="avatarManager.scrollAvatares('left')">‹</button>
-                <button class="nav-btn next" onclick="avatarManager.scrollAvatares('right')">›</button>
-            `;
-            
-            // Insertar después de la cuadrícula
-            grid.parentNode.insertBefore(navContainer, grid.nextSibling);
-        }
-    }
+    filrarAvatares(genero, btn) {
+        this.generoActual = genero;
 
-    scrollAvatares(direction) {
-        const grid = document.getElementById('avatarGrid');
-        if (!grid) return;
-        
-        const scrollAmount = 240; // 4 avatares a la vez
-        
-        if (direction === 'left') {
-            grid.scrollBy({ left: -scrollAmount, behavior: 'smooth' });
+        // Actualizar botones UI
+        document.querySelectorAll('.btn-gender').forEach(b => b.classList.remove('active'));
+        if (btn) btn.classList.add('active');
+
+        // Cambiar lista
+        if (genero === 'hombre') {
+            this.avataresPredefinidos = this.avataresHombre;
         } else {
-            grid.scrollBy({ left: scrollAmount, behavior: 'smooth' });
+            this.avataresPredefinidos = this.avataresMujer;
         }
+
+        this.generarAvatares();
     }
+
 
     seleccionarAvatar(avatarSrc, elemento) {
         // Remover selección previa
-        document.querySelectorAll('.avatar-option').forEach(opt => 
+        document.querySelectorAll('.avatar-option').forEach(opt =>
             opt.classList.remove('selected')
         );
-        
+
         // Seleccionar nuevo avatar
         elemento.classList.add('selected');
         this.avatarSeleccionado = avatarSrc;
-        
+
         // Actualizar avatar principal
         const avatarPrincipal = document.getElementById('avatar');
         if (avatarPrincipal) {
             avatarPrincipal.src = avatarSrc;
         }
-        
+
         // Ocultar vista previa de imagen personalizada
         const preview = document.getElementById('avatarPreview');
         if (preview) {
             preview.style.display = 'none';
         }
         this.imagenPersonalizada = null;
-        
+
         // Guardar en localStorage
         localStorage.setItem('avatarSeleccionado', avatarSrc);
         localStorage.removeItem('avatarPersonalizada');
-        
+
         this.mostrarMensaje('✅ Avatar seleccionado', 'success');
     }
 
@@ -124,13 +113,8 @@ class AvatarManager {
         if (fileInput) {
             fileInput.addEventListener('change', (e) => this.manejarSubidaArchivo(e));
         }
-        
-        // Listener para scroll de avatares
+
         const grid = document.getElementById('avatarGrid');
-        if (grid) {
-            grid.addEventListener('scroll', () => this.actualizarIndicadoresScroll());
-        }
-        
         // Listener para mostrar/ocultar opciones de avatar al hacer click en la foto principal
         const avatarPrincipal = document.getElementById('avatar');
         if (avatarPrincipal) {
@@ -147,14 +131,14 @@ class AvatarManager {
                     this.imagenPersonalizada = e.target.result;
                     const previewImage = document.getElementById('previewImage');
                     const avatarPreview = document.getElementById('avatarPreview');
-                    
+
                     if (previewImage && avatarPreview) {
                         previewImage.src = this.imagenPersonalizada;
                         avatarPreview.style.display = 'block';
                     }
-                    
+
                     // Remover selección de avatares predefinidos
-                    document.querySelectorAll('.avatar-option').forEach(opt => 
+                    document.querySelectorAll('.avatar-option').forEach(opt =>
                         opt.classList.remove('selected')
                     );
                     this.avatarSeleccionado = null;
@@ -172,18 +156,18 @@ class AvatarManager {
             if (avatarPrincipal) {
                 avatarPrincipal.src = this.imagenPersonalizada;
             }
-            
+
             localStorage.setItem('avatarPersonalizada', this.imagenPersonalizada);
             localStorage.removeItem('avatarSeleccionado');
-            
+
             // Ocultar vista previa
             const preview = document.getElementById('avatarPreview');
             if (preview) {
                 preview.style.display = 'none';
             }
-            
+
             this.mostrarMensaje('✅ Avatar personalizado guardado', 'success');
-            
+
             // Aquí podrías enviar la imagen al backend si es necesario
             this.enviarAvatarAlBackend(this.imagenPersonalizada);
         }
@@ -215,21 +199,21 @@ class AvatarManager {
             },
             body: formData
         })
-        .then(response => response.json())
-        .then(data => {
-            if (data.success) {
-                console.log('Avatar guardado en el backend');
-            }
-        })
-        .catch(error => {
-            console.error('Error al guardar avatar en el backend:', error);
-        });
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    console.log('Avatar guardado en el backend');
+                }
+            })
+            .catch(error => {
+                console.error('Error al guardar avatar en el backend:', error);
+            });
     }
 
     cargarAvatarGuardado() {
         const avatarPersonalizado = localStorage.getItem('avatarPersonalizada');
         const avatarSeleccionado = localStorage.getItem('avatarSeleccionado');
-        
+
         if (avatarPersonalizado) {
             const avatarPrincipal = document.getElementById('avatar');
             if (avatarPrincipal) {
@@ -242,7 +226,7 @@ class AvatarManager {
                 avatarPrincipal.src = avatarSeleccionado;
             }
             this.avatarSeleccionado = avatarSeleccionado;
-            
+
             // Marcar como seleccionado en la cuadrícula
             setTimeout(() => {
                 const avatarElement = document.querySelector(`[src="${avatarSeleccionado}"]`);
@@ -275,28 +259,12 @@ class AvatarManager {
         return this.imagenPersonalizada || this.avatarSeleccionado || 'img/avatar-default.png';
     }
 
-    actualizarIndicadoresScroll() {
-        const grid = document.getElementById('avatarGrid');
-        if (!grid) return;
-        
-        const prevBtn = document.querySelector('.nav-btn.prev');
-        const nextBtn = document.querySelector('.nav-btn.next');
-        
-        if (prevBtn && nextBtn) {
-            // Habilitar/deshabilitar botón izquierdo
-            prevBtn.disabled = grid.scrollLeft <= 0;
-            
-            // Habilitar/deshabilitar botón derecho
-            const maxScroll = grid.scrollWidth - grid.clientWidth;
-            nextBtn.disabled = grid.scrollLeft >= maxScroll;
-        }
-    }
 
     toggleAvatarOptions() {
         const avatarOptions = document.getElementById('avatarOptions');
         if (avatarOptions) {
             const isVisible = avatarOptions.style.display !== 'none';
-            
+
             if (isVisible) {
                 // Ocultar opciones
                 avatarOptions.style.display = 'none';

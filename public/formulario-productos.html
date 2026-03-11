@@ -1,189 +1,265 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
   <meta charset="UTF-8">
-  <title>Agregar Producto - Legumbrería JM</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Registrar Nuevo Producto - Legumbrería JM</title>
   <link rel="stylesheet" href="style.css">
   <style>
-    body {
-      font-family: Arial, sans-serif;
-      background: #f1f8e9;
-      padding: 30px;
-    }
-
+    /* Estilos específicos para este formulario */
     .form-container {
-      background: white;
-      max-width: 600px;
-      margin: auto;
+      max-width: 800px;
+      margin: 40px auto;
       padding: 30px;
-      border-radius: 10px;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
     }
 
-    h2 {
+    .form-header {
       text-align: center;
-      color: #388e3c;
+      margin-bottom: 30px;
+    }
+
+    .form-header h2 {
+      color: var(--color-primary, #333);
+      margin-bottom: 10px;
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    .form-row {
+      display: flex;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+
+    .form-row .form-group {
+      flex: 1;
+      min-width: 200px;
     }
 
     label {
       display: block;
-      margin-top: 15px;
-      color: #333;
+      margin-bottom: 8px;
+      font-weight: 500;
+      color: #374151;
     }
 
-    input, select, textarea {
+    input,
+    select,
+    textarea {
       width: 100%;
       padding: 10px;
-      margin-top: 5px;
-      border: 1px solid #ccc;
-      border-radius: 5px;
+      border: 1px solid #d1d5db;
+      border-radius: 8px;
+      font-size: 14px;
+      transition: border-color 0.2s;
+      box-sizing: border-box;
     }
 
-    button {
-      background: #4caf50;
-      color: white;
-      border: none;
-      padding: 12px 20px;
-      border-radius: 6px;
-      margin-top: 20px;
-      cursor: pointer;
+    input:focus,
+    select:focus,
+    textarea:focus {
+      outline: none;
+      border-color: var(--color-accent, #fbbf24);
+      box-shadow: 0 0 0 3px rgba(251, 191, 36, 0.1);
+    }
+
+    .btn-submit {
       width: 100%;
-      font-size: 16px;
+      padding: 12px;
+      background: linear-gradient(135deg, #ffd700 0%, #ffaa00 100%);
+      border: none;
+      border-radius: 8px;
+      color: #1a1a1a;
+      font-weight: 700;
+      cursor: pointer;
+      transition: transform 0.2s;
+      margin-top: 20px;
     }
 
-    button:hover {
-      background: #388e3c;
+    .btn-submit:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(255, 170, 0, 0.3);
+    }
+
+    .mensaje {
+      margin-top: 20px;
+      padding: 10px;
+      border-radius: 8px;
+      text-align: center;
+      display: none;
+    }
+
+    .mensaje.success {
+      background: #d1fae5;
+      color: #065f46;
+      border: 1px solid #34d399;
+    }
+
+    .mensaje.error {
+      background: #fee2e2;
+      color: #991b1b;
+      border: 1px solid #f87171;
     }
   </style>
- 
 </head>
-<body><div class="form-container">
-  <h2>Agregar Nuevo Producto</h2>
-  <form action="/legumbreria/productos" method="POST" enctype="multipart/form-data">
-    <label for="nombre">Nombre del producto:</label>
-    <input type="text" id="nombre" name="nombre" required>
 
-    <label for="categoria">Categoría:</label>
-    <select id="categoria" name="categoria" required>
-      <option value="">Seleccionar</option>
-      <option value="frutas">Frutas</option>
-      <option value="verduras">Verduras</option>
-      <option value="legumbres">Legumbres</option>
-      <option value="hortalizas">Hortalizas</option>
-      <option value="cereales">Cereales</option>
-      <option value="promociones">Promociones</option>
-    </select>
+<body>
+  <div id="navbar"></div>
 
-    <label for="precio">Precio:</label>
-    <input type="number" id="precio" name="precio" step="0.01" required>
+  <div class="form-container">
+    <div class="form-header">
+      <h2>📦 Registrar Nuevo Producto</h2>
+      <p>Ingresa los detalles para crear un nuevo producto en el catálogo</p>
+    </div>
 
-    <label for="cantidad">Cantidad:</label>
-    <input type="number" id="cantidad" name="cantidad" step="0.01" required>
+    <form id="formProducto">
 
-    <label for="unidad">Unidad de venta:</label>
-    <select id="unidad" name="unidad" required>
-      <option value="kg">Kilogramo (kg)</option>
-      <option value="lb">Libra (lb)</option>
-      <option value="unidad">Unidad</option>
-    </select>
+      <!-- Información Básica -->
+      <div class="form-group">
+        <label for="nombre">Nombre del Producto *</label>
+        <input type="text" id="nombre" name="nombre" placeholder="Ej: Tomate Chonto" list="lista-productos-nombres"
+          required>
+        <datalist id="lista-productos-nombres"></datalist>
+      </div>
 
-    <label for="imagen">Imagen del producto:</label>
-    <input type="file" id="imagen" name="imagen" accept="image/*" required>
+      <div class="form-row">
+        <div class="form-group">
+          <label for="tipo_venta">Tipo de Venta *</label>
+          <select id="tipo_venta" name="tipo_venta" required>
+            <option value="">Seleccionar...</option>
+            <option value="KG">Kilogramo (KG)</option>
+            <option value="UNIDAD">Unidad</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="idcategoria">Categoría *</label>
+          <select id="idcategoria" name="idcategoria" required>
+            <option value="">Seleccionar...</option>
+            <option value="1">Legumbres</option>
+            <option value="2">Frutas</option>
+            <option value="3">Hortalizas</option>
+            <option value="4">Cereales</option>
+            <option value="5">Hierbas</option>
+          </select>
+        </div>
+      </div>
 
-    <label for="descripcion">Descripción:</label>
-    <textarea id="descripcion" name="descripcion" rows="4"></textarea>
+      <div class="form-group">
+        <label for="descripcion">Descripción</label>
+        <textarea id="descripcion" name="descripcion" rows="3"
+          placeholder="Detalles adicionales del producto..."></textarea>
+      </div>
 
-    <label for="precioCompra">Precio de compra:</label>
-    <input type="number" id="precioCompra" name="precioCompra" step="0.01" required>
+      <hr style="margin: 30px 0; border: 0; border-top: 1px solid #e5e7eb;">
 
-    <label for="precioVentaMenor">Precio de venta menor:</label>
-    <input type="number" id="precioVentaMenor" name="precioVentaMenor" step="0.01" required>
+      <!-- Datos de Inventario -->
+      <h3 style="margin-bottom: 20px; font-size: 1.1em; color: #4b5563;">📊 Datos de Inventario y Precio
+      </h3>
 
-    <label for="precioVentaMayor">Precio de venta mayor:</label>
-    <input type="number" id="precioVentaMayor" name="precioVentaMayor" step="0.01" required>
+      <div class="form-row">
+        <div class="form-group">
+          <label for="cantidad">Stock Inicial *</label>
+          <input type="number" id="cantidad" name="cantidad" min="0" step="0.01" required>
+        </div>
+        <div class="form-group">
+          <label for="precio">Precio Unitario ($) *</label>
+          <input type="number" id="precio" name="precio" min="0" step="0.01" required>
+        </div>
+      </div>
 
+      <button type="submit" class="btn-submit" id="btnSubmit">Registrar Producto</button>
+      <a href="gestionproop.html"
+        style="display: block; text-align: center; margin-top: 15px; color: #666; text-decoration: none; font-size: 14px;">Cancelar
+        y volver</a>
 
+      <div id="mensaje" class="mensaje"></div>
 
-    <button type="submit">Agregar Producto</button>
-    <div id="mensaje" style="margin-top: 10px; text-align: center;"></div>
-  </form>
-</div>
-<script src="js/role-verifier.js"></script>
-<script>
-  // Verificación de roles - DEBE SER LO PRIMERO
-  if (!roleVerifier.init('formulario-productos.html')) {
-    // Si no tiene acceso, la función ya redirige automáticamente
-    // No ejecutar el resto del código
-    throw new Error('Acceso denegado');
-  }
-</script>
-</body>
-<script src="navbar.js"></script>
-  
+    </form>
+  </div>
+
+  <script src="navbar.js"></script>
   <script>
-    document.addEventListener('DOMContentLoaded', function() {
-      const form = document.querySelector('.form-container form');
-      const mensaje = document.getElementById('mensaje');
-      if (!form) return;
+    document.addEventListener('DOMContentLoaded', () => {
+      const form = document.getElementById('formProducto');
+      const mensajeDiv = document.getElementById('mensaje');
+      const btnSubmit = document.getElementById('btnSubmit');
 
-      form.addEventListener('submit', async function(e) {
+      // Envío del formulario
+      form.addEventListener('submit', async (e) => {
         e.preventDefault();
 
-        mensaje.style.color = '#333';
-        mensaje.textContent = 'Guardando...';
+        // Bloquear botón
+        btnSubmit.disabled = true;
+        btnSubmit.textContent = 'Guardando...';
+        mostrarMensaje('', ''); // Limpiar mensaje
 
         try {
+          // Usamos objeto plano y JSON en lugar de FormData para simplificar, 
+          // ya que no hay subida de archivos (imágenes).
           const formData = new FormData(form);
-          const inputImagen = document.getElementById('imagen');
-          if (!inputImagen || !inputImagen.files || inputImagen.files.length === 0) {
-            mensaje.style.color = 'red';
-            mensaje.textContent = 'Selecciona una imagen antes de guardar.';
-            return;
-          }
-          const token = localStorage.getItem('token');
-          const headers = {};
-          if (token) headers['Authorization'] = 'Bearer ' + token;
+          const dataObj = Object.fromEntries(formData.entries());
 
-          const origin = window.location.origin;
-          const baseUrl = origin && origin.startsWith('http') ? origin : 'http://localhost:4545';
+          console.log('Enviando datos:', dataObj);
+
+          const baseUrl = window.location.origin;
+          const token = localStorage.getItem('token');
+
           const res = await fetch(baseUrl + '/legumbreria/productos', {
             method: 'POST',
-            headers,
-            body: formData
+            body: JSON.stringify(dataObj),
+            headers: {
+              'Content-Type': 'application/json',
+              ...(token ? { 'Authorization': 'Bearer ' + token } : {})
+            }
           });
 
+          const data = await res.json();
+
           if (!res.ok) {
-            let errMsg = 'No se pudo guardar el producto.';
-            try {
-              const data = await res.json();
-              if (data) {
-                if (typeof data === 'string') errMsg = data;
-                else if (data.mensaje) errMsg = data.mensaje;
-                else if (data.error) errMsg = typeof data.error === 'string' ? data.error : (data.error.message || JSON.stringify(data.error));
-              }
-            } catch (_) {}
-            throw new Error(errMsg);
+            throw new Error(data.mensaje || data.error || 'Error al guardar el producto');
           }
 
-          const respuesta = await res.json();
-          const rutaImagen = respuesta && respuesta.imagen ? respuesta.imagen : '';
-          mensaje.style.color = 'green';
-          mensaje.innerHTML = `
-          Producto agregado correctamente.<br>
-          ${rutaImagen ? `<img src="${rutaImagen}" alt="Imagen del producto" style="max-width: 150px; margin-top: 10px;">` : ''}
-          <br><a href="formulario-productos.html">Agregar otro producto</a>
-          `;
+          mostrarMensaje('✅ Producto registrado exitosamente!', 'success');
           form.reset();
-          setTimeout(function() {
-            window.location.href = 'formulario-productos.html';
-          }, 2200);
-        } catch (err) {
-          mensaje.style.color = 'red';
-          const texto = (err && err.message) ? err.message : (typeof err === 'string' ? err : JSON.stringify(err));
-          mensaje.textContent = texto || 'Error al guardar.';
+
+        } catch (error) {
+          console.error('Error:', error);
+          mostrarMensaje('❌ Error: ' + error.message, 'error');
+        } finally {
+          btnSubmit.disabled = false;
+          btnSubmit.textContent = 'Registrar Producto';
         }
       });
+
+      function mostrarMensaje(texto, tipo) {
+        mensajeDiv.textContent = texto;
+        mensajeDiv.className = 'mensaje ' + tipo;
+        mensajeDiv.style.display = texto ? 'block' : 'none';
+      }
+
+      // Cargar nombres para el autocomplete
+      async function cargarNombresExistentes() {
+        try {
+          const baseUrl = window.location.origin;
+          const res = await fetch(baseUrl + '/legumbreria/productos');
+          const productos = await res.json();
+          if (Array.isArray(productos)) {
+            const datalist = document.getElementById('lista-productos-nombres');
+            datalist.innerHTML = productos.map(p => `<option value="${p.nombre}">`).join('');
+          }
+        } catch (err) {
+          console.error('Error cargando nombres para autocomplete:', err);
+        }
+      }
+      cargarNombresExistentes();
     });
   </script>
 </body>
+
 </html>

@@ -1,0 +1,296 @@
+    body {
+        margin: 0;
+        font-family: 'Segoe UI', Arial, sans-serif;
+        background: var(--color-bg);
+        min-height: 100vh;
+        padding-top: 80px;
+    }
+
+    .container-gestion {
+        max-width: 1400px;
+        margin: 0 auto;
+        padding: 20px;
+    }
+
+    .header-gestion {
+        text-align: center;
+        background: rgba(255, 255, 255, 0.95);
+        padding: 30px;
+        border-radius: 15px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        margin-bottom: 30px;
+        -webkit-backdrop-filter: blur(10px);
+        backdrop-filter: blur(10px);
+    }
+
+    .header-gestion h1 {
+        color: var(--color-primary);
+        font-size: 2.2rem;
+        margin-bottom: 10px;
+        font-weight: 700;
+    }
+
+    .header-gestion p {
+        color: #7f8c8d;
+        font-size: 1.1rem;
+    }
+
+    .dashboard-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+        gap: 25px;
+        margin-bottom: 30px;
+    }
+
+    .card-gestion {
+        background: rgba(255, 255, 255, 0.95);
+        border-radius: 15px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        overflow: hidden;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        -webkit-backdrop-filter: blur(10px);
+        backdrop-filter: blur(10px);
+    }
+
+    .card-gestion:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+    }
+
+    .card-header {
+        background: var(--color-primary);
+        color: white;
+        padding: 20px;
+        display: flex;
+        align-items: center;
+        gap: 15px;
+    }
+
+    .card-header i {
+        font-size: 1.5rem;
+    }
+
+    .card-header h3 {
+        margin: 0;
+        font-size: 1.3rem;
+        font-weight: 600;
+    }
+
+    .card-content {
+        padding: 25px;
+    }
+
+    .form-gestion {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+    }
+
+    .form-group {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .form-group label {
+        color: var(--color-primary);
+        font-weight: 600;
+        margin-bottom: 8px;
+        font-size: 0.95rem;
+    }
+
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+        padding: 12px 15px;
+        border: 2px solid #e9ecef;
+        border-radius: 8px;
+        font-size: 1rem;
+        transition: all 0.3s ease;
+        background: #f8f9fa;
+    }
+
+    .form-group input:focus,
+    .form-group select:focus,
+    .form-group textarea:focus {
+        border-color: var(--color-primary);
+        outline: none;
+        background: white;
+        box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+    }
+
+    .btn-primary {
+        background: var(--color-primary);
+        color: black;
+        border: none;
+        padding: 12px 20px;
+        border-radius: 8px;
+        font-size: 1rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+    }
+
+    .btn-primary:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(37, 99, 235, 0.3);
+    }
+
+    .btn-secondary {
+        background: #6c757d;
+        color: black;
+        text-decoration: none;
+        padding: 10px 20px;
+        border-radius: 6px;
+        font-weight: 500;
+        transition: background 0.3s ease;
+    }
+
+    .btn-secondary:hover {
+        background: #5a6268;
+    }
+
+    .solicitudes-list {
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+    }
+
+    .solicitud-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 15px;
+        background: #f8f9fa;
+        border-radius: 8px;
+        border-left: 4px solid var(--color-primary);
+    }
+
+    .solicitud-info {
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
+    }
+
+    .solicitud-info strong {
+        color: var(--color-primary);
+        font-size: 1rem;
+    }
+
+    .solicitud-info .fecha {
+        color: #6c757d;
+        font-size: 0.9rem;
+    }
+
+    .solicitud-info .tipo {
+        background: #e3f2fd;
+        color: #1976d2;
+        padding: 2px 8px;
+        border-radius: 4px;
+        font-size: 0.8rem;
+        font-weight: 500;
+    }
+
+    .solicitud-actions {
+        display: flex;
+        gap: 8px;
+    }
+
+    .btn-approve,
+    .btn-reject {
+        width: 35px;
+        height: 35px;
+        border: none;
+        border-radius: 50%;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .btn-approve {
+        background: var(--color-primary);
+        color: black;
+    }
+
+    .btn-approve:hover {
+        background: #002244;
+        transform: scale(1.1);
+    }
+
+    .btn-reject {
+        background: #f44336;
+        color: black;
+    }
+
+    .btn-reject:hover {
+        background: #d32f2f;
+        transform: scale(1.1);
+    }
+
+    .mensaje {
+        margin-top: 20px;
+        padding: 15px;
+        border-radius: 8px;
+        font-weight: 500;
+        text-align: center;
+        min-height: 20px;
+    }
+
+    .mensaje.success {
+        background: #d4edda;
+        color: #155724;
+        border: 1px solid #c3e6cb;
+    }
+
+    .mensaje.error {
+        background: #f8d7da;
+        color: #721c24;
+        border: 1px solid #f5c6cb;
+    }
+
+    .no-access {
+        text-align: center;
+        background: rgba(255, 255, 255, 0.95);
+        padding: 60px 40px;
+        border-radius: 15px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        -webkit-backdrop-filter: blur(10px);
+        backdrop-filter: blur(10px);
+    }
+
+    .no-access i {
+        font-size: 4rem;
+        color: #dc3545;
+        margin-bottom: 20px;
+    }
+
+    .no-access h2 {
+        color: var(--color-primary);
+        margin-bottom: 15px;
+        font-size: 1.8rem;
+    }
+
+    .no-access p {
+        color: #6c757d;
+        font-size: 1.1rem;
+        margin-bottom: 25px;
+    }
+
+    @media (max-width: 768px) {
+        .dashboard-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .header-gestion h1 {
+            font-size: 1.8rem;
+        }
+
+        .card-content {
+            padding: 20px;
+        }
+    }

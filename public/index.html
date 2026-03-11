@@ -1,265 +1,195 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
   <meta charset="UTF-8">
-  <title>Legumbrería JM</title>
-  <link rel="stylesheet" href="style.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Legumbrería - Frescura Natural</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/index.css">
+  <script src="navbar.js" defer></script>
   <style>
-    :root {
-      --verde: #4CAF50;
-      --naranja: #FF9800;
-      --amarillo: #FFEB3B;
+    .slide-index {
+      background-image: url('img/index.png');
     }
 
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
-
-    body {
-      font-family: 'Segoe UI', sans-serif;
-    }
-
-    .hero {
-      background-image: url('https://cdn.pixabay.com/photo/2017/02/22/17/06/fruits-2085066_1280.jpg');
-      background-size: cover;
-      background-position: center;
-      height: 400px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: white;
-      text-shadow: 1px 1px 3px black;
-      margin-top: 80px; /* espacio solo cuando hay navbar */
-    }
-
-    .hero h1 {
-      font-size: 48px;
-      background-color: rgba(76, 175, 80, 0.7);
-      padding: 20px;
-      border-radius: 10px;
-    }
-
-    .productos {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      padding: 40px;
-      background-color: var(--amarillo);
-    }
-
-    .producto {
-      width: 250px;
-      background-color: white;
-      border: 3px solid var(--naranja);
-      margin: 20px;
-      border-radius: 12px;
-      overflow: hidden;
-      box-shadow: 0 0 10px rgba(0,0,0,0.1);
-      transition: transform 0.3s;
-    }
-
-    .producto:hover {
-      transform: scale(1.05);
-    }
-
-    .producto img {
-      width: 100%;
-      height: 180px;
-      object-fit: cover;
-    }
-
-    .producto h3 {
-      text-align: center;
-      padding: 10px;
-    }
-
-    /* Controles y botón estéticos */
-    .controles {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 10px;
-      padding: 12px;
-      flex-wrap: wrap;
-    }
-    .controles select,
-    .controles input[type="number"] {
-      padding: 8px 10px;
-      border: 1px solid #ddd;
-      border-radius: 8px;
-      font-size: 14px;
-    }
-    .btn-add {
-      background: linear-gradient(135deg, #4CAF50, #45a049);
-      color: #fff;
-      border: none;
-      padding: 10px 14px;
-      border-radius: 999px;
-      cursor: pointer;
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      box-shadow: 0 4px 10px rgba(76, 175, 80, 0.3);
-      transition: transform 0.15s ease, box-shadow 0.15s ease, opacity 0.15s ease;
-    }
-    .btn-add:hover {
-      transform: translateY(-1px);
-      box-shadow: 0 6px 14px rgba(76, 175, 80, 0.35);
-    }
-    .btn-add:active {
-      transform: translateY(0);
-      opacity: 0.9;
-    }
-
-    footer {
-      background-color: var(--verde);
-      color: white;
-      text-align: center;
-      padding: 20px;
+    .slide-combo {
+      background-image: url('img/productos/combo-frutas.jpg');
     }
   </style>
 </head>
+
 <body>
+  <header id="navbar-container"></header>
 
- 
+  <main>
+    <!-- Carousel Hero -->
+    <section class="hero-carousel">
+      <div class="carousel-container" id="main-carousel">
+        <div class="carousel-slide active slide-index">
+          <div class="slide-content">
+            <h1 class="text-clip">Frutas y Verduras Frescas Directas del Campo</h1>
+            <p>Lo mejor de nuestra tierra en tu mesa</p>
+            <a href="productos.html" class="btn-primary">Ver Catálogo</a>
+          </div>
+        </div>
+        <div class="carousel-slide slide-combo">
+          <div class="slide-content">
+            <h1 class="text-clip">Sabor y Salud en cada bocado</h1>
+            <p>Frutas de temporada seleccionadas para ti</p>
+            <a href="productos.html" class="btn-primary">Ver Ofertas</a>
+          </div>
+        </div>
+      </div>
+      <button class="carousel-nav prev" onclick="moveSlide(-1)">❮</button>
+      <button class="carousel-nav next" onclick="moveSlide(1)">❯</button>
+    </section>
 
-  <!-- Hero -->
-  <section class="hero">
-    <h1>Frutas y Verduras Frescas Directas del Campo</h1>
-  </section>
-
-  <!-- Productos -->
-  <section class="productos" id="productos-list">
-    <!-- Los productos se cargarán aquí dinámicamente -->
-  </section>
+    <!-- Productos Destacados -->
+    <section class="featured-section">
+      <div class="container">
+        <div class="section-header">
+          <h2>Productos Destacados</h2>
+          <p>Frescura garantizada cada día</p>
+        </div>
+        <div class="producto-grid" id="productos-list">
+          <!-- Los productos se cargarán aquí dinámicamente -->
+        </div>
+      </div>
+    </section>
+  </main>
 
   <footer>
-    © 2025 Legumbrería Natural. Todos los derechos reservados.
+    <div class="container">
+      <p>© 2025 Legombrería JM. Todos los derechos reservados.</p>
+    </div>
   </footer>
 
-  
   <script>
-    const token = localStorage.getItem('token');
-    const bienvenida = document.getElementById('bienvenida');
-    const menu = document.getElementById('menu');
+    // Configuración y lógica de Carrusel
+    let currentSlide = 0;
+    const slides = document.querySelectorAll('.carousel-slide');
 
-    if (token) {
-      fetch('/usuario/perfil', {
-        headers: {
-          Authorization: 'Bearer ' + token
-        }
-      })
-      .then(res => res.json())
-      .then(data => {
-        if (bienvenida) bienvenida.textContent = `Hola, ${data.nombres}`;
-        if (menu) {
-          menu.innerHTML = `
-            <a href="perfil.html">Perfil</a>
-            <a href="#" onclick="cerrarSesion()">Salir</a>
-          `;
-        }
-      })
-      .catch(() => {
-        localStorage.removeItem('token');
-      });
+    function showSlide(index) {
+      if (slides.length === 0) return;
+      slides.forEach(s => s.classList.remove('active'));
+      currentSlide = (index + slides.length) % slides.length;
+      slides[currentSlide].classList.add('active');
     }
 
-    function cerrarSesion() {
-      localStorage.removeItem('token');
-      window.location.href = 'index.html';
+    function moveSlide(step) {
+      showSlide(currentSlide + step);
     }
 
-    // Cargar productos dinámicamente con controles y botón estilizado
+    // Auto carrusel Random cada 4 segundos
+    setInterval(() => {
+      if (slides.length <= 1) return;
+      let next;
+      do {
+        next = Math.floor(Math.random() * slides.length);
+      } while (next === currentSlide); // Evita repetir la misma consecutiva si hay + de 1
+      showSlide(next);
+    }, 4000);
+
+    // Cargar productos dinámicamente (Sincronizado con productos.html)
+    function normalizarNombre(nombre) {
+      return nombre.toLowerCase()
+        .normalize("NFD").replace(/[\u0300-\u036f]/g, "")
+        .replace(/\s+/g, '-')
+        .replace(/[^\w-]/g, '');
+    }
+
+    const imagenesCategoria = {
+      'Legumbres': 'img/productos/combo-vergetales.jpg',
+      'Frutas': 'img/productos/combo-frutas.jpg',
+      'Hortalizas': 'img/productos/combo-vergetales.jpg',
+      'Cereales': 'https://images.unsplash.com/photo-1586201375761-83865001e31c?q=80&w=400&h=300&auto=format&fit=crop',
+      'Hierbas': 'https://images.unsplash.com/photo-1596715364265-55577c7ec524?q=80&w=400&h=300&auto=format&fit=crop',
+      'default': 'https://images.unsplash.com/photo-1542838132-92c53300491e?q=80&w=400&h=300&auto=format&fit=crop'
+    };
+
     fetch('/legumbreria/productos')
-      .then(res => {
-        if (!res.ok) throw new Error('No se pudo cargar productos');
-        return res.json();
-      })
+      .then(res => res.json())
       .then(productos => {
         const contenedor = document.getElementById('productos-list');
         contenedor.innerHTML = '';
 
-        (productos || []).forEach(p => {
-          const nombre = p.descripcion || p.nombre || 'Producto';
-          const imagen = (p.imagen && String(p.imagen).trim()) ? p.imagen : '/img/tomate.jpg';
-          const precioPorKg = Number((p.precioVentaMenor != null ? p.precioVentaMenor : p.precio) || 0);
-          const disponible = p.cantidad != null ? p.cantidad : (p.stock || '');
-          const estaAgotado = disponible <= 0;
-          const mensajeStock = estaAgotado ? '<strong style="color: red;">Agotado</strong>' : `Disponible: ${disponible}`;
+        // Mostrar 8 productos aleatorios en stock para mantener variedad
+        const destacados = (productos || []).filter(p => p.stock > 0)
+          .sort(() => 0.5 - Math.random())
+          .slice(0, 8);
+
+        destacados.forEach(p => {
+          const nombre = p.nombre || 'Producto';
+          const descripcion = p.descripcion || 'Fresco y natural';
+          const precio = p.precio || 0;
+          const categoriasText = p.categorias || 'Varias';
+
+          const nombreNormal = normalizarNombre(nombre);
+          const imagenLocal = `img/productos/${nombreNormal}.jpg`;
+          const imagen = imagenLocal; // El fallback se maneja con onerror en CSS o JS
 
           const card = document.createElement('div');
-          card.className = 'producto';
+          card.className = 'producto-card';
           card.innerHTML = `
-            <img src="${imagen}" alt="${nombre}">
-            <h3>${nombre}</h3>
-            <div style=\"padding: 0 12px 10px; text-align:center; color:#555;\">
-              <div>Precio: <strong>$${precioPorKg ? precioPorKg : '—'}</strong> <small>/ kg</small></div>
-              <div>${mensajeStock}</div>
+            <div class="card-img">
+              <img src="${imagen}" alt="${nombre}" onerror="this.src='${imagenesCategoria[categoriasText] || imagenesCategoria['default']}'">
+              <span class="badge">${categoriasText}</span>
             </div>
-            <div class=\"controles\">
-              <select class=\"unidad\" ${estaAgotado ? 'disabled' : ''}>
-                <option value=\"kg\">kg</option>
-                <option value=\"lb\">lb</option>
-              </select>
-              <input type=\"number\" class=\"cantidad\" min=\"0.1\" step=\"0.1\" value=\"1\" ${estaAgotado ? 'disabled' : ''} />
-              <button class=\"btn-add\" ${estaAgotado ? 'disabled' : ''}><span>🛒</span> Agregar al carrito</button>
+            <div class="card-body">
+              <h3>${nombre}</h3>
+              <p>${descripcion}</p>
+              <div class="card-footer">
+                <span class="price">$${precio}</span>
+                <div class="actions">
+                  <input type="number" class="cantidad-input" min="0.1" step="0.1" value="1">
+                  <span class="unid-label">${p.tipo_venta || ''}</span>
+                  <button class="btn-add">Añadir</button>
+                </div>
+              </div>
             </div>
           `;
+
+          const btnAdd = card.querySelector('.btn-add');
+          const inputCant = card.querySelector('.cantidad-input');
+
+          btnAdd.onclick = () => {
+            const cant = parseFloat(inputCant.value) || 1;
+            agregarAlCarrito(p, cant, btnAdd);
+          };
+
           contenedor.appendChild(card);
-
-          const btn = card.querySelector('.btn-add');
-          const selUnidad = card.querySelector('.unidad');
-          const inpCantidad = card.querySelector('.cantidad');
-          if (estaAgotado) {
-            // Si el producto está agotado, no añadimos el evento click al botón
-            btn.removeEventListener('click', () => {});
-          } else {
-            btn.addEventListener('click', () => {
-              const unidadSel = selUnidad.value;
-              const cantidadSel = parseFloat(inpCantidad.value || '0');
-              if (!cantidadSel || cantidadSel <= 0) {
-                alert('Ingresa una cantidad válida.');
-                return;
-              }
-              if (!precioPorKg) {
-                alert('Producto sin precio.');
-                return;
-              }
-              const POUNDS_TO_KG = 0.45359237;
-              const cantidadKg = unidadSel === 'lb' ? cantidadSel * POUNDS_TO_KG : cantidadSel;
-              const subtotal = cantidadKg * precioPorKg;
-
-              const item = {
-                idProducto: p.idProducto || null,
-                nombre,
-                imagen,
-                unidad: unidadSel,
-                cantidad: cantidadSel,
-                cantidadKg,
-                precioPorKg,
-                subtotal
-              };
-
-              try {
-                const carrito = JSON.parse(localStorage.getItem('carrito') || '[]');
-                carrito.push(item);
-                localStorage.setItem('carrito', JSON.stringify(carrito));
-                btn.innerHTML = '<span>✅</span> Agregado!';
-                setTimeout(() => { btn.innerHTML = '<span>🛒</span> Agregar al carrito'; }, 1200);
-              } catch (e) {
-                alert('No se pudo agregar al carrito.');
-              }
-            });
-          }
         });
       })
-      .catch(() => {
-        // Manejo de error opcional
-      });
-  </script>
+      .catch(err => console.error('Error cargando productos:', err));
 
-  <script src="navbar.js"></script>
+    function agregarAlCarrito(p, cant, btn) {
+      const item = {
+        idproducto: p.idproductos,
+        nombre: p.nombre,
+        cantidad: cant,
+        tipoventa: p.tipo_venta,
+        precio: p.precio,
+        subtotal: p.precio * cant
+      };
+
+      const carrito = JSON.parse(localStorage.getItem('carrito') || '[]');
+      carrito.push(item);
+      localStorage.setItem('carrito', JSON.stringify(carrito));
+
+      if (btn) {
+        btn.textContent = '✓';
+        btn.classList.add('success');
+        setTimeout(() => {
+          btn.textContent = 'Añadir';
+          btn.classList.remove('success');
+        }, 1000);
+      }
+    }
+  </script>
 </body>
+
 </html>
