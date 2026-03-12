@@ -287,7 +287,65 @@ const navbarHTML = `
         padding: 2px 5px;
         border-radius: 50%;
         display: none;
-        border: 2px solid #27ae60; /* Para que resalte sobre el fondo */
+        border: 2px solid #27ae60;
+      }
+
+      /* Mobile Responsive Styles */
+      .hamburger {
+        display: none;
+        cursor: pointer;
+        font-size: 24px;
+        color: white;
+        background: none;
+        border: none;
+        padding: 10px;
+        z-index: 1001;
+      }
+
+      @media (max-width: 768px) {
+        .navbar {
+          padding: 10px 15px;
+        }
+        .navbar .search-bar, 
+        .navbar #bienvenida {
+          display: none;
+        }
+        .hamburger {
+          display: block;
+        }
+        .nav-right {
+          position: fixed;
+          top: 0;
+          right: -100%;
+          width: 70%;
+          height: 100vh;
+          background: #1a4d2e;
+          flex-direction: column;
+          padding: 80px 20px 20px;
+          transition: 0.3s ease;
+          display: flex !important;
+          box-shadow: -5px 0 15px rgba(0,0,0,0.3);
+        }
+        .nav-right.active {
+          right: 0;
+        }
+        .nav-right a {
+          margin: 15px 0 !important;
+          font-size: 20px;
+          border-bottom: 1px solid rgba(255,255,255,0.1);
+          padding-bottom: 10px;
+          display: block;
+        }
+        .navbar .logo {
+          font-size: 18px;
+        }
+        .navbar .logo img {
+          height: 30px;
+        }
+        .notif-bell-container {
+          margin-left: auto;
+          margin-right: 10px;
+        }
       }
     </style>
     <div class="navbar" id="navbar">
@@ -311,6 +369,9 @@ const navbarHTML = `
         <span class="notif-bell-icon">🔔</span>
         <span class="notif-bell-badge" id="navbarNotifBadge">0</span>
       </div>
+
+      <!-- Hamburger Menu (Solo móvil) -->
+      <button class="hamburger" id="hamburgerBtn">☰</button>
       <div class="options-menu" id="optionsMenu">
         <div class="options-toggle" id="optionsToggle">
           <div id="navIconContainer">
@@ -367,6 +428,27 @@ function updateNavAvatar() {
 
 // Inicializar avatar
 setTimeout(updateNavAvatar, 50);
+
+// Lógica del menú hamburguesa
+setTimeout(() => {
+  const hamburgerBtn = document.getElementById('hamburgerBtn');
+  const menu = document.getElementById('menu');
+  
+  if (hamburgerBtn && menu) {
+    hamburgerBtn.addEventListener('click', () => {
+      menu.classList.toggle('active');
+      hamburgerBtn.textContent = menu.classList.contains('active') ? '✕' : '☰';
+    });
+
+    // Cerrar menú al hacer clic en un enlace (móvil)
+    menu.addEventListener('click', (e) => {
+      if (e.target.tagName === 'A') {
+        menu.classList.remove('active');
+        hamburgerBtn.textContent = '☰';
+      }
+    });
+  }
+}, 100);
 
 setTimeout(() => {
   const token = localStorage.getItem('token');
