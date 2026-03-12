@@ -66,6 +66,11 @@ exports.obtenerProductos = async (req, res) => {
 
 exports.obtenerProductoPorId = async (req, res) => {
   const { id } = req.params;
+
+  if (isNaN(parseInt(id))) {
+    return res.status(400).json({ error: 'ID de producto inválido' });
+  }
+
   try {
     const producto = await ProductoModelo.obtenerProductoPorId(id);
     if (!producto) {
@@ -80,6 +85,11 @@ exports.obtenerProductoPorId = async (req, res) => {
 
 exports.actualizarProducto = async (req, res) => {
   const { id } = req.params;
+
+  if (isNaN(parseInt(id))) {
+    return res.status(400).json({ error: 'ID de producto inválido' });
+  }
+
   const { nombre, descripcion, tipo_venta, precio, cantidad, idcategoria } = req.body;
 
   try {
@@ -108,6 +118,10 @@ exports.actualizarProducto = async (req, res) => {
 
 exports.eliminarProducto = async (req, res) => {
   const { id } = req.params;
+
+  if (isNaN(parseInt(id))) {
+    return res.status(400).json({ error: 'ID de producto inválido' });
+  }
 
   try {
     const producto = await ProductoModelo.obtenerProductoPorId(id);

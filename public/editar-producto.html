@@ -111,9 +111,10 @@
             }
 
             // Cargar datos del producto
-            try {
-                const baseUrl = window.location.origin;
-                const res = await fetch(`${baseUrl}/legumbreria/productos/${productId}`);
+            if (productId && productId !== 'null') {
+                try {
+                    const baseUrl = window.location.origin;
+                    const res = await fetch(`${baseUrl}/legumbreria/productos/${productId}`);
                 const product = await res.json();
 
                 if (!res.ok) throw new Error(product.error || 'Error al cargar producto');
@@ -132,6 +133,7 @@
                     console.error('Error:', error);
                     mostrarMensaje('❌ Error: ' + error.message, 'error');
                 }
+            }
             }
 
             // Envío del formulario (ACTUALIZAR)

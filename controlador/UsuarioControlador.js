@@ -154,6 +154,7 @@ class UsuarioControlador {
 
       // Comentado: envío de correo al iniciar sesión
       // Si el usuario existe y las credenciales son correctas
+      console.timeEnd('Login_Total');
       res.json({
         mensaje: 'Inicio de sesión exitoso',
         usuario: {
