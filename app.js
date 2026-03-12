@@ -13,6 +13,10 @@ const ventaVista = require('./vista/VentaVista');
 const gestionVista = require('./vista/GestionVista');
 const jwt = require('jsonwebtoken');
 
+// 🚀 HEALTH CHECK (DEBE IR ANTES DE LOS ESTÁTICOS)
+app.get("/health", (req, res) => res.send("🍇 Sistema Legumbrería v2.1 Operativo (Sync: " + new Date().getTime() + ")"));
+app.get("/api/ping", (req, res) => res.json({ status: "alive", time: new Date().getTime() }));
+
 // Logger global para ver quién intenta conectar
 app.use((req, res, next) => {
   console.log(`📡 [${new Date().toLocaleTimeString()}] Recibida solicitud: ${req.method} ${req.url} desde ${req.ip}`);
@@ -55,9 +59,7 @@ function autenticarToken(req, res, next) {
   });
 }
 
-// Prueba de conexion y salud
-app.get("/", (req, res) => res.send("🍇 Sistema Legumbrería Operativo"));
-app.get("/api/prueba", (req, res) => res.json({ mensaje: "¡Conexión Exitosa!" }));
+// Health check routes moved to top
 
 // Ruta para obtener el rol del usuario autenticado
 app.get('/mi-rol', autenticarToken, async (req, res) => {
