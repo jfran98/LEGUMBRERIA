@@ -57,8 +57,14 @@
                         <div class="form-group">
                             <label>Tiempo Extra</label>
                             <div class="flex-gap">
-                                <input type="number" id="input-extras-horas" value="0" min="0" max="12" class="form-control flex-1" placeholder="Horas">
-                                <input type="number" id="input-extras-minutos" value="0" min="0" max="59" class="form-control flex-1" placeholder="Minutos">
+                                <div class="flex-1">
+                                    <small style="display: block; font-weight: bold; color: var(--secondary); margin-bottom: 4px;">Horas</small>
+                                    <input type="number" id="input-extras-horas" value="0" min="0" max="12" class="form-control" placeholder="0">
+                                </div>
+                                <div class="flex-1">
+                                    <small style="display: block; font-weight: bold; color: var(--secondary); margin-bottom: 4px;">Minutos</small>
+                                    <input type="number" id="input-extras-minutos" value="0" min="0" max="59" class="form-control" placeholder="0">
+                                </div>
                             </div>
                         </div>
                         <button type="submit" class="btn-nomina btn-primary w-full bg-secondary">
