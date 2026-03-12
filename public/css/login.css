@@ -97,3 +97,20 @@ body {
     transform: translateY(0);
   }
 }
+
+/* Responsividad para móviles */
+@media (max-width: 480px) {
+    body {
+        padding: 20px;
+        align-items: center; /* Mantener centrado vertical si cabe */
+    }
+    .login-container {
+        padding: 1.5rem;
+        border-radius: 12px;
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+    }
+    .login-container h2 {
+        font-size: 1.5rem;
+        margin-bottom: 1.2rem;
+    }
+}

@@ -304,20 +304,22 @@ const navbarHTML = `
 
       @media (max-width: 768px) {
         .navbar {
-          padding: 10px 15px;
+          padding: 8px 15px !important;
+          height: auto !important;
         }
         .navbar .search-bar, 
         .navbar #bienvenida {
-          display: none;
+          display: none !important;
         }
         .hamburger {
-          display: block;
+          display: block !important;
         }
         .nav-right {
           position: fixed;
           top: 0;
           right: -100%;
-          width: 70%;
+          width: 75% !important;
+          max-width: 300px;
           height: 100vh;
           background: #1a4d2e;
           flex-direction: column;
@@ -327,24 +329,33 @@ const navbarHTML = `
           box-shadow: -5px 0 15px rgba(0,0,0,0.3);
         }
         .nav-right.active {
-          right: 0;
+          right: 0 !important;
         }
         .nav-right a {
-          margin: 15px 0 !important;
-          font-size: 20px;
+          margin: 12px 0 !important;
+          font-size: 18px !important;
           border-bottom: 1px solid rgba(255,255,255,0.1);
-          padding-bottom: 10px;
-          display: block;
+          padding-bottom: 8px;
+          display: block !important;
+          width: 100%;
         }
         .navbar .logo {
-          font-size: 18px;
+          font-size: 16px !important;
+          margin-right: 10px !important;
         }
         .navbar .logo img {
-          height: 30px;
+          height: 28px !important;
         }
         .notif-bell-container {
           margin-left: auto;
-          margin-right: 10px;
+          margin-right: 15px;
+        }
+      }
+
+      /* Extra small devices */
+      @media (max-width: 360px) {
+        .navbar .logo span {
+          display: none; /* Solo logo en pantallas minúsculas */
         }
       }
     </style>
