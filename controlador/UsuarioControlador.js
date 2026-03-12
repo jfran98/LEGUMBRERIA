@@ -137,7 +137,10 @@ class UsuarioControlador {
     }
 
     try {
+      console.time('Login_Total');
+      console.time('DB_ValidarCredenciales');
       const resultado = await modelo.validarCredenciales(email, password);
+      console.timeEnd('DB_ValidarCredenciales');
 
       if (!resultado) {
         return res.status(401).json({
@@ -164,6 +167,7 @@ class UsuarioControlador {
       });
 
     } catch (err) {
+      console.timeEnd('Login_Total');
       // Manejar específicamente el error de cuenta bloqueada
       if (err.message.includes('bloqueada')) {
         return res.status(403).json({
