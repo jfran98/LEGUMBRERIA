@@ -1,5 +1,6 @@
 const express = require('express');
 console.log('🚀 [SISTEMA] Iniciando Versión 2.0 (Sin Bloqueo de Correos)');
+// Force-sync-deployment: 2026-03-12
 require('dotenv').config();
 const cors = require('cors');
 const rutaUsuario = require('./vista/UsuarioVista');//crea todas las rutas del cliente
