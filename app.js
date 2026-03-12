@@ -32,7 +32,6 @@ app.use(cors({
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, 'public')));
-app.use(express.static('public')); // si guardas el HTML ahí
 app.use('/', require('./vista/UsuarioVista'));
 app.use('/venta', ventaVista);
 app.use('/gestion', gestionVista);
@@ -70,7 +69,7 @@ app.get('/mi-rol', autenticarToken, async (req, res) => {
   }
   // Si necesitas buscar el usuario en la base de datos:
   try {
-    const usuarioBD = await modelo.findOne({ where: { correo: req.usuario.correo } });
+    const usuarioBD = await modelo.buscaCorreo(req.usuario.correo);
     if (!usuarioBD) return res.status(404).json({ mensaje: 'Usuario no encontrado' });
     return res.json({ rol: usuarioBD.rol });
   } catch (error) {
