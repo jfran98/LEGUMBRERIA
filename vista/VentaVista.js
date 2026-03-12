@@ -350,47 +350,6 @@ router.get('/mis-facturas', jwtAuth.verificarToken, async (req, res) => {
   }
 });
 
-const enviarCorreo = require('../utils/mailer');
-const { plantillaFactura } = require('../utils/plantillasCorreo');
-
-// Enviar factura por correo
-router.post('/factura/:id/enviar-correo', jwtAuth.verificarToken, async (req, res) => {
-  const idfactura = Number(req.params.id || 0);
-  const usuarioDecoded = req.usuario;
-
-  try {
-    const facturas = util.normalize(await conexion.query(
-      `SELECT f.idfactura, f.fecha, COALESCE(e.nombre, 'pendiente') as estado, f.metodo_pago as metodopago, f.total,
-              u.idusuario, u.documento, u.nombres, u.correo, u.telefono
-       FROM public.factura f
-       JOIN public.usuarios u ON u.idusuario = f.idusuario
-       LEFT JOIN public.estado e ON e.idestado = f.idestado
-       WHERE f.idfactura = ?`,
-      [idfactura]
-    ));
-
-    if (!facturas.length) return res.status(404).json({ mensaje: 'Factura no encontrada' });
-    const factura = facturas[0];
-
-    if (usuarioDecoded.rol === 'usuario' && factura.documento !== usuarioDecoded.documento) {
-      return res.status(403).json({ mensaje: 'Sin permisos' });
-    }
-
-    const detalles = util.normalize(await conexion.query(
-      `SELECT d.stock AS cantidad, d.precio AS preciounitario, d.subtotal, p.nombre
-       FROM public.detalles d
-       JOIN public.productos p ON p.idproductos = d.idproductos
-       WHERE d.idfactura = ?`,
-      [idfactura]
-    ));
-
-    const htmlEmail = plantillaFactura(factura, factura, detalles);
-    await enviarCorreo(factura.correo, `Detalle de tu Factura #${idfactura}`, htmlEmail);
-
-    return res.json({ ok: true });
-  } catch (err) {
-    return res.status(500).json({ mensaje: 'Error al enviar correo' });
-  }
-});
+module.exports = router;
 
 module.exports = router;
