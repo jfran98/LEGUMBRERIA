@@ -325,12 +325,6 @@ const navbarHTML = `
           <!-- Los enlaces administrativos se insertarán aquí dinámicamente -->
           
           <div class="divider"></div>
-
-          <div class="section-title">Herramientas</div>
-          <a href="#" onclick="toggleDarkMode()">🌙 Modo Oscuro</a>
-          <a href="#" id="notif-link" onclick="showNotifications(event)">🔔 Notificaciones <span class="notif-badge" id="notif-count">0</span></a>
-          
-          <div class="divider"></div>
           
           <div class="section-title">Información</div>
           <a href="preguntas-frecuentes.html">❓ Preguntas frecuentes</a>

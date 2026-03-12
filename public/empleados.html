@@ -46,16 +46,17 @@
                             <label>Fecha</label>
                             <input type="date" name="fecha" required class="form-control" title="Fecha del Turno">
                         </div>
-                        <div class="flex-gap">
-                            <div class="form-group flex-1">
-                                <label>Hora Inicio</label>
-                                <input type="time" name="hora_inicio" required class="form-control"
-                                    title="Hora de Inicio">
-                            </div>
-                            <div class="form-group flex-1">
-                                <label>Hora Fin</label>
-                                <input type="time" name="hora_fin" required class="form-control" title="Hora de Fin">
-                            </div>
+                        <div class="form-group">
+                            <label>Turno</label>
+                            <select id="select-turno" class="form-control" required title="Seleccionar Turno">
+                                <option value="">Seleccione turno...</option>
+                                <option value="02:00|10:00">Mañana (2:00 AM - 10:00 AM)</option>
+                                <option value="08:00|16:00">Tarde (8:00 AM - 4:00 PM)</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Horas Extras</label>
+                            <input type="number" id="input-extras" value="0" min="0" max="12" step="0.5" class="form-control" title="Horas Extras trabajadas">
                         </div>
                         <button type="submit" class="btn-nomina btn-primary w-full bg-secondary">
                             <i class="fas fa-clock"></i> Registrar Jornada
@@ -358,6 +359,27 @@
             e.preventDefault();
             const formData = new FormData(e.target);
             const payload = Object.fromEntries(formData);
+
+            // Obtener datos del turno seleccionado
+            const turnoSelect = document.getElementById('select-turno');
+            const [hInicio, hFinBase] = turnoSelect.value.split('|');
+            const horasExtras = parseFloat(document.getElementById('input-extras').value) || 0;
+
+            if (!hInicio) {
+                mostrarMensaje('Debe seleccionar un turno', 'error');
+                return;
+            }
+
+            // Calcular hora de fin real sumando las extras
+            let [hFin, mFin] = hFinBase.split(':').map(Number);
+            let totalMinutosFin = (hFin * 60) + mFin + (horasExtras * 60);
+            
+            let finalH = Math.floor(totalMinutosFin / 60) % 24;
+            let finalM = totalMinutosFin % 60;
+            const horaFinReal = `${String(finalH).padStart(2, '0')}:${String(finalM).padStart(2, '0')}`;
+
+            payload.hora_inicio = hInicio;
+            payload.hora_fin = horaFinReal;
 
             // Si el select está deshabilitado (caso empleado), FormData no lo captura
             const select = document.getElementById('select-empleados');
