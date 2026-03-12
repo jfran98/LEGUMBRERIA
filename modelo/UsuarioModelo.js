@@ -6,8 +6,8 @@ const dbService = require('./bd/Conexion');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 
-// Clave secreta para firmar el token - En producción, esto debería estar en variables de entorno
-const JWT_SECRET = '12345@jJ';
+// Clave secreta para firmar el token
+const JWT_SECRET = process.env.JWT_SECRET || '12345@jJ';
 
 class UsuarioModelo {
   // funcion para crear nuevos clientes

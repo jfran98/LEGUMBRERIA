@@ -3,7 +3,7 @@ console.log('🚀 [SISTEMA] Iniciando Versión 2.0 (Sin Bloqueo de Correos)');
 // Force-sync-deployment: 2026-03-12
 require('dotenv').config();
 const cors = require('cors');
-const rutaUsuario = require('./vista/UsuarioVista');//crea todas las rutas del cliente
+const rutaUsuario = require('./vista/UsuarioVista');
 const app = express();
 const PORT = process.env.PORT || 4545;
 const { UsuarioModelo: modelo } = require('./modelo/UsuarioModelo');
@@ -41,7 +41,7 @@ app.use('/', require('./vista/EmpleadoVista'));
 
 
 // Middleware para autenticar el token JWT
-const claveSecreta = process.env.JWT_SECRET || 'tu_clave_secreta';
+const { JWT_SECRET: claveSecreta } = require('./modelo/UsuarioModelo');
 
 function autenticarToken(req, res, next) {
   const authHeader = req.headers['authorization'];
@@ -55,11 +55,9 @@ function autenticarToken(req, res, next) {
   });
 }
 
-// prueba de conexion movil
-app.get("/api/prueba", (req, res) => {
-  console.log("📢 Intento de conexión desde dispositivo móvil detectado");
-  res.json({ mensaje: "¡Conexión Exitosa con el Backend!" });
-});
+// Prueba de conexion y salud
+app.get("/", (req, res) => res.send("🍇 Sistema Legumbrería Operativo"));
+app.get("/api/prueba", (req, res) => res.json({ mensaje: "¡Conexión Exitosa!" }));
 
 // Ruta para obtener el rol del usuario autenticado
 app.get('/mi-rol', autenticarToken, async (req, res) => {
@@ -84,11 +82,7 @@ app.get('/mi-rol', autenticarToken, async (req, res) => {
 //app.use('/', rutaadmin);
 // Iniciar el servidor
 app.listen(PORT, "0.0.0.0", () => {
-  console.log("=================================");
-  console.log(`🚀 Servidor corriendo en:`);
-  console.log(`👉 http://localhost:${PORT}`);
-  console.log(`👉 http://192.168.1.23:${PORT}`);
-  console.log("=================================");
+  console.log(`✅ Servidor en puerto ${PORT}`);
 });
 
 
