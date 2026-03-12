@@ -7,6 +7,7 @@
     <title>Editar Producto - Legumbrería JM</title>
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="css/editar-producto.css">
+    <script src="js/role-verifier.js"></script>
 </head>
 
 <body>
@@ -71,7 +72,7 @@
             <div class="form-actions">
                 <button type="submit" class="btn-submit" id="btnSubmit">Guardar Cambios</button>
                 <button type="button" class="btn-delete" id="btnDelete">Eliminar Producto</button>
-                <a href="gestionproop.html" class="btn-cancel">Cancelar</a>
+                <a href="#" class="btn-cancel" id="btnCancelar">Cancelar</a>
             </div>
 
             <div id="mensaje" class="mensaje"></div>
@@ -93,6 +94,19 @@
     <script src="navbar.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', async () => {
+            // Verificación de roles
+            if (!roleVerifier.init('editar-producto.html')) {
+                return; // Redirigido por RoleVerifier
+            }
+
+            const role = roleVerifier.getCurrentUser()?.rol || 'usuario';
+
+            // Configurar botón cancelar
+            const btnCancelar = document.getElementById('btnCancelar');
+            if (btnCancelar) {
+                btnCancelar.href = role === 'gerente' ? 'gestionproop.html' : 'editar-producto.html';
+            }
+
             const form = document.getElementById('formEditarProducto');
             const mensajeDiv = document.getElementById('mensaje');
             const btnSubmit = document.getElementById('btnSubmit');
@@ -164,7 +178,7 @@
                     mostrarMensaje('✅ Producto actualizado correctamente!', 'success');
 
                     setTimeout(() => {
-                        window.location.href = 'gestionproop.html';
+                        window.location.href = role === 'gerente' ? 'gestionproop.html' : 'editar-producto.html';
                     }, 1500);
 
                 } catch (error) {
@@ -219,7 +233,7 @@
                     mostrarMensaje('🗑️ Producto eliminado correctamente.', 'success');
 
                     setTimeout(() => {
-                        window.location.href = 'gestionproop.html';
+                        window.location.href = role === 'gerente' ? 'gestionproop.html' : 'editar-producto.html';
                     }, 1500);
                 } catch (error) {
                     console.error('Error al eliminar producto:', error);

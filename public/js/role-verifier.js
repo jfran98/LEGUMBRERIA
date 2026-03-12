@@ -10,6 +10,7 @@ class RoleVerifier {
             'gestionproop.html': ['gerente'],
             'pedidos.html': ['gerente', 'empleado'],
             'formulario-productos.html': ['gerente', 'empleado'],
+            'editar-producto.html': ['gerente', 'empleado'],
             'empleados.html': ['gerente', 'empleado']
         };
     }
