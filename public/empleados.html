@@ -55,8 +55,11 @@
                             </select>
                         </div>
                         <div class="form-group">
-                            <label>Horas Extras</label>
-                            <input type="number" id="input-extras" value="0" min="0" max="12" step="0.5" class="form-control" title="Horas Extras trabajadas">
+                            <label>Tiempo Extra</label>
+                            <div class="flex-gap">
+                                <input type="number" id="input-extras-horas" value="0" min="0" max="12" class="form-control flex-1" placeholder="Horas">
+                                <input type="number" id="input-extras-minutos" value="0" min="0" max="59" class="form-control flex-1" placeholder="Minutos">
+                            </div>
                         </div>
                         <button type="submit" class="btn-nomina btn-primary w-full bg-secondary">
                             <i class="fas fa-clock"></i> Registrar Jornada
@@ -363,16 +366,17 @@
             // Obtener datos del turno seleccionado
             const turnoSelect = document.getElementById('select-turno');
             const [hInicio, hFinBase] = turnoSelect.value.split('|');
-            const horasExtras = parseFloat(document.getElementById('input-extras').value) || 0;
+            const extrasHoras = parseInt(document.getElementById('input-extras-horas').value) || 0;
+            const extrasMinutos = parseInt(document.getElementById('input-extras-minutos').value) || 0;
 
             if (!hInicio) {
                 mostrarMensaje('Debe seleccionar un turno', 'error');
                 return;
             }
 
-            // Calcular hora de fin real sumando las extras
+            // Calcular hora de fin real sumando las extras (Convertimos todo a minutos)
             let [hFin, mFin] = hFinBase.split(':').map(Number);
-            let totalMinutosFin = (hFin * 60) + mFin + (horasExtras * 60);
+            let totalMinutosFin = (hFin * 60) + mFin + (extrasHoras * 60) + extrasMinutos;
             
             let finalH = Math.floor(totalMinutosFin / 60) % 24;
             let finalM = totalMinutosFin % 60;
