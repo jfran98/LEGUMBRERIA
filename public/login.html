@@ -48,6 +48,7 @@
           localStorage.setItem('token', resultado.token);
           mensaje.style.color = 'green';
           mensaje.textContent = 'Inicio de sesión exitoso.';
+          // Esperar exactamente 1 segundo antes de redirigir
           setTimeout(() => window.location.href = 'perfil.html', 1000);
         } else {
           btn.disabled = false;
