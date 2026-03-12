@@ -448,7 +448,6 @@ setTimeout(() => {
     menu.innerHTML = `
         <a href="index.html">Inicio</a>
         <a href="productos.html">Productos</a>
-        <a href="registro.html">Registrarse</a>
         <a href="login.html">Iniciar sesión</a>
       `;
   }
