@@ -4,8 +4,6 @@ con la funcion crearCliente se cumple el requisito rf-01
 require('dotenv').config(); // Asegúrate de cargar las variables .env
 const jwt = require('jsonwebtoken');
 const { UsuarioModelo: modelo } = require('../modelo/UsuarioModelo');
-const enviarCorreoRegistro = require('../utils/mailer');
-const { plantillaRegistro } = require('../utils/plantillasCorreo');
 
 
 class UsuarioControlador {
@@ -55,18 +53,6 @@ class UsuarioControlador {
 
       // Generar el token JWT usando el método del modelo
       const token = await modelo.generarToken(nuevoUsuario);
-
-      // enviar correo de bienvenida (opcional, no bloquear si falla)
-      try {
-        await enviarCorreoRegistro(
-          email,
-          'Bienvenido a Legumbrería JM',
-          plantillaRegistro(name)
-        );
-      } catch (emailError) {
-        console.log('Error al enviar correo de bienvenida:', emailError.message);
-        // No bloquear el registro si falla el envío de correo
-      }
 
       res.status(201).json({
         mensaje: 'Usuario registrado exitosamente.',
@@ -164,17 +150,6 @@ class UsuarioControlador {
 
 
       // Comentado: envío de correo al iniciar sesión
-      try {
-        await enviarCorreoRegistro(
-          email,
-          'Inicio de sesión exitoso - Legumbrería JM',
-          `<h3>Hola ${resultado.usuario.nombres},</h3><p>Has iniciado sesión correctamente en tu cuenta. Si no fuiste tú, por favor comunícate con soporte.</p>`
-        );
-      } catch (emailError) {
-        console.log('Error al enviar correo de confirmación:', emailError.message);
-        // No bloquear el login si falla el envío de correo
-      }
-
       // Si el usuario existe y las credenciales son correctas
       res.json({
         mensaje: 'Inicio de sesión exitoso',
@@ -281,21 +256,6 @@ class UsuarioControlador {
 
       if (!nombres || !telefono || !correo) {
         return res.status(400).json({ error: 'Todos los campos son obligatorios' });
-      }
-
-      await modelo.actualizarPerfil(doc, nombres, telefono, correo);
-
-      // enviar correo de confirmación de actualización
-      try {
-        await enviarCorreoRegistro(
-          correo,
-          'Perfil actualizado - Legumbrería JM',
-          `<h3>Hola ${nombres},</h3><p>Tu perfil ha sido actualizado correctamente. Si no fuiste tú, por favor comunícate con soporte inmediatamente.</p><p>Gracias por confiar en Legumbrería JM 🥦</p>`
-        );
-        console.log('✅ Correo de confirmación de actualización enviado exitosamente');
-      } catch (emailError) {
-        console.log('❌ Error al enviar correo de confirmación:', emailError.message);
-        // No bloquear la actualización si falla el envío de correo
       }
 
       res.json({ mensaje: 'Perfil actualizado correctamente' });
