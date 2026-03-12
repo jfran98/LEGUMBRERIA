@@ -192,7 +192,7 @@ class AvatarManager {
         formData.append('avatar', blob, 'avatar.png');
 
         // Enviar al backend (ajusta la URL según tu API)
-        fetch('http://localhost:4545/usuario/avatar', {
+        fetch('/usuario/avatar', {
             method: 'POST',
             headers: {
                 'Authorization': 'Bearer ' + token

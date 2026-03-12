@@ -284,7 +284,7 @@
       }
 
       try {
-        const res = await fetch('http://localhost:4545/mi-rol', {
+        const res = await fetch('/mi-rol', {
           headers: { 'Authorization': 'Bearer ' + token }
         });
         const data = await res.json();
@@ -313,7 +313,7 @@
       const token = localStorage.getItem('token');
       if (!token) return false;
       try {
-        const res = await fetch('http://localhost:4545/mi-rol', {
+        const res = await fetch('/mi-rol', {
           headers: { 'Authorization': 'Bearer ' + token }
         });
         const data = await res.json();
@@ -379,7 +379,7 @@
     async function cargarKPIs() {
       try {
         const token = localStorage.getItem('token');
-        const response = await fetch('http://localhost:4545/gestion/kpis', {
+        const response = await fetch('/gestion/', {
           headers: { 'Authorization': `Bearer ${token}` }
         });
         const result = await response.json();
@@ -395,7 +395,7 @@
     async function cargarEstrategias() {
       try {
         const token = localStorage.getItem('token');
-        const response = await fetch('http://localhost:4545/gestion/estrategias', {
+        const response = await fetch('/gestion/estrategias', {
           headers: { 'Authorization': `Bearer ${token}` }
         });
         const result = await response.json();
@@ -524,7 +524,7 @@
       if (nuevoProgreso && !isNaN(nuevoProgreso) && nuevoProgreso >= 0 && nuevoProgreso <= 100) {
         try {
           const token = localStorage.getItem('token');
-          const response = await fetch(`http://localhost:4545/gestion/planes-trabajo/${id}/progreso`, {
+          const response = await fetch(`/gestion/planes-trabajo/${id}/progreso`, {
             method: 'PUT',
             headers: {
               'Authorization': `Bearer ${token}`,
@@ -550,7 +550,7 @@
 
       try {
         const token = localStorage.getItem('token');
-        const response = await fetch(`http://localhost:4545/gestion/kpis/${kpi}`, {
+        const response = await fetch(`/gestion/kpis/${kpi}`, {
           method: 'PUT',
           headers: {
             'Authorization': `Bearer ${token}`,
@@ -602,7 +602,7 @@
 
       try {
         // 1. Cargar Resumen Diario
-        const resDiario = await fetch('http://localhost:4545/gestion/reporte-diario', { headers }).then(r => r.json());
+        const resDiario = await fetch('/gestion/reporte-diario', { headers }).then(r => r.json());
         if (resDiario.success) {
           const d = resDiario.data;
           document.getElementById('kpi-ventas-hoy').textContent = `$${Number(d.total_ventas).toLocaleString()}`;
@@ -611,27 +611,27 @@
         }
 
         // 2. Cargar Métricas (Margen)
-        const resMetricas = await fetch('http://localhost:4545/gestion/metricas-comerciales', { headers }).then(r => r.json());
+        const resMetricas = await fetch('/gestion/metricas-comerciales', { headers }).then(r => r.json());
         if (resMetricas.success) {
           document.getElementById('kpi-margen').textContent = `${Math.round(resMetricas.data.margenPromedio)}%`;
         }
 
         // 3. Cargar Alertas de Stock
-        const resAlertas = await fetch('http://localhost:4545/gestion/alertas-stock', { headers }).then(r => r.json());
+        const resAlertas = await fetch('/gestion/alertas-stock', { headers }).then(r => r.json());
         if (resAlertas.success) {
           const bajoStock = resAlertas.data.filter(a => a.tipoAlerta === 'bajo_stock' || a.tipoAlerta === 'sin_stock');
           document.getElementById('kpi-alertas-total').textContent = bajoStock.length;
         }
 
         // 4. Cargar Análisis Completo (Gráficos)
-        const resAnalisis = await fetch('http://localhost:4545/gestion/analisis-ventas', { headers }).then(r => r.json());
+        const resAnalisis = await fetch('/gestion/analisis-ventas', { headers }).then(r => r.json());
         if (resAnalisis.success) {
           renderizarGraficos(resAnalisis.data);
           poblarSinRotacion(resAnalisis.data.sinRotacion);
         }
 
         // 5. Cargar Historial
-        const resHistorial = await fetch('http://localhost:4545/gestion/historial-ventas', { headers }).then(r => r.json());
+        const resHistorial = await fetch('/gestion/historial-ventas', { headers }).then(r => r.json());
         if (resHistorial.success) {
           poblarHistorial(resHistorial.data);
         }
@@ -646,7 +646,7 @@
     async function cargarResumenPagos() {
       const token = localStorage.getItem('token');
       try {
-        const res = await fetch('http://localhost:4545/nomina/mensual', {
+        const res = await fetch('/nomina/mensual', {
           headers: { 'Authorization': `Bearer ${token}` }
         });
         const data = await res.json();
@@ -701,7 +701,7 @@
 
       try {
         const token = localStorage.getItem('token');
-        const res = await fetch('http://localhost:4545/nomina/pagar', {
+        const res = await fetch('/nomina/pagar', {
           method: 'POST',
           headers: {
             'Authorization': `Bearer ${token}`,
@@ -793,7 +793,7 @@
     async function cargarListaEmpleadosDescuento() {
       const token = localStorage.getItem('token');
       try {
-        const res = await fetch('http://localhost:4545/empleados', {
+        const res = await fetch('/empleados', {
           headers: { 'Authorization': `Bearer ${token}` }
         });
         const data = await res.json();

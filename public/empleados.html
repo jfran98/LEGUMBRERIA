@@ -391,7 +391,7 @@
         async function apiRequest(path, method, body) {
             const token = localStorage.getItem('token');
             try {
-                const res = await fetch(`http://localhost:4545${path}`, {
+                const res = await fetch(`${path}`, {
                     method,
                     headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' },
                     body: JSON.stringify(body)
