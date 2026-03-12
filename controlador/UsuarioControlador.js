@@ -138,9 +138,11 @@ class UsuarioControlador {
 
     try {
       console.time('Login_Total');
+      console.log('🔍 [CONTROLADOR] Iniciando validación de credenciales...');
       console.time('DB_ValidarCredenciales');
       const resultado = await modelo.validarCredenciales(email, password);
       console.timeEnd('DB_ValidarCredenciales');
+      console.log('✅ [CONTROLADOR] DB respondió:', resultado ? 'Usuario encontrado' : 'No encontrado');
 
       if (!resultado) {
         return res.status(401).json({
@@ -154,6 +156,7 @@ class UsuarioControlador {
 
       // Comentado: envío de correo al iniciar sesión
       // Si el usuario existe y las credenciales son correctas
+      console.log('🚀 [CONTROLADOR] Enviando respuesta exitosa al cliente...');
       console.timeEnd('Login_Total');
       res.json({
         mensaje: 'Inicio de sesión exitoso',

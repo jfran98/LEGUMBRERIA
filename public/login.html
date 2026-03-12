@@ -29,7 +29,13 @@
       const datos = Object.fromEntries(formData.entries());
       const mensaje = document.getElementById('mensaje');
 
+      const btn = this.querySelector('button');
+      btn.disabled = true;
+      const originalText = btn.textContent;
+      btn.textContent = 'Ingresando...';
+
       try {
+        console.log('🚀 [FRONTEND] Enviando login, esperando respuesta...');
         const res = await fetch('/login', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
@@ -44,10 +50,14 @@
           mensaje.textContent = 'Inicio de sesión exitoso.';
           setTimeout(() => window.location.href = 'perfil.html', 1000);
         } else {
+          btn.disabled = false;
+          btn.textContent = originalText;
           mensaje.style.color = 'red';
           mensaje.textContent = resultado.mensaje || resultado.error || 'Credenciales inválidas.';
         }
       } catch (error) {
+        btn.disabled = false;
+        btn.textContent = originalText;
         mensaje.style.color = 'red';
         mensaje.textContent = 'Error al conectar con el servidor.';
         console.error(error);
